@@ -1,0 +1,16 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav mode="side" opened>
+    <mat-list role="list">
+      <mat-list-item role="listitem" routerLink="home">Home</mat-list-item>
+      <mat-list-item role="listitem" routerLink="lista amici">Lista Amici</mat-list-item>
+      <mat-list-item role="listitem" routerLink="carte">Carte</mat-list-item>
+      <mat-list-item role="listitem" routerLink="mazzi">Mazzi</mat-list-item>
+      <mat-list-item role="listitem" routerLink="marketplace">Marketplace</mat-list-item>
+      <mat-list-item role="listitem" routerLink="account">Account</mat-list-item>
+    </mat-list>
+
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

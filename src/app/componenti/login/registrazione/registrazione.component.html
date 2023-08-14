@@ -1,0 +1,99 @@
+
+<div style="display: flex; flex-direction: column; align-items: flex-start;">
+  <div style="margin-left: 20px;">
+
+    <br> <!-- Aggiungo una riga vuota per spaziare i campi verticalmente -->
+    <h1>Registrazione</h1>
+
+    <div class="registration-box">
+      <h2>Crea un nuovo account:</h2>
+
+      <form #registrazioneform="ngForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="equal-width">
+          <mat-label>nickname</mat-label>
+          <input matInput type="nickname" name="nickname" style="background-color: white;" required
+                 [ngModel]="user ? user.name : nickname"
+                 [(ngModel)]="nickname"
+                 [formControl]="nicknameFormControl">
+        </mat-form-field>
+
+        <br> <!-- Aggiungo una riga vuota per spaziare i campi verticalmente -->
+
+        <mat-form-field appearance="outline" class="equal-width">
+          <mat-label>email</mat-label>
+          <input matInput type="email" name="email" style="background-color: white;" required
+                 [ngModel]="user ? user.email : email"
+                 [(ngModel)]="email">
+        </mat-form-field>
+
+        <br> <!-- Aggiungo una riga vuota per spaziare i campi verticalmente -->
+
+      </form>
+
+      <!-- Il campo password ho dovuto spostarlo fuori dal form perchè altrimenti quando premevo sull'occhietto automaticamente mi invocava il metodo "onSubmit" -->
+      <mat-form-field appearance="outline" class="equal-width">
+        <mat-label>password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" name="password" style="background-color: white;" required [(ngModel)]="password">
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <br>
+
+      <!-- se vuoi aumentare la lunghezza minima della password modifica qui sotto password.length > 0-->
+      <button mat-raised-button color="primary" type="button" (click)="onSubmit()"
+              [disabled]="!registrazioneform.valid || !(password.length > 0)">CREA ACCOUNT</button>
+
+      <!--  PER FAR FUNZIONARE IL SIGNIN (vale anche per il login) CON GOOGLE DEVI PER FORZA METTERE
+            NELLE CREDENZIALI SU GOOGLE CLOUD ALL'INTERNO DI "Authorised JavaScript origins"
+            QUESTI DUE URI: http://localhost:4200 e http://localhost
+     -->
+      <div class="jumbotron bg-transparent text-center">
+        <div class="card text-center">
+          <h6 class="card-header">
+            SignIn With Google
+          </h6>
+          <div class="card-block">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <p style="margin-bottom: 0; margin-top: 0">
+                <!-- Inserisco il bottone per il login con Google -->
+                <asl-google-signin-button (click)="signWithGoogle()" type='icon' size='large'></asl-google-signin-button>
+              </p>
+            </div>
+          </div>
+
+          <!-- QUESTO E' IL CODICE PER POTER FARE IL LOGOUT.. -->
+          <!--        <div *ngIf="user" class="card text-center">-->
+          <!--          <div class="card-block"></div>-->
+          <!--&lt;!&ndash;          <img *ngIf="user.photoUrl" src="{{user.photoUrl}}" alt= "" class="card-img-top img-responsive photo">&ndash;&gt;-->
+          <!--          <div class="card-block">-->
+          <!--            <h4 class="card-title">{{user.name}}</h4>-->
+          <!--            <p class="card-text">{{user.email}}</p>-->
+          <!--          </div>-->
+          <!--          <div class="card-block">-->
+          <!--            <button class="btn btn-danger" (click)="signOut()"> SignOut </button>-->
+          <!--          </div>-->
+          <!--        </div>-->
+        </div>
+      </div>
+
+
+      <!-- Spazio tra il bottone "CREA ACCOUNT" e il messaggio -->
+      <div style="margin-top: 20px;"></div>
+
+      <ng-container *ngIf="registrationFailed">
+        <mat-dialog-content>
+          <p>
+             La registrazione non è andata a buon fine.
+             Causa dell'errore: <span class="error-message">{{ out }}</span>
+          </p>
+        </mat-dialog-content>
+      </ng-container>
+
+    </div>
+
+  </div>
+
+</div>

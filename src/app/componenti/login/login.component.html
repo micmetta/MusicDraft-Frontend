@@ -1,0 +1,61 @@
+
+<div style="display: flex; flex-direction: column; align-items: flex-start;">
+  <div style="margin-left: 20px;">
+
+    <br> <!-- Aggiungo una riga vuota per spaziare i campi verticalmente -->
+    <h1>Login</h1>
+
+    <div class="login-box">
+      <h2>Inserisci qui sotto i tuoi dati o crea un nuovo account se non ne hai uno:</h2>
+
+      <mat-form-field appearance="outline" class="equal-width">
+        <mat-label>nickname or email</mat-label>
+
+<!--        Nel codice di <input> di sotto, l'attributo [ngModel] è utilizzato per definire -->
+<!--        il valore iniziale del campo di input "nick_mail":
+            Se user è definito (cioè *ngIf="user" è vero),
+            allora il valore sarà impostato su user.name
+            altrimenti sarà impostato al valore attualmente associato alla variabile nick_mail.-->
+        <input matInput type="nickname or email" name="nick_mail" required
+               [ngModel]="user ? user.name : nick_mail"
+               [(ngModel)]="nick_mail"
+               (input)="checkLoginFormValidity()">
+      </mat-form-field>
+
+      <!-- Il campo password ho dovuto spostarlo fuori dal form perchè altrimenti quando premevo sull'occhietto automaticamente mi invocava il metodo "onSubmit" -->
+      <mat-form-field appearance="outline" class="equal-width">
+        <mat-label>password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" name="password" style="background-color: white;" required
+               [ngModel]="user ? '' : password"
+               [(ngModel)]="password" (input)="checkLoginFormValidity()">
+
+
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+
+      <div class="button-group centered">
+        <button mat-raised-button color="primary" type="button" (click)="onSubmit()" class="login-button" [disabled]="!loginFormValid">LOGIN</button>
+        <button mat-raised-button color="primary" type="button" (click)="vaiSuCreaAccount()" class="create-account-button">CREA ACCOUNT</button>
+      </div>
+
+      <!-- Spazio tra i bottoni "Crea Account" e "Continua con Google" -->
+      <div style="margin-top: 10px;"></div>
+
+      <!-- Codice per far apparire il messaggio di login errato -->
+      <!-- Spazio tra i bottoni e il messaggio -->
+      <div style="margin-top: 20px;"></div>
+      <ng-container *ngIf="loginFailed">
+        <mat-dialog-content>
+          <p>Il login non è riuscito. Controlla le tue credenziali e riprova.</p>
+        </mat-dialog-content>
+      </ng-container>
+
+
+    </div>
+
+  </div>
+
+</div>

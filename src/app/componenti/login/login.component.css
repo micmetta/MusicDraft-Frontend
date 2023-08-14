@@ -1,0 +1,41 @@
+.login-box {
+  background-color: #f0f0f0; /* Colore di sfondo grigio chiaro */
+  width: 400px; /* Larghezza del quadrato */
+  padding: 20px; /* Spaziatura interna */
+  border: 1px solid #ccc; /* Bordo */
+  border-radius: 5px; /* Angoli arrotondati */
+  margin: 0 auto; /* Centra il quadrato orizzontalmente */
+  text-align: center; /* Centra il testo orizzontalmente */
+}
+.equal-width {
+  width: 100%;
+}
+.button-group.centered {
+  display: flex;
+  margin-top: 10px;
+}
+.login-button{
+  margin-left: 50px;
+  width: 130px;
+}
+.create-account-button {
+  margin-left: 20px; /* Aggiungi spazio tra i bottoni */
+}
+.continua-google-button{
+  margin-left: 0px;
+}
+.bg-transparent{
+  background-color: transparent;
+}
+:host{
+  height: 100%;
+}
+.photo{
+  object-fit: contain;
+}
+.card{
+  width: 20rem;
+  margin: 0 auto;
+}
+
+
