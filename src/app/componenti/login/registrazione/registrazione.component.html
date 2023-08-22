@@ -15,7 +15,7 @@
           <input matInput type="nickname" name="nickname" style="background-color: white;" required
                  [ngModel]="user ? user.name : nickname"
                  [(ngModel)]="nickname"
-                 [formControl]="nicknameFormControl">
+                 [formControl]="nicknameFormControl"> <!-- SOLUZIONE nickname vuoto se l'autenticazione veniva fatta con Google -->
         </mat-form-field>
 
         <br> <!-- Aggiungo una riga vuota per spaziare i campi verticalmente -->
@@ -24,7 +24,8 @@
           <mat-label>email</mat-label>
           <input matInput type="email" name="email" style="background-color: white;" required
                  [ngModel]="user ? user.email : email"
-                 [(ngModel)]="email">
+                 [(ngModel)]="email"
+                 [formControl]="emailFormControl">
         </mat-form-field>
 
         <br> <!-- Aggiungo una riga vuota per spaziare i campi verticalmente -->
@@ -53,13 +54,13 @@
       <div class="jumbotron bg-transparent text-center">
         <div class="card text-center">
           <h6 class="card-header">
-            SignIn With Google
+            SignUp With Google
           </h6>
           <div class="card-block">
             <div style="display: flex; flex-direction: column; align-items: center;">
               <p style="margin-bottom: 0; margin-top: 0">
                 <!-- Inserisco il bottone per il login con Google -->
-                <asl-google-signin-button (click)="signWithGoogle()" type='icon' size='large'></asl-google-signin-button>
+                <asl-google-signin-button (click)="signUpWithGoogle()" type='icon' size='large'></asl-google-signin-button>
               </p>
             </div>
           </div>

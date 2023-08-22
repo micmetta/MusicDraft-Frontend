@@ -19,7 +19,9 @@
         <input matInput type="nickname or email" name="nick_mail" required
                [ngModel]="user ? user.name : nick_mail"
                [(ngModel)]="nick_mail"
-               (input)="checkLoginFormValidity()">
+               (input)="checkLoginFormValidity()"
+               [formControl]="nick_mailFormControl"> <!-- SOLUZIONE nickname vuoto se l'autenticazione veniva fatta con Google -->
+<!--               (input)="checkLoginFormValidity()">-->
       </mat-form-field>
 
       <!-- Il campo password ho dovuto spostarlo fuori dal form perchè altrimenti quando premevo sull'occhietto automaticamente mi invocava il metodo "onSubmit" -->
@@ -40,6 +42,42 @@
         <button mat-raised-button color="primary" type="button" (click)="onSubmit()" class="login-button" [disabled]="!loginFormValid">LOGIN</button>
         <button mat-raised-button color="primary" type="button" (click)="vaiSuCreaAccount()" class="create-account-button">CREA ACCOUNT</button>
       </div>
+
+      <!--  PER FAR FUNZIONARE IL SIGNIN (vale anche per il login) CON GOOGLE DEVI PER FORZA METTERE
+            NELLE CREDENZIALI SU GOOGLE CLOUD ALL'INTERNO DI "Authorised JavaScript origins"
+            QUESTI DUE URI: http://localhost:4200 e http://localhost
+     -->
+      <div class="jumbotron bg-transparent text-center">
+        <div class="card text-center">
+          <h6 class="card-header">
+            SignIn With Google
+          </h6>
+          <div class="card-block">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <p style="margin-bottom: 0; margin-top: 0">
+                <!-- Inserisco il bottone per il login con Google -->
+                <asl-google-signin-button (click)="signInWithGoogle()" type='icon' size='large'></asl-google-signin-button>
+              </p>
+            </div>
+          </div>
+
+          <!-- QUESTO E' IL CODICE PER POTER FARE IL LOGOUT.. -->
+          <!--        <div *ngIf="user" class="card text-center">-->
+          <!--          <div class="card-block"></div>-->
+          <!--&lt;!&ndash;          <img *ngIf="user.photoUrl" src="{{user.photoUrl}}" alt= "" class="card-img-top img-responsive photo">&ndash;&gt;-->
+          <!--          <div class="card-block">-->
+          <!--            <h4 class="card-title">{{user.name}}</h4>-->
+          <!--            <p class="card-text">{{user.email}}</p>-->
+          <!--          </div>-->
+          <!--          <div class="card-block">-->
+          <!--            <button class="btn btn-danger" (click)="signOut()"> SignOut </button>-->
+          <!--          </div>-->
+          <!--        </div>-->
+        </div>
+      </div>
+
+
+
 
       <!-- Spazio tra i bottoni "Crea Account" e "Continua con Google" -->
       <div style="margin-top: 10px;"></div>

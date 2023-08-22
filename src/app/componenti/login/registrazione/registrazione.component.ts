@@ -4,6 +4,9 @@ import {AuthService} from "../../../auth/auth.service";
 import {style} from "@angular/animations";
 import {Router} from "@angular/router";
 import {GoogleLoginProvider, SocialAuthService, SocialUser} from "@abacritt/angularx-social-login";
+import {
+  Nickname_and_email_user_loggedService
+} from "../../../servizi/nickname_and_email_user_loggedService/nickname_and_email_user_logged.service";
 
 @Component({
   selector: 'app-registrazione',
@@ -21,8 +24,9 @@ export class RegistrazioneComponent implements OnInit{
   registrationFailed = false;
   user!: SocialUser;
   nicknameFormControl = new FormControl('', [Validators.required]);
+  emailFormControl = new FormControl('', [Validators.required]);
 
-  constructor(private authServicce: AuthService, private authServiceSocial: SocialAuthService, private router: Router) {}
+  constructor(private nicknameAndEmailUserLoggedService: Nickname_and_email_user_loggedService, private authService: AuthService, private authServiceSocial: SocialAuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.authServiceSocial.authState.subscribe((user)=>{
@@ -47,7 +51,7 @@ export class RegistrazioneComponent implements OnInit{
 
     // chiamare authservice (il tuo microservizio backend che si preoccupa
     // di controllare se nickname_or_email e password sono presenti nel DB user)
-    this.authServicce.signUp(
+    this.authService.signUp(
       {
         nickname: nickname,
         email: email,
@@ -65,6 +69,10 @@ export class RegistrazioneComponent implements OnInit{
         this.registrationFailed = true
       }
       else{
+        // aggiunto per il localStorage
+        this.nicknameAndEmailUserLoggedService.updateNickname_user_logged(this.nickname);
+        this.nicknameAndEmailUserLoggedService.updateEmail_user_logged(this.email);
+
         this.registrationFailed = false
         this.router.navigate(["/dashboard/home"])
       }
@@ -76,8 +84,17 @@ export class RegistrazioneComponent implements OnInit{
     this.hide = !this.hide;
   }
 
-  signWithGoogle(): any{ // For SignIn
-    this.authServiceSocial.signIn(GoogleLoginProvider.PROVIDER_ID);
+  signUpWithGoogle(): any{ // For SignUp
+    this.authServiceSocial.signIn(GoogleLoginProvider.PROVIDER_ID)
+      .then(response => {
+        this.nicknameAndEmailUserLoggedService.updateNickname_user_logged(response.name);
+        this.nicknameAndEmailUserLoggedService.updateEmail_user_logged(response.email);
+        this.registrationFailed = false
+      })
+      .catch(error => {
+        console.error("Si è verificato un errore durante la registrazione con Google.");
+        this.registrationFailed = true;
+      })
   }
 
   // signOut(): any{ // For SignOut User
