@@ -18,7 +18,6 @@ import { PaginaCarteComponent } from './componenti/pagina-carte/pagina-carte.com
 import { PaginaMazziComponent } from './componenti/pagina-mazzi/pagina-mazzi.component';
 import { PaginaMarketplaceComponent } from './componenti/pagina-marketplace/pagina-marketplace.component';
 import { PaginaAccountComponent } from './componenti/pagina-account/pagina-account.component';
-
 import {RouterOutlet} from "@angular/router";
 import { AppRoutingModule } from './app-routing.module';
 
@@ -27,6 +26,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import{MatTableModule} from "@angular/material/table";
 import {MatListModule} from '@angular/material/list';
 import { PaginaHomeComponent } from './componenti/pagina-home/pagina-home.component';
 import {HttpClientModule} from "@angular/common/http";
@@ -34,6 +34,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatDialogModule} from "@angular/material/dialog";
 import { ContinuaConGoogleComponent } from './componenti/login/continua-con-google/continua-con-google.component';
 import { ErrorComponent } from './componenti/error/error.component';
+import {MatTabsModule} from "@angular/material/tabs";
+import { PopupComponent } from './componenti/popupconfermaacquisto/popup/popup.component';
 
 
 @NgModule({
@@ -51,6 +53,7 @@ import { ErrorComponent } from './componenti/error/error.component';
     PaginaHomeComponent,
     ContinuaConGoogleComponent,
     ErrorComponent,
+    PopupComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,9 @@ import { ErrorComponent } from './componenti/error/error.component';
     MatIconModule,
     MatDialogModule,
     SocialLoginModule,
-    GoogleSigninButtonModule
+    MatTableModule,
+    GoogleSigninButtonModule,
+    MatTabsModule
   ],
     providers: [
       {
