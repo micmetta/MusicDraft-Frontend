@@ -2,5 +2,9 @@
   "/api/v1/authenticationService": {
     "target": "http://localhost:8081",
     "secure": false
+  },
+  "/api/v1/marketplace": {
+    "target": "http://localhost:9091",
+    "secure": false
   }
 }

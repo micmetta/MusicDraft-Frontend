@@ -1,1 +1,92 @@
-<p>pagina-marketplace works!</p>
+
+<mat-tab-group>
+  <mat-tab label="Artisti">
+    <div class="search-filters">
+      <input type="text" placeholder="Cerca carte" [(ngModel)]="searchQuery">
+      <select [(ngModel)]="selectedGenre">
+        <option value="">Tutti i generi</option>
+        <option value="rock,">Rock</option>
+        <option value="pop,">Pop</option>
+        <option value="k-pop,">K-pop</option>
+        <option value="metal,">Metal</option>
+      </select>
+      <select [(ngModel)]="selectedPopularity">
+        <option value="">Tutte le popolarità</option>
+        <option value="> 20">>20</option>
+        <option value="> 50">>50</option>
+        <option value="> 70">>70</option>
+      </select>
+      <select [(ngModel)]="selectedCosto">
+        <option value="" selected>Qualsiasi costo</option>
+        <option value="> 0">>0</option>
+        <option value="> 100">>100</option>
+        <option value="> 200">>200</option>
+        <option value="> 500">>500</option>
+      </select>
+
+      <!-- Aggiungi ulteriori filtri se necessario -->
+      <button (click)="applyFilters()">Applica Filtri</button>
+    </div>
+    <div class="card-container">
+      <div *ngFor="let cartaA of FiltereditemsA" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+            <p>{{ cartaA.genere }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaA.immagine" alt="Immagine">
+          </div>
+          <div class="card-footer">
+            <p>Costo: {{ cartaA.costo }}</p>
+            <button (click)="onButtonClick(cartaA)" class="card-button">Compra</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Brani">
+    <div class="search-filters">
+      <input type="text" placeholder="Cerca carte" [(ngModel)]="searchQuery">
+      <select [(ngModel)]="selectedAnnoPubblicazione"  >
+        <option value="">Qualsiasi Anno</option>
+        <option value="> 1940" selected>> 1940</option>
+        <option value="> 1980">> 1980</option>
+        <option value="> 2000">> 2000</option>
+        <option value="> 2010">> 2010</option>
+      </select>
+      <select [(ngModel)]="selectedPopularity"  >
+        <option value="">Tutte le popolarità</option>
+        <option value="> 20" selected>>20</option>
+        <option value="> 50">>50</option>
+        <option value="> 70">>70</option>
+      </select>
+      <select [(ngModel)]="selectedCosto">
+        <option value="" selected>Qualsiasi costo</option>
+        <option value="> 0">>0</option>
+        <option value="> 100">>100</option>
+        <option value="> 200">>200</option>
+        <option value="> 500">>500</option>
+      </select>
+      <button (click)="applyFiltersT()">Applica Filtri</button>
+    </div>
+    <div class="card-container">
+      <div *ngFor="let cartaA of FiltereditemsT" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+            <p>{{ cartaA.anno_pubblicazione }}</p>
+            <p>{{ cartaA.durata }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaA.immagine" alt="Immagine">
+          </div>
+          <div class="card-footer">
+            <p>Costo: {{ cartaA.costo }}</p>
+            <button (click)="onButtonClick(cartaA)" class="card-button">Compra</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

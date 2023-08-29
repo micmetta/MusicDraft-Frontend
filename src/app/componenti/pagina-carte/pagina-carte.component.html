@@ -1,1 +1,35 @@
-<p>pagina-carte works!</p>
+<mat-tab-group>
+  <mat-tab label="Artisti">
+    <div class="card-container">
+      <div *ngFor="let cartaA of itemsA" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+            <p>{{ cartaA.genere }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaA.immagine" alt="Immagine">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Brani">
+    <div class="card-container">
+      <div *ngFor="let cartaA of itemsT" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+            <p>{{ cartaA.anno_pubblicazione }}</p>
+            <p>{{ cartaA.durata }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaA.immagine" alt="Immagine">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

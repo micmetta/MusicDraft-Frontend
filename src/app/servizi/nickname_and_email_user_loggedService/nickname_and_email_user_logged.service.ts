@@ -27,6 +27,10 @@ export class Nickname_and_email_user_loggedService {
     const storedValue = localStorage.getItem('nickname_user_logged');
     return storedValue ? JSON.parse(storedValue) : null;
   }
+  getStoredNickname_user_logged_not_json(): any {
+    const storedValue = localStorage.getItem('nickname_user_logged');
+    return storedValue;
+  }
 
   getStoredEmail_user_logged(): any {
     const storedValue = localStorage.getItem('email_user_logged');
