@@ -16,6 +16,13 @@
         <option value="> 50">>50</option>
         <option value="> 70">>70</option>
       </select>
+      <select [(ngModel)]="selectedCosto">
+        <option value="" selected>Qualsiasi costo</option>
+        <option value="> 0">>0</option>
+        <option value="> 100">>100</option>
+        <option value="> 200">>200</option>
+        <option value="> 500">>500</option>
+      </select>
 
       <!-- Aggiungi ulteriori filtri se necessario -->
       <button (click)="applyFilters()">Applica Filtri</button>
@@ -39,6 +46,30 @@
     </div>
   </mat-tab>
   <mat-tab label="Brani">
+    <div class="search-filters">
+      <input type="text" placeholder="Cerca carte" [(ngModel)]="searchQuery">
+      <select [(ngModel)]="selectedAnnoPubblicazione"  >
+        <option value="">Qualsiasi Anno</option>
+        <option value="> 1940" selected>> 1940</option>
+        <option value="> 1980">> 1980</option>
+        <option value="> 2000">> 2000</option>
+        <option value="> 2010">> 2010</option>
+      </select>
+      <select [(ngModel)]="selectedPopularity"  >
+        <option value="">Tutte le popolarità</option>
+        <option value="> 20" selected>>20</option>
+        <option value="> 50">>50</option>
+        <option value="> 70">>70</option>
+      </select>
+      <select [(ngModel)]="selectedCosto">
+        <option value="" selected>Qualsiasi costo</option>
+        <option value="> 0">>0</option>
+        <option value="> 100">>100</option>
+        <option value="> 200">>200</option>
+        <option value="> 500">>500</option>
+      </select>
+      <button (click)="applyFiltersT()">Applica Filtri</button>
+    </div>
     <div class="card-container">
       <div *ngFor="let cartaA of FiltereditemsT" class="card">
         <div class="card-content">

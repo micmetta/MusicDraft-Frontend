@@ -1,0 +1,9 @@
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  overflow: hidden; /* Nasconde l'overflow */
+}
+.button-container button {
+  margin-left: 10px;
+}

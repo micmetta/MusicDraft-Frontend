@@ -1,0 +1,6 @@
+<h2>Conferma l'acquisto</h2>
+<p>Stai per acquistare {{ data.nome }} {{ data.cognome }}. Sei sicuro?</p>
+<div class="button-container">
+  <button mat-button (click)="annullaAcquisto()">Annulla</button>
+  <button mat-raised-button color="primary" (click)="confermaAcquisto()">Conferma</button>
+</div>
