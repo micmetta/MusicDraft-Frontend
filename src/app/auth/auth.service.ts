@@ -8,12 +8,12 @@ import {User} from "../modelli/user.model";
 })
 export class AuthService {
 
-  signUpURL = '/api/registration' //url del microservizio per la registrazione (in proxy.conf.json c'è la prima parte: http://localhost:8081)
+  signUpURL = '/api/v1/authenticationService/registration' //url del microservizio per la registrazione (in proxy.conf.json c'è la prima parte: http://localhost:8081)
   //signInURL = '/api/loginRegistered/{nickname}/{password}'
-  signUPGoogleURL: string = '/api/loginGoogle'
-  signInURL = '/api/loginRegistered/' //url per il login di un utente già registrato
-  getEmailURL: string = '/api/getEmail/'
-  getNicknameURL : string = '/api/getNickname/'
+  signUPGoogleURL: string = '/api/v1/authenticationService/loginGoogle'
+  signInURL = '/api/v1/authenticationService/loginRegistered/' //url per il login di un utente già registrato
+  getEmailURL: string = '/api/v1/authenticationService/getEmail/'
+  getNicknameURL : string = '/api/v1/authenticationService/getNickname/'
 
   isLoggedIn = true // solo se questa variabile sarà true allora l'auth.guard
   // mi permettera di andare nella dashboard altrimenti siccome vuol dire che l'utente non è loggato verrà sempre rimandato sulla

@@ -1,5 +1,5 @@
 {
-  "/api": {
+  "/api/v1/authenticationService": {
     "target": "http://localhost:8081",
     "secure": false
   }
