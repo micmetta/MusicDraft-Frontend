@@ -31,6 +31,9 @@ export class PaginaMarketplaceComponent implements OnInit{
   FiltereditemsT: any;
   FiltereditemsA: any;
   selectedPopularity: any;
+  searchQueryT: any;
+  selectedAnnoPubblicazione: any;
+  selectedCosto: any;
   constructor(private show: ShowCarteInVenditaService,private dialog: MatDialog, private buy:AcquistaService,private http:HttpClient,private nick:Nickname_and_email_user_loggedService) {
 
   }
@@ -49,15 +52,12 @@ export class PaginaMarketplaceComponent implements OnInit{
     this.FiltereditemsA = this.itemsA.filter((cartaA:any) =>
       cartaA.nome.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
       (this.selectedGenre === '' || cartaA.genere === this.selectedGenre) &&
-      this.checkPopularity(cartaA.popolarita)
+      this.checkPopularity(cartaA.popolarita)&&
+      this.checkCosto(cartaA.costo)
     );
 
-    this.FiltereditemsT = this.itemsT.filter((cartaT:any) =>
-      cartaT.nome.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
-      (this.selectedGenre === '' || cartaT.genere === this.selectedGenre) &&
-      this.checkPopularity(cartaT.popolarita)
 
-    );
+
   }
 
   onButtonClick(carta: any) {
@@ -136,5 +136,46 @@ export class PaginaMarketplaceComponent implements OnInit{
     } else {
       return this.selectedPopularity === '' || popolarita === parseInt(this.selectedPopularity);
     }
+  }
+
+  private checkCosto(costo:number):boolean{
+    if (this.selectedCosto === '> 0') {
+      return costo >0;
+    } else if (this.selectedCosto === '> 100') {
+      return costo > 100;
+    } else if (this.selectedCosto === '> 200') {
+      return costo > 200;
+    } else if (this.selectedCosto === '> 500') {
+      return costo > 500;
+    } else {
+      return this.selectedCosto === '' || costo === parseInt(this.selectedCosto);
+    }
+
+  }
+
+  checkAnno(anno:number):boolean {
+    console.log(anno)
+    if (this.selectedAnnoPubblicazione === '> 1940') {
+      return anno > 1940;
+    } else if (this.selectedAnnoPubblicazione === '> 1980') {
+      return anno > 1980;
+    } else if (this.selectedAnnoPubblicazione === '> 2000') {
+      return anno > 2000;
+    }else if (this.selectedAnnoPubblicazione === '> 2010') {
+      return anno > 2010;
+    } else {
+      return this.selectedAnnoPubblicazione === '' || anno === parseInt(this.selectedAnnoPubblicazione);
+    }
+  }
+  applyFiltersT() {
+
+    this.FiltereditemsT = this.itemsT.filter((cartaT:any) =>
+      cartaT.nome.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
+      (this.checkAnno((cartaT.anno_pubblicazione).substring(0,4))) &&
+      this.checkPopularity(cartaT.popolarita)&&
+      this.checkCosto(cartaT.costo)
+
+
+    );
   }
 }
