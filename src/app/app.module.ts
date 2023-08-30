@@ -35,7 +35,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { ContinuaConGoogleComponent } from './componenti/login/continua-con-google/continua-con-google.component';
 import { ErrorComponent } from './componenti/error/error.component';
 import {MatTabsModule} from "@angular/material/tabs";
-import { PopupComponent } from './componenti/popupconfermaacquisto/popup/popup.component';
+import { PopupComponent } from './componenti/popupconfermaacquisto/popup/compra/popup.component';
+import { VendipopComponent } from './popup/vendi/vendipop/vendipop.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { PopupComponent } from './componenti/popupconfermaacquisto/popup/popup.c
     ContinuaConGoogleComponent,
     ErrorComponent,
     PopupComponent,
+    VendipopComponent,
   ],
   imports: [
     BrowserModule,
