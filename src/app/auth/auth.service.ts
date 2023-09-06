@@ -55,6 +55,7 @@ export class AuthService {
     return this.http.get(`${this.getPointsURL}`+`${nickname}`) // restituisce un intero
   }
 
+  //
   updatePoints(nickname: String, new_points: number){
     return this.http.put(`${this.updatePointsURL}`+`${nickname}`+`/`+`${new_points}`, {responseType: 'text'}) // restituisce un intero
   }
