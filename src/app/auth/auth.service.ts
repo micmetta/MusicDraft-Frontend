@@ -8,12 +8,14 @@ import {User} from "../modelli/user.model";
 })
 export class AuthService {
 
-  signUpURL = '/api/registration' //url del microservizio per la registrazione (in proxy.conf.json c'è la prima parte: http://localhost:8081)
+  signUpURL = '/api/v1/authenticationService/registration' //url del microservizio per la registrazione (in proxy.conf.json c'è la prima parte: http://localhost:8081)
   //signInURL = '/api/loginRegistered/{nickname}/{password}'
-  signUPGoogleURL: string = '/api/loginGoogle'
-  signInURL = '/api/loginRegistered/' //url per il login di un utente già registrato
-  getEmailURL: string = '/api/getEmail/'
-  getNicknameURL : string = '/api/getNickname/'
+  signUPGoogleURL: string = '/api/v1/authenticationService/loginGoogle'
+  signInURL = '/api/v1/authenticationService/loginRegistered/' //url per il login di un utente già registrato
+  getEmailURL: string = '/api/v1/authenticationService/getEmail/'
+  getNicknameURL : string = '/api/v1/authenticationService/getNickname/'
+  getPointsURL : string = '/api/v1/authenticationService/getPoints/'
+  updatePointsURL: string = '/api/v1/authenticationService/updatePoints/'
 
   isLoggedIn = true // solo se questa variabile sarà true allora l'auth.guard
   // mi permettera di andare nella dashboard altrimenti siccome vuol dire che l'utente non è loggato verrà sempre rimandato sulla
@@ -48,6 +50,17 @@ export class AuthService {
   getNickname(email: string) {
     return this.http.get(`${this.getNicknameURL}`+`${email}`, {responseType: 'text'}) // ricordati di mettere {responseType: 'text'} SE IL REST RESTITUISCE UNA STRINGA!
   }
+
+  getPoints(nickname: String){
+    return this.http.get(`${this.getPointsURL}`+`${nickname}`) // restituisce un intero
+  }
+
+  //
+  updatePoints(nickname: String, new_points: number){
+    return this.http.put(`${this.updatePointsURL}`+`${nickname}`+`/`+`${new_points}`, {responseType: 'text'}) // restituisce un intero
+  }
+
+
 
   logout(){
     this.isLoggedIn = false; // lo setto a false in modo tale che l'utente che ha fatto il logout non potrà più entrare nella dashboard

@@ -36,6 +36,7 @@ import { ContinuaConGoogleComponent } from './componenti/login/continua-con-goog
 import { ErrorComponent } from './componenti/error/error.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import { PopupComponent } from './componenti/popupconfermaacquisto/popup/popup.component';
+import {MatCardModule} from "@angular/material/card";
 
 
 @NgModule({
@@ -55,26 +56,27 @@ import { PopupComponent } from './componenti/popupconfermaacquisto/popup/popup.c
     ErrorComponent,
     PopupComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    RouterOutlet,
-    AppRoutingModule,
-    MatFormFieldModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatListModule,
-    HttpClientModule,
-    MatIconModule,
-    MatDialogModule,
-    SocialLoginModule,
-    MatTableModule,
-    GoogleSigninButtonModule,
-    MatTabsModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        RouterOutlet,
+        AppRoutingModule,
+        MatFormFieldModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatListModule,
+        HttpClientModule,
+        MatIconModule,
+        MatDialogModule,
+        SocialLoginModule,
+        MatTableModule,
+        GoogleSigninButtonModule,
+        MatTabsModule,
+        MatCardModule
+    ],
     providers: [
       {
         provide: 'SocialAuthServiceConfig',

@@ -1,3 +1,70 @@
 
-<p>Benvenuto, {{this.nickname_user_logged}}</p>
-<p>La tua email è: {{this.email_user_logged}}</p>
+
+<mat-card>
+  <mat-card-content class="custom-barra-superiore">
+    <p class="paragrafo-barra-superiore">
+      Bentornato, {{this.nickname_user_logged}}
+    </p>
+  </mat-card-content>
+</mat-card>
+
+<div class="card-container">
+
+  <mat-card class="example-card custom-card card-left">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="header-container-left" style="width: 700px">
+          <div class="header-left">
+            <i class="material-icons">monetization_on</i>
+            <span class="points-label" style="margin-left: 10px">Points</span>
+          </div>
+          <div class="header-left">
+            <div class="points-value" style="margin-left: 5px">p {{ points_user }}</div>
+          </div>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+  </mat-card>
+
+  <mat-card class="example-card custom-card card-center" style="width: 220px">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="header-container-center" style="width: 700px">
+          <div class="header-left">
+            <i class="material-icons">group</i>
+            <span class="points-label" style="margin-left: 10px">Matchmaking</span>
+          </div>
+          <div class="header-right">
+            <div class="points-value" style="margin-top: 10px">utenti online: 12,302</div>
+          </div>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+  </mat-card>
+
+  <mat-card class="example-card custom-card card-right">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="header-container-center" style="width: 700px">
+          <div class="header-left">
+            <i class="material-icons">group</i>
+            <span class="points-label" style="margin-left: 10px">Lista amici</span>
+          </div>
+          <div class="header-right">
+            <div class="small-text">2 online</div>
+            <div class="points-value">amici totali: 20</div>
+          </div>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+  </mat-card>
+
+
+</div>
+
+
+
+
+<button mat-flat-button color="primary" style="margin-left: 50px" (click)="aggiungi_points()">
+  aggiungi 10 points
+</button>

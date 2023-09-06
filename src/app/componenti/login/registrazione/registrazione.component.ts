@@ -50,7 +50,7 @@ export class RegistrazioneComponent implements OnInit{
 
 
     // chiamare authservice (il tuo microservizio backend che si preoccupa
-    // di controllare se nickname_or_email e password sono presenti nel DB user)
+    // di controllare se nickname_or_email e password sono già presenti nel DB user)
     this.authService.signUp(
       {
         nickname: nickname,
@@ -96,9 +96,5 @@ export class RegistrazioneComponent implements OnInit{
         this.registrationFailed = true;
       })
   }
-
-  // signOut(): any{ // For SignOut User
-  //   this.authServiceSocial.signOut();
-  // }
 
 }

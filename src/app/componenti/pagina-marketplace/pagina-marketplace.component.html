@@ -3,20 +3,20 @@
   <mat-tab label="Artisti">
     <div class="search-filters">
       <input type="text" placeholder="Cerca carte" [(ngModel)]="searchQuery">
-      <select [(ngModel)]="selectedGenre" >
-        <option value="" selected>Tutti i generi</option>
+      <select [(ngModel)]="selectedGenre">
+        <option value="">Tutti i generi</option>
         <option value="rock,">Rock</option>
         <option value="pop,">Pop</option>
         <option value="k-pop,">K-pop</option>
         <option value="metal,">Metal</option>
       </select>
-      <select [(ngModel)]="selectedPopularity" >
-        <option value="" selected>Tutte le popolarità</option>
+      <select [(ngModel)]="selectedPopularity">
+        <option value="">Tutte le popolarità</option>
         <option value="> 20">>20</option>
         <option value="> 50">>50</option>
         <option value="> 70">>70</option>
       </select>
-      <select [(ngModel)]="selectedCosto" >
+      <select [(ngModel)]="selectedCosto">
         <option value="" selected>Qualsiasi costo</option>
         <option value="> 0">>0</option>
         <option value="> 100">>100</option>
@@ -33,6 +33,7 @@
           <div class="card-header">
             <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
             <p>{{ cartaA.genere }}</p>
+            <p>Pop:{{ cartaA.popolarita }}</p>
           </div>
           <div class="card-image">
             <img [src]="cartaA.immagine" alt="Immagine">
@@ -61,14 +62,14 @@
         <option value="> 50">>50</option>
         <option value="> 70">>70</option>
       </select>
-    <select [(ngModel)]="selectedCosto">
-      <option value="" selected>Qualsiasi costo</option>
-      <option value="> 0">>0</option>
-      <option value="> 100">>100</option>
-      <option value="> 200">>200</option>
-      <option value="> 500">>500</option>
-    </select>
-    <button (click)="applyFiltersT()">Applica Filtri</button>
+      <select [(ngModel)]="selectedCosto">
+        <option value="" selected>Qualsiasi costo</option>
+        <option value="> 0">>0</option>
+        <option value="> 100">>100</option>
+        <option value="> 200">>200</option>
+        <option value="> 500">>500</option>
+      </select>
+      <button (click)="applyFiltersT()">Applica Filtri</button>
     </div>
     <div class="card-container">
       <div *ngFor="let cartaA of FiltereditemsT" class="card">
@@ -77,6 +78,7 @@
             <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
             <p>{{ cartaA.anno_pubblicazione }}</p>
             <p>{{ cartaA.durata }}</p>
+            <p>Pop:{{ cartaA.popolarita }}</p>
           </div>
           <div class="card-image">
             <img [src]="cartaA.immagine" alt="Immagine">

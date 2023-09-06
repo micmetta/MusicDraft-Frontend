@@ -1,0 +1,93 @@
+/* Stili personalizzati per il componente mat-card */
+.custom-card {
+  margin-left: 50px; /* Sposta il componente verso destra di 100 pixel (se necessario) */
+  margin-top: 20px;
+  width: 200px; /* Imposta la larghezza desiderata */
+  height: 100px; /* Imposta l'altezza desiderata */
+  border-radius: 15px; /* Imposta il raggio dei bordi per ottenere bordi curvi */
+  font-weight: bold; /* Rendi il testo in grassetto */
+  font-size: 1.2rem; /* Imposta la dimensione del carattere a 1.2rem (puoi modificare il valore) */
+  background-color: lightskyblue;
+}
+
+
+/* Stili personalizzati per l'intestazione */
+.header-container-left {
+  flex-direction: column; /* Allinea verticalmente gli elementi uno sotto l'altro */
+  align-items: center; /* Allinea orizzontalmente al centro */
+}
+
+/* Stili personalizzati per l'intestazione */
+.header-container-center {
+  flex-direction: column; /* Allinea verticalmente gli elementi uno sotto l'altro */
+  align-items: center; /* Allinea orizzontalmente al centro */
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  display: flex;
+  text-align: right;
+}
+
+.points-label {
+  font-weight: bold;
+}
+
+.points-value {
+  font-size: 1.2rem; /* Imposta la dimensione del carattere a 1.2rem (puoi modificarla) */
+  margin-top: 10px;
+}
+
+.custom-barra-superiore {
+  height: 50px;
+}
+.paragrafo-barra-superiore {
+  font-size: 1.3rem;
+  margin-top: 20px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+}
+.card-left {
+  margin-left: 50px; /* Sposta il componente verso destra di 100 pixel (se necessario) */
+  margin-top: 20px;
+  width: 200px; /* Imposta la larghezza desiderata */
+  height: 150px; /* Imposta l'altezza desiderata */
+  border-radius: 15px; /* Imposta il raggio dei bordi per ottenere bordi curvi */
+  font-weight: bold; /* Rendi il testo in grassetto */
+  font-size: 1.2rem; /* Imposta la dimensione del carattere a 1.2rem (puoi modificare il valore) */
+  background-color: lightskyblue;
+}
+.card-center {
+  margin-left: 20px; /* Aggiungi uno spazio tra i card per separarli */
+  margin-top: 20px;
+  width: 200px; /* Imposta la larghezza desiderata */
+  height: 150px; /* Imposta l'altezza desiderata */
+  border-radius: 15px; /* Imposta il raggio dei bordi per ottenere bordi curvi */
+  font-weight: bold; /* Rendi il testo in grassetto */
+  font-size: 1.2rem; /* Imposta la dimensione del carattere a 1.2rem (puoi modificare il valore) */
+  background-color: #f1f1f1;
+}
+.card-right {
+  margin-right: 1400px; /* Aggiungi uno spazio tra i card per separarli */
+  margin-left: 20px; /* Aggiungi uno spazio tra i card per separarli */
+  margin-top: 20px;
+  width: 200px; /* Imposta la larghezza desiderata */
+  height: 150px; /* Imposta l'altezza desiderata */
+  border-radius: 15px; /* Imposta il raggio dei bordi per ottenere bordi curvi */
+  font-weight: bold; /* Rendi il testo in grassetto */
+  font-size: 1.2rem; /* Imposta la dimensione del carattere a 1.2rem (puoi modificare il valore) */
+  background-color: lightskyblue;
+}
+
+.small-text {
+  font-size: 12px; /* Imposta la dimensione del carattere desiderata */
+  font-weight: normal; /* Rimuovi lo stile in grassetto */
+  color: #777; /* Cambia il colore del testo se necessario */
+}

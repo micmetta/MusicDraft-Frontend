@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import{ShowCarteInVenditaService} from "../../servizi/marketplace/show-carte-in-vendita.service";
 import { MatDialog } from '@angular/material/dialog';
-import {PopupComponent} from "../popupconfermaacquisto/popup/popup.component";
+import {PopupComponent} from "../popupconfermaacquisto/popup/compra/popup.component";
 import {AcquistaService} from "../../servizi/acquistare/acquista.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {
@@ -24,6 +24,7 @@ export class PaginaMarketplaceComponent implements OnInit{
   itemsA: any
   itemsT:any
   private baseUrl = 'http://localhost:9092/api/v1/cartemazzi'
+  private baseurl2 ='http://localhost:9091/api/v1/marketplace'
   // @ts-ignore
   private url: string;
   searchQuery: string = '';
@@ -34,6 +35,7 @@ export class PaginaMarketplaceComponent implements OnInit{
   searchQueryT: any;
   selectedAnnoPubblicazione: any;
   selectedCosto: any;
+  id:any;
   constructor(private show: ShowCarteInVenditaService,private dialog: MatDialog, private buy:AcquistaService,private http:HttpClient,private nick:Nickname_and_email_user_loggedService) {
 
   }
@@ -54,8 +56,8 @@ export class PaginaMarketplaceComponent implements OnInit{
       (this.selectedGenre === '' || cartaA.genere === this.selectedGenre) &&
       this.checkPopularity(cartaA.popolarita)&&
       this.checkCosto(cartaA.costo)
-    );
 
+    );
 
 
   }
@@ -69,8 +71,11 @@ export class PaginaMarketplaceComponent implements OnInit{
         console.log("confermato");
 
         let url: string;
+        let url2: string;
         if (carta.hasOwnProperty('durata')) {
           url = `${this.baseUrl}/acquistaCartaBrano`;
+          url2 = `${this.baseurl2}/delete-CardBrano/${carta.id}`
+          this.id=carta.id;
           this.nome = carta.nome;
           this.durata = carta.durata;
           this.anno_pubblicazione = carta.anno_pubblicazione;
@@ -78,6 +83,8 @@ export class PaginaMarketplaceComponent implements OnInit{
           this.immagine = carta.immagine;
         } else {
           url = `${this.baseUrl}/acquistaCartaArtista`;
+          url2 = `${this.baseurl2}/delete-CardArtist/${carta.id}`
+          this.id=carta.id;
           this.nome = carta.nome;
           this.popolarita = carta.popolarita;
           this.genere = carta.genere;
@@ -85,6 +92,7 @@ export class PaginaMarketplaceComponent implements OnInit{
         }
         if (carta.hasOwnProperty('durata')) {
           this.http.post(url, {
+            "id":this.id,
             "nome": this.nome,
             "durata": this.durata,
             "anno_pubblicazione": this.anno_pubblicazione,
@@ -102,8 +110,20 @@ export class PaginaMarketplaceComponent implements OnInit{
                 console.error("Errore nella chiamata:", error);
               }
             );
+          this.http.delete(url2)
+      .subscribe(
+          response => {
+            // Gestisci la risposta dal backend
+            console.log("Risposta dal backend:", response);
+          },
+          error => {
+            // Gestisci gli errori
+            console.error("Errore nella chiamata:", error);
+          }
+        );
         } else {
           this.http.post(url, {
+            "id":this.id,
             "nome": this.nome,
             "popolarita": this.popolarita,
             "genere": this.genere,
@@ -120,12 +140,37 @@ export class PaginaMarketplaceComponent implements OnInit{
                 console.error("Errore nella chiamata:", error);
               }
             );
+          console.log(url2)
+          this.http.delete(url2)
+            .subscribe(
+              response => {
+                // Gestisci la risposta dal backend
+                console.log("Risposta dal backend:", response);
+              },
+              error => {
+                // Gestisci gli errori
+                console.error("Errore nella chiamata:", error);
+              }
+            );
         }
+        this.removeItemFromArray(carta);
+
+
       }
     });
 
   }
-
+  private removeItemFromArray(carta: any) {
+    console.log("Removing item with ID:", carta.id);
+    if (carta.hasOwnProperty('durata')) {
+      this.FiltereditemsT = this.FiltereditemsT.filter((item:any) => item.id !== carta.id);
+      console.log("itemsT after removal:", this.FiltereditemsT);
+    } else {
+      console.log("Removing item from itemsA");
+      this.FiltereditemsA = this.FiltereditemsA.filter((item:any) => item.id !== carta.id);
+      console.log("itemsA after removal:", this.FiltereditemsA);
+    }
+  }
   private checkPopularity(popolarita: number): boolean {
     if (this.selectedPopularity === '> 20') {
       return popolarita > 20;
@@ -137,7 +182,6 @@ export class PaginaMarketplaceComponent implements OnInit{
       return this.selectedPopularity === '' || popolarita === parseInt(this.selectedPopularity);
     }
   }
-
   private checkCosto(costo:number):boolean{
     if (this.selectedCosto === '> 0') {
       return costo >0;
