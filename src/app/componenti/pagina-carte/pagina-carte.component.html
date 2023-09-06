@@ -6,11 +6,14 @@
           <div class="card-header">
             <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
             <p>{{ cartaA.genere }}</p>
+            <p>Pop:{{ cartaA.popolarita }}</p>
           </div>
           <div class="card-image">
             <img [src]="cartaA.immagine" alt="Immagine">
           </div>
-
+          <div class="card-footer">
+            <button (click)="openVendiPopup(cartaA)" class="card-button">Vendi</button>
+          </div>
         </div>
       </div>
     </div>
@@ -23,11 +26,14 @@
             <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
             <p>{{ cartaA.anno_pubblicazione }}</p>
             <p>{{ cartaA.durata }}</p>
+            <p>Pop:{{ cartaA.popolarita }}</p>
           </div>
           <div class="card-image">
             <img [src]="cartaA.immagine" alt="Immagine">
           </div>
-
+          <div class="card-footer">
+            <button (click)="openVendiPopup(cartaA)" class="card-button">Vendi</button>
+          </div>
         </div>
       </div>
     </div>

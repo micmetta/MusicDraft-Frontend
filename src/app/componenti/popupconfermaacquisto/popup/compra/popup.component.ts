@@ -2,7 +2,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
-import {PaginaMarketplaceComponent} from "../../pagina-marketplace/pagina-marketplace.component";
+import {PaginaMarketplaceComponent} from "../../../pagina-marketplace/pagina-marketplace.component";
 import {HttpClient} from "@angular/common/http";
 
 @Component({

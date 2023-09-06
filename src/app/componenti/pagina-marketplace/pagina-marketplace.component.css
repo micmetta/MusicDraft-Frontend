@@ -49,4 +49,36 @@
   padding: 5px 10px;
   cursor: pointer;
 }
+.search-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-filters input,
+.search-filters select,
+.search-filters button {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.search-filters select {
+  min-width: 120px;
+}
+
+.search-filters button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.search-filters button:hover {
+  background-color: #0056b3;
+}
 
