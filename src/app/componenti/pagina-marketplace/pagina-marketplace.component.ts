@@ -35,6 +35,7 @@ export class PaginaMarketplaceComponent implements OnInit{
   searchQueryT: any;
   selectedAnnoPubblicazione: any;
   selectedCosto: any;
+  id:any;
   constructor(private show: ShowCarteInVenditaService,private dialog: MatDialog, private buy:AcquistaService,private http:HttpClient,private nick:Nickname_and_email_user_loggedService) {
 
   }
@@ -74,6 +75,7 @@ export class PaginaMarketplaceComponent implements OnInit{
         if (carta.hasOwnProperty('durata')) {
           url = `${this.baseUrl}/acquistaCartaBrano`;
           url2 = `${this.baseurl2}/delete-CardBrano/${carta.id}`
+          this.id=carta.id;
           this.nome = carta.nome;
           this.durata = carta.durata;
           this.anno_pubblicazione = carta.anno_pubblicazione;
@@ -82,6 +84,7 @@ export class PaginaMarketplaceComponent implements OnInit{
         } else {
           url = `${this.baseUrl}/acquistaCartaArtista`;
           url2 = `${this.baseurl2}/delete-CardArtist/${carta.id}`
+          this.id=carta.id;
           this.nome = carta.nome;
           this.popolarita = carta.popolarita;
           this.genere = carta.genere;
@@ -89,6 +92,7 @@ export class PaginaMarketplaceComponent implements OnInit{
         }
         if (carta.hasOwnProperty('durata')) {
           this.http.post(url, {
+            "id":this.id,
             "nome": this.nome,
             "durata": this.durata,
             "anno_pubblicazione": this.anno_pubblicazione,
@@ -119,6 +123,7 @@ export class PaginaMarketplaceComponent implements OnInit{
         );
         } else {
           this.http.post(url, {
+            "id":this.id,
             "nome": this.nome,
             "popolarita": this.popolarita,
             "genere": this.genere,

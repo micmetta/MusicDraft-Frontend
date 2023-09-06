@@ -27,6 +27,7 @@ export class PaginaCarteComponent implements OnInit{
   private immagine: any;
   private genere: any;
   private costo: any;
+  private id: any;
 
   constructor(nick: Nickname_and_email_user_loggedService, http:HttpClient, private show:ShowCarteInVenditaService, private dialog:MatDialog) {
     this.nick=nick;
@@ -62,6 +63,7 @@ export class PaginaCarteComponent implements OnInit{
         if (carta.hasOwnProperty('durata')) {
           url = `${this.baseurl2}/vendiCartaBrano`;
           url2 = `${this.baseUrl}/delete-CardBrano/${carta.id}`
+          this.id = this.carta.id
           this.nome = carta.nome;
           this.durata = carta.durata;
           this.anno_pubblicazione = carta.anno_pubblicazione;
@@ -71,6 +73,7 @@ export class PaginaCarteComponent implements OnInit{
         } else {
           url = `${this.baseurl2}/vendiCartaArtista`;
           url2 = `${this.baseUrl}/delete-CardArtist/${carta.id}`
+          this.id = this.carta.id
           this.nome = carta.nome;
           this.popolarita = carta.popolarita;
           this.genere = carta.genere;
@@ -79,6 +82,7 @@ export class PaginaCarteComponent implements OnInit{
         }
         if (carta.hasOwnProperty('durata')) {
           this.http.post(url, {
+            "id": this.id,
             "nome": this.nome,
             "durata": this.durata,
             "anno_pubblicazione": this.anno_pubblicazione,
@@ -110,6 +114,7 @@ export class PaginaCarteComponent implements OnInit{
             );
         } else {
           this.http.post(url, {
+            "id": this.id,
             "nome": this.nome,
             "popolarita": this.popolarita,
             "genere": this.genere,
