@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User} from "../modelli/user.model";
+import {
+  Nickname_and_email_user_loggedService
+} from "../servizi/nickname_and_email_user_loggedService/nickname_and_email_user_logged.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +17,7 @@ export class AuthService {
   signInURL = '/api/v1/authenticationService/loginRegistered/' //url per il login di un utente già registrato
   getEmailURL: string = '/api/v1/authenticationService/getEmail/'
   getNicknameURL : string = '/api/v1/authenticationService/getNickname/'
+  getNickURL : string = '/api/v1/authenticationService/getNick'
   getPointsURL : string = '/api/v1/authenticationService/getPoints/'
   updatePointsURL: string = '/api/v1/authenticationService/updatePoints/'
 
@@ -24,7 +28,7 @@ export class AuthService {
   // @ts-ignore
   //user: User
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private nick:Nickname_and_email_user_loggedService) {}
 
 
   // createUser(nickname: string, email: string, token: string, expirationDate: Date){
@@ -50,7 +54,9 @@ export class AuthService {
   getNickname(email: string) {
     return this.http.get(`${this.getNicknameURL}`+`${email}`, {responseType: 'text'}) // ricordati di mettere {responseType: 'text'} SE IL REST RESTITUISCE UNA STRINGA!
   }
-
+  getActualNick() {
+    return this.http.get(`${this.getNickURL}`,this.nick.getStoredNickname_user_logged()) // ricordati di mettere {responseType: 'text'} SE IL REST RESTITUISCE UNA STRINGA!
+  }
   getPoints(nickname: String){
     return this.http.get(`${this.getPointsURL}`+`${nickname}`) // restituisce un intero
   }

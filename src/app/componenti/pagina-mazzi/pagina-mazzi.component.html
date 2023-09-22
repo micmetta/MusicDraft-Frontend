@@ -1,1 +1,100 @@
-<p>pagina-mazzi works!</p>
+<h1>I miei mazzi di Carte</h1>
+
+<div *ngIf="!isEditing">
+  <button (click)="creaNuovoMazzo()">Crea Nuovo Mazzo</button>
+  <ul>
+    <li *ngFor="let deck of decks">
+      {{ deck.nomemazzo }}
+      <button (click)="modificaMazzo(deck)">Modifica</button>
+      <button (click)="eliminaMazzo(deck)">Elimina</button>
+    </li>
+  </ul>
+</div>
+
+
+
+<div *ngIf="isEditing && selectedDeck && modificamazzo">
+  <h2>{{ selectedDeck ? 'Modifica Mazzo' : 'Crea un Nuovo Mazzo' }}</h2>
+
+  <form (ngSubmit)="modifyDeck()">
+
+    <div class="form-group" >
+      <label>Nome del Mazzo:</label>
+      <input [(ngModel)]="selectedDeck.nomemazzo" [ngModelOptions]="{ standalone: true }" required>
+    </div>
+    <div *ngFor="let carte of selectedDeck.carteassociate">
+
+    <ul>
+      <li *ngFor="let card of carte">
+
+        <img src="{{card.immagine }}" alt="{{ card.nome }}" class="card-thumbnail">
+        {{ card.nome }} (Popolarità: {{ card.popolarita }})
+        <button type="button" (click)="rimuoviCarta(selectedDeck.carteassociate, card)">Rimuovi</button>
+      </li>
+    </ul>
+    </div >
+    <!-- Aggiungi carte al mazzo selezionato -->
+    <div class="form-group">
+      <form >
+        <label for="cartaDaAggiungere">Aggiungi Carta:</label>
+
+          <mat-chip-list id="cartaDaAggiungere">
+            <mat-chip *ngFor="let card of availableCards" [selectable]="true" (click)="toggleCardSelection(card)" [selected]="isSelected(card)">
+              <mat-icon matChipAvatar>
+                <img [src]="card.immagine" alt="{{ card.nome }}">
+              </mat-icon>
+              {{ card.nome }} (Popolarità: {{ card.popolarita }})
+              <mat-icon matChipRemove *ngIf="isSelected(card)" (click)="toggleCardSelection(card)"></mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+        <h3>Carte Selezionate</h3>
+        <ul>
+          <li *ngFor="let card of carteSelezionate">
+            <img src="{{ card.immagine }}" alt="{{ card.nome }}" class="card-thumbnail">
+            {{ card.nome }} (Popolarità: {{ card.popolarita }})
+          </li>
+        </ul>
+
+
+        <button type="button" (click)="aggiungiCarta()">Aggiungi</button>
+
+      </form>
+    </div>
+
+    <button type="submit" >{{ modificamazzo ? 'Modifica' : 'Crea' }}</button>
+    <button type="button" (click)="annullaModifica()">Annulla</button>
+  </form>
+</div>
+<div *ngIf="isEditing && creanuovomazzo">
+  <h2>{{ selectedDeck ? 'Modifica Mazzo' : 'Crea un Nuovo Mazzo' }}</h2>
+
+  <form (submit)="salvaMazzo()">
+
+    <div class="form-group">
+      <label for="nome">Nome del Mazzo:</label>
+      <input type="text" name="nome" [(ngModel)]="deck.name" required>
+    </div>
+
+    <div class="form-group">
+      <mat-chip-list>
+        <mat-chip *ngFor="let card of availableCards" [selectable]="true" (click)="toggleCardSelection(card)" [selected]="isSelected(card)">
+          <mat-icon matChipAvatar>
+            <img [src]="card.immagine" alt="{{ card.nome }}">
+          </mat-icon>
+          {{ card.nome }} (Popolarità: {{ card.popolarita }})
+          <mat-icon matChipRemove *ngIf="isSelected(card)" (click)="toggleCardSelection(card)"></mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+
+    <h3>Carte Selezionate</h3>
+    <ul>
+      <li *ngFor="let card of carteSelezionate">
+        <img src="{{ card.immagine }}" alt="{{ card.nome }}" class="card-thumbnail">
+        {{ card.nome }} (Popolarità: {{ card.popolarita }})
+      </li>
+    </ul>
+    <button type="submit" [disabled]="carteSelezionate.length === 0">{{ creanuovomazzo ? 'Crea' : 'Modifica' }}</button>
+    <button type="button" (click)="annullaModifica()">Annulla</button>
+  </form>
+</div>

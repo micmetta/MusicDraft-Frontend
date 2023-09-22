@@ -35,6 +35,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { ContinuaConGoogleComponent } from './componenti/login/continua-con-google/continua-con-google.component';
 import { ErrorComponent } from './componenti/error/error.component';
 import {MatTabsModule} from "@angular/material/tabs";
+import { PopupComponent} from "./componenti/popupconfermaacquisto/popup/compra/popup.component";
+import{VendipopComponent} from "./popup/vendi/vendipop/vendipop.component"
 import {MatCardModule} from "@angular/material/card";
 import {PopupComponent} from "./componenti/popupconfermaacquisto/popup/compra/popup.component";
 import {VendipopComponent} from "./popup/vendi/vendipop/vendipop.component";
@@ -44,6 +46,9 @@ import { PaginaCreaOffertaComponent } from './componenti/pagina-crea-offerta/pag
 import { DialogMessageComponent } from './componenti/dialog-message/dialog-message.component';
 import { PaginaFaiControffertaComponent } from './componenti/pagina-fai-controfferta/pagina-fai-controfferta.component';
 
+import {MatChipsModule} from "@angular/material/chips";
+import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
+import {PaginaMazziComponent} from "./componenti/pagina-mazzi/pagina-mazzi.component";
 
 @NgModule({
   declarations: [
@@ -68,6 +73,9 @@ import { PaginaFaiControffertaComponent } from './componenti/pagina-fai-controff
     PaginaCreaOffertaComponent,
     DialogMessageComponent,
     PaginaFaiControffertaComponent,
+    VendipopComponent,
+
+
   ],
     imports: [
         BrowserModule,
@@ -90,6 +98,29 @@ import { PaginaFaiControffertaComponent } from './componenti/pagina-fai-controff
         MatTabsModule,
         MatCardModule,
     ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterOutlet,
+    AppRoutingModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatListModule,
+    HttpClientModule,
+    MatIconModule,
+    MatDialogModule,
+    SocialLoginModule,
+    MatTableModule,
+    GoogleSigninButtonModule,
+    MatTabsModule,
+    MatCardModule,
+    MatChipsModule,
+    MatLegacyChipsModule
+  ],
     providers: [
       {
         provide: 'SocialAuthServiceConfig',
