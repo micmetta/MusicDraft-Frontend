@@ -23,7 +23,7 @@ export class PaginaHomeComponent implements OnInit{
   // @ts-ignore
   private subscription: Subscription;
 
-  constructor(private nicknameAndEmailUserLoggedService: Nickname_and_email_user_loggedService, private authService: AuthService) {
+  constructor(private nicknameAndEmailUserLoggedService: Nickname_and_email_user_loggedService, private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -61,6 +61,8 @@ export class PaginaHomeComponent implements OnInit{
   // - tutte le loro carte,
   // - possibilità di fare un'offerta per una certa carta,
   // - visualizzare tutte le offerte in corso e il loro storico.
-
+  pagina_scambi(){
+    this.router.navigate(["/dashboard/scambi_carte"])
+  }
 
 }

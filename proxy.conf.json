@@ -3,6 +3,12 @@
     "target": "http://localhost:8081",
     "secure": false
   },
+
+  "/api/v1/homeService": {
+    "target": "http://localhost:8082",
+    "secure": false
+  },
+
   "/api/v1/marketplace": {
     "target": "http://localhost:9091",
     "secure": false

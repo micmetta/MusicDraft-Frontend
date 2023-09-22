@@ -1,0 +1,44 @@
+
+<mat-tab-group>
+
+  <mat-tab label="Artisti di {{user_offerta}}">
+    <div class="card-container">
+      <div *ngFor="let cartaA of lista_carte_artisti_utente" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+            <p>{{ cartaA.genere }}</p>
+            <p>Pop:{{ cartaA.popolarita }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaA.immagine" alt="Immagine">
+          </div>
+          <div class="card-footer">
+            <button (click)="proponiOfferta(cartaA, 'artista', user_offerta)" class="card-button">Proponi offerta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Brani di {{user_offerta}}">
+    <div class="card-container">
+      <div *ngFor="let cartaB of lista_carte_brani_utente" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaB.nome }} {{ cartaB.cognome }}</h4>
+            <p>{{ cartaB.anno_pubblicazione }}</p>
+            <p>{{ cartaB.durata }}</p>
+            <p>Pop:{{ cartaB.popolarita }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaB.immagine" alt="Immagine">
+          </div>
+          <div class="card-footer">
+            <button (click)="proponiOfferta(cartaB, 'brano', user_offerta)" class="card-button">Proponi offerta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

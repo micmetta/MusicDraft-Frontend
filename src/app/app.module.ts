@@ -35,8 +35,14 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { ContinuaConGoogleComponent } from './componenti/login/continua-con-google/continua-con-google.component';
 import { ErrorComponent } from './componenti/error/error.component';
 import {MatTabsModule} from "@angular/material/tabs";
-import { PopupComponent } from './componenti/popupconfermaacquisto/popup/popup.component';
 import {MatCardModule} from "@angular/material/card";
+import {PopupComponent} from "./componenti/popupconfermaacquisto/popup/compra/popup.component";
+import {VendipopComponent} from "./popup/vendi/vendipop/vendipop.component";
+import { PaginaScambiCarteComponent } from './componenti/pagina-scambi-carte/pagina-scambi-carte.component';
+import { PaginaFaiOffertaComponent } from './componenti/pagina-fai-offerta/pagina-fai-offerta.component';
+import { PaginaCreaOffertaComponent } from './componenti/pagina-crea-offerta/pagina-crea-offerta.component';
+import { DialogMessageComponent } from './componenti/dialog-message/dialog-message.component';
+import { PaginaFaiControffertaComponent } from './componenti/pagina-fai-controfferta/pagina-fai-controfferta.component';
 
 
 @NgModule({
@@ -55,6 +61,13 @@ import {MatCardModule} from "@angular/material/card";
     ContinuaConGoogleComponent,
     ErrorComponent,
     PopupComponent,
+    PaginaMarketplaceComponent,
+    VendipopComponent,
+    PaginaScambiCarteComponent,
+    PaginaFaiOffertaComponent,
+    PaginaCreaOffertaComponent,
+    DialogMessageComponent,
+    PaginaFaiControffertaComponent,
   ],
     imports: [
         BrowserModule,
@@ -75,7 +88,7 @@ import {MatCardModule} from "@angular/material/card";
         MatTableModule,
         GoogleSigninButtonModule,
         MatTabsModule,
-        MatCardModule
+        MatCardModule,
     ],
     providers: [
       {

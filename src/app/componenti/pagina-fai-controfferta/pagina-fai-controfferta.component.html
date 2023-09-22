@@ -1,0 +1,489 @@
+
+
+<br>
+<br>
+<h2> In questa sezione puoi creare una controfferta per l'offerta selezionata: </h2>
+
+
+<div>
+  <!-- Utilizza la variabile tempObj per i dati temporanei -->
+  <p *ngIf="offerta_ricevuta.statoOfferta == 'in_attesa'" style="margin-top: 50px; font-size: 16px; font-weight: bold;"> Offerta ricevuta da: {{ offerta_ricevuta.nickname_utente_richiesta_ricevuta }} </p>
+  <p *ngIf="offerta_ricevuta.statoOfferta == 'controfferta' && !isPari(offerta_ricevuta.numControfferta)" style="margin-top: 50px; font-size: 16px; font-weight: bold;"> Controfferta ricevuta da: {{ offerta_ricevuta.nicknameU2 }} </p>
+
+  <div class="carta-container">
+    <div class="carta-info">
+      <div class="card-image-small">
+        <img [src]="offerta_ricevuta.immagine_carta_ricevuta" alt="Immagine">
+      </div>
+      <p> ID carta richiesta: {{ offerta_ricevuta.id_carta_richiesta_ricevuta }} </p>
+      <p> Tipo richiesta: {{ offerta_ricevuta.tipo_carta_richiesta_ricevuta }} </p>
+      <p> Nome carta richiesta: {{ offerta_ricevuta.nome_carta_richiesta_ricevuta }} </p>
+      <p> popolarità: {{ offerta_ricevuta.popolarita_ricevuta }} </p>
+      <p> genere: {{ offerta_ricevuta.genere_ricevuta }} </p>
+      <p> points offerti: {{ offerta_ricevuta.points_offerti_ricevuta }} </p>
+    </div>
+  </div>
+
+
+
+  <div *ngIf="offerta_ricevuta.statoOfferta == 'in_attesa'">
+
+    <p style="margin-top: 20px; font-weight: bold"> LISTA CARTE OFFERTE: </p>
+
+    <div class="card-container">
+      <!-- Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte -->
+      <div *ngFor="let id_cartaOfferta of lista_carte_offerte_ricevuta; let j = index">
+
+
+        <!-- Controllo della condizione -->
+        <ng-container *ngIf="offerta_ricevuta.lista_tipi_carte_offerte_ricevuta[j] == 'artista'; then forArtisti else forBrani"></ng-container>
+
+        <!-- Primo *ngFor interno (eseguito se la condizione è vera) -->
+        <ng-template #forArtisti>
+          <div class="carta-container">
+            <div *ngFor="let carta_artista of lista_carte_artisti_utente_ricevuta; let k = index">
+              <ng-container *ngIf="carta_artista.id == id_cartaOfferta">
+                <div class="carta-info">
+                  <div class="card-image-small">
+                    <img [src]="carta_artista.immagine" alt="Immagine">
+                  </div>
+                  <p>Id carta offerta: {{ id_cartaOfferta }}</p>
+                  <p>Nome carta: {{ carta_artista.nome }}</p>
+                  <p>popolarità: {{ carta_artista.popolarita }}</p>
+                  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="togli_carta(carta_artista.id, 'artista')">
+                    Elimina carta
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Secondo *ngFor interno (eseguito se la condizione è falsa) -->
+        <ng-template #forBrani>
+          <div class="carta-container">
+            <div *ngFor="let carta_brano of lista_carte_brani_utente_ricevuta">
+              <ng-container *ngIf="carta_brano.id == id_cartaOfferta">
+                <div class="carta-info">
+                  <div class="card-image-small">
+                    <img [src]="carta_brano.immagine" alt="Immagine">
+                  </div>
+                  <p>Id carta offerta: {{ id_cartaOfferta }}</p>
+                  <p>Nome carta: {{ carta_brano.nome }}</p>
+                  <p>popolarità: {{ carta_brano.popolarita }}</p>
+                  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="togli_carta(carta_brano.id, 'brano')">
+                    Elimina carta
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+
+      </div>
+    </div>
+
+    <div>
+
+      <p style="margin-top: 20px; font-weight: bold"> RICHIEDI ALTRE CARTE a: {{ offerta_ricevuta.nickname_utente_richiesta_ricevuta }} </p>
+      <!-- Qui faccio apparire tutte le carte "Artisti" e "Brani" di offerta_ricevuta.nickname_utente_richiesta_ricevuta e per ogni carta è possibile fare "Richiedi"
+           in questo modo quella carta verrà aggiunta tra le carte richieste nella controfferta.
+      -->
+      <mat-tab-group>
+
+        <mat-tab label="Artisti di {{offerta_ricevuta.nickname_utente_richiesta_ricevuta}}">
+          <div class="card-container">
+            <div *ngFor="let cartaA of lista_carte_artisti_utente_ricevuta" class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+                  <p>{{ cartaA.genere }}</p>
+                  <p>Pop:{{ cartaA.popolarita }}</p>
+                </div>
+                <div class="card-image">
+                  <img [src]="cartaA.immagine" alt="Immagine">
+                </div>
+                <div class="card-footer">
+                  <button (click)="richiediCarta(cartaA, 'artista')" class="card-button">Richiedi carta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Brani di {{offerta_ricevuta.nickname_utente_richiesta_ricevuta}}">
+          <div class="card-container">
+            <div *ngFor="let cartaB of lista_carte_brani_utente_ricevuta" class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h4>{{ cartaB.nome }} {{ cartaB.cognome }}</h4>
+                  <p>{{ cartaB.anno_pubblicazione }}</p>
+                  <p>{{ cartaB.durata }}</p>
+                  <p>Pop:{{ cartaB.popolarita }}</p>
+                </div>
+                <div class="card-image">
+                  <img [src]="cartaB.immagine" alt="Immagine">
+                </div>
+                <div class="card-footer">
+                  <button (click)="richiediCarta(cartaB, 'brano')" class="card-button">Richiedi carta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+
+
+    <p style="margin-top: 20px; font-weight: bold"> LISTA CARTE RICHIESTE: </p>
+
+    <div class="card-container">
+      <!-- Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte -->
+      <div *ngFor="let carta_richiesta of lista_carte_richieste_nella_controfferta; let j = index">
+
+        <!-- Primo *ngFor interno (eseguito se la condizione è vera) -->
+        <div class="carta-container">
+          <div class="carta-info">
+            <div class="card-image-small">
+              <img [src]="carta_richiesta.immagine" alt="Immagine">
+            </div>
+            <p>Id carta offerta: {{ carta_richiesta.id }}</p>
+            <p>Nome carta: {{ carta_richiesta.nome }}</p>
+            <p>popolarità: {{ carta_richiesta.popolarita }}</p>
+
+            <div *ngIf="lista_tipi_carte_richieste_nella_controfferta[j] == 'artista'" class="card-footer">
+              <button (click)="togli_carta_proposta(carta_richiesta, 'artista')" class="card-button">Elimina carta</button>
+            </div>
+
+            <div *ngIf="lista_tipi_carte_richieste_nella_controfferta[j] == 'brano'" class="card-footer">
+              <button (click)="togli_carta_proposta(carta_richiesta, 'brano')" class="card-button">Elimina carta</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+  <div *ngIf="offerta_ricevuta.statoOfferta == 'controfferta' && !isPari(offerta_ricevuta.numControfferta)">
+
+    <p style="margin-top: 20px; font-weight: bold"> LISTA CARTE OFFERTE: </p>
+
+    <div class="card-container">
+      <!-- Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte -->
+      <div *ngFor="let id_cartaOfferta of lista_carte_offerte_ricevuta; let j = index">
+
+
+        <!-- Controllo della condizione -->
+        <ng-container *ngIf="offerta_ricevuta.lista_tipi_carte_offerte_ricevuta[j] == 'artista'; then forArtisti else forBrani"></ng-container>
+
+        <!-- Primo *ngFor interno (eseguito se la condizione è vera) -->
+        <ng-template #forArtisti>
+          <div class="carta-container">
+            <div *ngFor="let carta_artista of lista_carte_artisti_utente_ricevuta; let k = index">
+
+
+              <ng-container *ngIf="carta_artista.id == id_cartaOfferta">
+                <div class="carta-info">
+                  <div class="card-image-small">
+                    <img [src]="carta_artista.immagine" alt="Immagine">
+                  </div>
+                  <p>Id carta offerta: {{ id_cartaOfferta }}</p>
+                  <p>Nome carta: {{ carta_artista.nome }}</p>
+                  <p>popolarità: {{ carta_artista.popolarita }}</p>
+                  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="togli_carta(carta_artista.id, 'artista')">
+                    Elimina carta
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Secondo *ngFor interno (eseguito se la condizione è falsa) -->
+        <ng-template #forBrani>
+          <div class="carta-container">
+            <div *ngFor="let carta_brano of lista_carte_brani_utente_ricevuta">
+              <ng-container *ngIf="carta_brano.id == id_cartaOfferta">
+                <div class="carta-info">
+                  <div class="card-image-small">
+                    <img [src]="carta_brano.immagine" alt="Immagine">
+                  </div>
+                  <p>Id carta offerta: {{ id_cartaOfferta }}</p>
+                  <p>Nome carta: {{ carta_brano.nome }}</p>
+                  <p>popolarità: {{ carta_brano.popolarita }}</p>
+                  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="togli_carta(carta_brano.id, 'brano')">
+                    Elimina carta
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+
+      </div>
+    </div>
+
+    <div>
+
+      <p style="margin-top: 20px; font-weight: bold"> PROPONI ALTRE CARTE a: {{ offerta_ricevuta.nicknameU2 }} </p>
+      <!-- Qui faccio apparire tutte le carte "Artisti" e "Brani" di offerta_ricevuta.nickname_utente_richiesta_ricevuta e per ogni carta è possibile fare "Richiedi"
+           in questo modo quella carta verrà aggiunta tra le carte richieste nella controfferta.
+      -->
+      <mat-tab-group>
+
+        <mat-tab label="TUOI Artisti">
+          <div class="card-container">
+            <div *ngFor="let cartaA of lista_carte_artisti_utente_ricevuta" class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+                  <p>{{ cartaA.genere }}</p>
+                  <p>Pop:{{ cartaA.popolarita }}</p>
+                </div>
+                <div class="card-image">
+                  <img [src]="cartaA.immagine" alt="Immagine">
+                </div>
+                <div class="card-footer">
+                  <button (click)="richiediCarta(cartaA, 'artista')" class="card-button">Proponi carta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="TUOI Brani">
+          <div class="card-container">
+            <div *ngFor="let cartaB of lista_carte_brani_utente_ricevuta" class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h4>{{ cartaB.nome }} {{ cartaB.cognome }}</h4>
+                  <p>{{ cartaB.anno_pubblicazione }}</p>
+                  <p>{{ cartaB.durata }}</p>
+                  <p>Pop:{{ cartaB.popolarita }}</p>
+                </div>
+                <div class="card-image">
+                  <img [src]="cartaB.immagine" alt="Immagine">
+                </div>
+                <div class="card-footer">
+                  <button (click)="richiediCarta(cartaB, 'brano')" class="card-button">Proponi carta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+
+
+    <p style="margin-top: 20px; font-weight: bold"> LISTA CARTE AGGIUNTIVE PROPOSTE: </p>
+
+    <div class="card-container">
+      <!-- Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte -->
+      <div *ngFor="let carta_richiesta of lista_carte_richieste_nella_controfferta; let j = index">
+
+        <!-- Primo *ngFor interno (eseguito se la condizione è vera) -->
+        <div class="carta-container">
+          <div class="carta-info">
+            <div class="card-image-small">
+              <img [src]="carta_richiesta.immagine" alt="Immagine">
+            </div>
+            <p>Id carta offerta: {{ carta_richiesta.id }}</p>
+            <p>Nome carta: {{ carta_richiesta.nome }}</p>
+            <p>popolarità: {{ carta_richiesta.popolarita }}</p>
+
+            <div *ngIf="lista_tipi_carte_richieste_nella_controfferta[j] == 'artista'" class="card-footer">
+              <button (click)="togli_carta_proposta(carta_richiesta, 'artista')" class="card-button">Elimina carta</button>
+            </div>
+
+            <div *ngIf="lista_tipi_carte_richieste_nella_controfferta[j] == 'brano'" class="card-footer">
+              <button (click)="togli_carta_proposta(carta_richiesta, 'brano')" class="card-button">Elimina carta</button>
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <div *ngIf="offerta_ricevuta.statoOfferta == 'controfferta' && isPari(offerta_ricevuta.numControfferta)">
+
+    <p style="margin-top: 20px; font-weight: bold"> LISTA CARTE OFFERTE: </p>
+
+    <div class="card-container">
+      <!-- Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte -->
+      <div *ngFor="let id_cartaOfferta of lista_carte_offerte_ricevuta; let j = index">
+
+
+        <!-- Controllo della condizione -->
+        <ng-container *ngIf="offerta_ricevuta.lista_tipi_carte_offerte_ricevuta[j] == 'artista'; then forArtisti else forBrani"></ng-container>
+
+        <!-- Primo *ngFor interno (eseguito se la condizione è vera) -->
+        <ng-template #forArtisti>
+          <div class="carta-container">
+            <div *ngFor="let carta_artista of lista_carte_artisti_utente_ricevuta; let k = index">
+
+
+              <ng-container *ngIf="carta_artista.id == id_cartaOfferta">
+                <div class="carta-info">
+                  <div class="card-image-small">
+                    <img [src]="carta_artista.immagine" alt="Immagine">
+                  </div>
+                  <p>Id carta offerta: {{ id_cartaOfferta }}</p>
+                  <p>Nome carta: {{ carta_artista.nome }}</p>
+                  <p>popolarità: {{ carta_artista.popolarita }}</p>
+                  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="togli_carta(carta_artista.id, 'artista')">
+                    Elimina carta
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Secondo *ngFor interno (eseguito se la condizione è falsa) -->
+        <ng-template #forBrani>
+          <div class="carta-container">
+            <div *ngFor="let carta_brano of lista_carte_brani_utente_ricevuta">
+              <ng-container *ngIf="carta_brano.id == id_cartaOfferta">
+                <div class="carta-info">
+                  <div class="card-image-small">
+                    <img [src]="carta_brano.immagine" alt="Immagine">
+                  </div>
+                  <p>Id carta offerta: {{ id_cartaOfferta }}</p>
+                  <p>Nome carta: {{ carta_brano.nome }}</p>
+                  <p>popolarità: {{ carta_brano.popolarita }}</p>
+                  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="togli_carta(carta_brano.id, 'brano')">
+                    Elimina carta
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+
+      </div>
+    </div>
+
+    <div>
+
+      <p style="margin-top: 20px; font-weight: bold"> RICHIEDI ALTRE CARTE a: {{ offerta_ricevuta.nicknameU1 }} </p>
+      <!-- Qui faccio apparire tutte le carte "Artisti" e "Brani" di offerta_ricevuta.nickname_utente_richiesta_ricevuta e per ogni carta è possibile fare "Richiedi"
+           in questo modo quella carta verrà aggiunta tra le carte richieste nella controfferta.
+      -->
+      <mat-tab-group>
+
+        <mat-tab label="Artisti di {{ offerta_ricevuta.nicknameU1 }}">
+          <div class="card-container">
+            <div *ngFor="let cartaA of lista_carte_artisti_utente_che_ha_inviato_la_controfferta_ricevuta" class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+                  <p>{{ cartaA.genere }}</p>
+                  <p>Pop:{{ cartaA.popolarita }}</p>
+                </div>
+                <div class="card-image">
+                  <img [src]="cartaA.immagine" alt="Immagine">
+                </div>
+                <div class="card-footer">
+                  <button (click)="richiediCarta(cartaA, 'artista')" class="card-button">Richied carta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Brani di {{ offerta_ricevuta.nicknameU1 }}">
+          <div class="card-container">
+            <div *ngFor="let cartaB of lista_carte_brani_utente_che_ha_inviato_la_controfferta_ricevuta" class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h4>{{ cartaB.nome }} {{ cartaB.cognome }}</h4>
+                  <p>{{ cartaB.anno_pubblicazione }}</p>
+                  <p>{{ cartaB.durata }}</p>
+                  <p>Pop:{{ cartaB.popolarita }}</p>
+                </div>
+                <div class="card-image">
+                  <img [src]="cartaB.immagine" alt="Immagine">
+                </div>
+                <div class="card-footer">
+                  <button (click)="richiediCarta(cartaB, 'brano')" class="card-button">Richied carta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+
+
+    <p style="margin-top: 20px; font-weight: bold"> LISTA CARTE AGGIUNTIVE PROPOSTE: </p>
+
+    <div class="card-container">
+      <!-- Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte -->
+      <div *ngFor="let carta_richiesta of lista_carte_richieste_nella_controfferta; let j = index">
+
+        <!-- Primo *ngFor interno (eseguito se la condizione è vera) -->
+        <div class="carta-container">
+          <div class="carta-info">
+            <div class="card-image-small">
+              <img [src]="carta_richiesta.immagine" alt="Immagine">
+            </div>
+            <p>Id carta offerta: {{ carta_richiesta.id }}</p>
+            <p>Nome carta: {{ carta_richiesta.nome }}</p>
+            <p>popolarità: {{ carta_richiesta.popolarita }}</p>
+
+            <div *ngIf="lista_tipi_carte_richieste_nella_controfferta[j] == 'artista'" class="card-footer">
+              <button (click)="togli_carta_proposta(carta_richiesta, 'artista')" class="card-button">Elimina carta</button>
+            </div>
+
+            <div *ngIf="lista_tipi_carte_richieste_nella_controfferta[j] == 'brano'" class="card-footer">
+              <button (click)="togli_carta_proposta(carta_richiesta, 'brano')" class="card-button">Elimina carta</button>
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <div class="form-group">
+    <p class="paragrafo-style"> POINTS RICHIESTI (modificabile): </p>
+    <input
+      type="number"
+      id="pointsOfferti"
+      name="pointsOfferti"
+      class="form-control"
+      [(ngModel)]="offerta_ricevuta.points_offerti_ricevuta"
+      required
+      min="0"
+    />
+  </div>
+
+
+  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="invia_controfferta(offerta_ricevuta.points_offerti_ricevuta)">
+    Invia controfferta
+  </button>
+
+
+</div>

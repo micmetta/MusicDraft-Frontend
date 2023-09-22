@@ -14,6 +14,10 @@ import {AuthService} from "./auth/auth.service";
 import {authGuard} from "./auth/auth.guard";
 import {ContinuaConGoogleComponent} from "./componenti/login/continua-con-google/continua-con-google.component";
 import {ErrorComponent} from "./componenti/error/error.component";
+import {PaginaScambiCarteComponent} from "./componenti/pagina-scambi-carte/pagina-scambi-carte.component";
+import {PaginaFaiOffertaComponent} from "./componenti/pagina-fai-offerta/pagina-fai-offerta.component";
+import {PaginaCreaOffertaComponent} from "./componenti/pagina-crea-offerta/pagina-crea-offerta.component";
+import {PaginaFaiControffertaComponent} from "./componenti/pagina-fai-controfferta/pagina-fai-controfferta.component";
 
 const routes: Routes = [
   {path: '', component: HomepageComponent},
@@ -29,6 +33,10 @@ const routes: Routes = [
       {path: 'mazzi', component: PaginaMazziComponent},
       {path: 'marketplace', component: PaginaMarketplaceComponent},
       {path: 'account', component: PaginaAccountComponent},
+      {path: 'scambi_carte', component: PaginaScambiCarteComponent},
+      {path: 'fai_offerta', component: PaginaFaiOffertaComponent},
+      {path: 'crea_offerta', component: PaginaCreaOffertaComponent},
+      {path: 'fai_controfferta', component: PaginaFaiControffertaComponent},
     ]},
 ]
 

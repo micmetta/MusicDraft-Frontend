@@ -39,7 +39,7 @@
 
 .points-value {
   font-size: 1.2rem; /* Imposta la dimensione del carattere a 1.2rem (puoi modificarla) */
-  margin-top: 10px;
+  margin-top: 2px;
 }
 
 .custom-barra-superiore {
@@ -90,4 +90,10 @@
   font-size: 12px; /* Imposta la dimensione del carattere desiderata */
   font-weight: normal; /* Rimuovi lo stile in grassetto */
   color: #777; /* Cambia il colore del testo se necessario */
+}
+.botton-scambio-carte{
+  margin-top: 2px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }

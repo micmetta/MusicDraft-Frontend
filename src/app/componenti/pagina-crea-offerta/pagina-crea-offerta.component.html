@@ -1,0 +1,94 @@
+
+
+<div class="card-content">
+  <div class="card-header">
+    <p class="paragrafo-style"> CARTA RICHIESTA: </p>
+    <h4>Nome: {{ this.carta_richiesta.nome }}</h4>
+    <p>Genere: {{ this.carta_richiesta.genere }}</p>
+    <p>Pop: {{ this.carta_richiesta.popolarita }}</p>
+  </div>
+  <div class="card-image">
+    <img [src]="this.carta_richiesta.immagine" alt="Immagine">
+  </div>
+</div>
+
+
+<div class="center-container">
+  <p class="paragrafo-style"> INSERISCI I DATI DELLA TUA OFFERTA: </p>
+</div>
+
+<mat-tab-group>
+
+  <mat-tab label="Tuoi artisti">
+    <div class="card-container">
+      <div *ngFor="let cartaA of lista_carte_artisti_utente" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+            <p>{{ cartaA.genere }}</p>
+            <p>Pop:{{ cartaA.popolarita }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaA.immagine" alt="Immagine">
+          </div>
+          <div class="card-footer">
+            <button (click)="aggiungi_cartaA_Offerta(cartaA)" class="card-button">Proponi carta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Tuoi brani">
+    <div class="card-container">
+      <div *ngFor="let cartaB of lista_carte_brani_utente" class="card">
+        <div class="card-content">
+          <div class="card-header">
+            <h4>{{ cartaB.nome }} {{ cartaB.cognome }}</h4>
+            <p>{{ cartaB.anno_pubblicazione }}</p>
+            <p>{{ cartaB.durata }}</p>
+            <p>Pop:{{ cartaB.popolarita }}</p>
+          </div>
+          <div class="card-image">
+            <img [src]="cartaB.immagine" alt="Immagine">
+          </div>
+          <div class="card-footer">
+            <button (click)="aggiungi_cartaB_Offerta(cartaB)" class="card-button">Proponi carta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+
+
+<form (ngSubmit)="submitForm()" #offertaForm="ngForm">
+
+  <div class="form-group">
+    <p class="paragrafo-style"> LISTA CARTE OFFERTE: </p>
+    <ul>
+      <li *ngFor="let carta of this.listaCarteOfferte; let i = index">
+
+        <div class="card-image-small"><img [src]="carta.immagine" alt="Immagine"> </div> id: {{ carta.id }}, nome: {{ carta.nome }}, pop: {{ carta.popolarita }}
+
+        <button type="button" (click)="rimuoviOggetto(i)" class="btn btn-danger">Rimuovi</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="form-group">
+    <p class="paragrafo-style"> POINTS OFFERTI: </p>
+    <input
+      type="number"
+      id="pointsOfferti"
+      name="pointsOfferti"
+      class="form-control"
+      [(ngModel)]="this.pointsOfferti"
+      required
+      min="0"
+    />
+  </div>
+
+  <button mat-raised-button color="primary" type="submit" class="create-account-button" style="margin-top: 10px; background-color: #007bff;">Invia offerta</button>
+</form>

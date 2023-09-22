@@ -1,0 +1,19 @@
+.dialog-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.dialog-message {
+  font-size: 18px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.dialog-button-container {
+  text-align: center;
+}
+
+.dialog-ok-button {
+  font-size: 18px;
+}
