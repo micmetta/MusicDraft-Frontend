@@ -15,7 +15,6 @@ import { RegistrazioneComponent } from './componenti/login/registrazione/registr
 import { DashboardComponent } from './componenti/dashboard/dashboard.component';
 import { PaginaListaAmiciComponent } from './componenti/pagina-lista-amici/pagina-lista-amici.component';
 import { PaginaCarteComponent } from './componenti/pagina-carte/pagina-carte.component';
-import { PaginaMazziComponent } from './componenti/pagina-mazzi/pagina-mazzi.component';
 import { PaginaMarketplaceComponent } from './componenti/pagina-marketplace/pagina-marketplace.component';
 import { PaginaAccountComponent } from './componenti/pagina-account/pagina-account.component';
 import {RouterOutlet} from "@angular/router";
@@ -35,9 +34,12 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { ContinuaConGoogleComponent } from './componenti/login/continua-con-google/continua-con-google.component';
 import { ErrorComponent } from './componenti/error/error.component';
 import {MatTabsModule} from "@angular/material/tabs";
-import { PopupComponent } from './componenti/popupconfermaacquisto/popup/popup.component';
+import { PopupComponent} from "./componenti/popupconfermaacquisto/popup/compra/popup.component";
+import{VendipopComponent} from "./popup/vendi/vendipop/vendipop.component"
 import {MatCardModule} from "@angular/material/card";
-
+import {MatChipsModule} from "@angular/material/chips";
+import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
+import {PaginaMazziComponent} from "./componenti/pagina-mazzi/pagina-mazzi.component";
 
 @NgModule({
   declarations: [
@@ -55,28 +57,33 @@ import {MatCardModule} from "@angular/material/card";
     ContinuaConGoogleComponent,
     ErrorComponent,
     PopupComponent,
+    VendipopComponent,
+
+
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterOutlet,
-        AppRoutingModule,
-        MatFormFieldModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatInputModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatListModule,
-        HttpClientModule,
-        MatIconModule,
-        MatDialogModule,
-        SocialLoginModule,
-        MatTableModule,
-        GoogleSigninButtonModule,
-        MatTabsModule,
-        MatCardModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterOutlet,
+    AppRoutingModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatListModule,
+    HttpClientModule,
+    MatIconModule,
+    MatDialogModule,
+    SocialLoginModule,
+    MatTableModule,
+    GoogleSigninButtonModule,
+    MatTabsModule,
+    MatCardModule,
+    MatChipsModule,
+    MatLegacyChipsModule
+  ],
     providers: [
       {
         provide: 'SocialAuthServiceConfig',

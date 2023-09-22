@@ -37,13 +37,26 @@ export class ShowCarteInVenditaService {
     return this.http.get(url,httpOptions);
   }
 
-  getCarteArtistaByNickname(nick:string):Observable<Object>{
-    const url = `${this.baseUrl2}/showCardArtistaUtente`;
-    return this.http.post(url,nick);
+  getCarteArtistaByNickname(nick:string){
+    const url = `${this.baseUrl2}/showCardArtistaUtente/${nick}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*' // Imposta l'origine consentita, potrebbe essere più restrittivo
+      })
+    };
+
+    return this.http.get(url,httpOptions);
   }
-  getCarteBranoByNickname(nick:string):Observable<Object>{
-    const url = `${this.baseUrl2}/showCardArtistaBrani`;
-    return this.http.post(url,nick);
+  getCarteBranoByNickname(nick:string){
+    const url = `${this.baseUrl2}/showCardArtistaBrani/${nick}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*' // Imposta l'origine consentita, potrebbe essere più restrittivo
+      })
+    };
+    return this.http.get(url,httpOptions);
   }
 }
 
