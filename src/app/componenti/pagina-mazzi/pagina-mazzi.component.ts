@@ -115,8 +115,6 @@ export class PaginaMazziComponent {
 
 
 
-
-
   aggiungiCarta() {
 
       console.log(this.deck.length);
@@ -215,9 +213,8 @@ export class PaginaMazziComponent {
       console.log(deck.carteassociate[oggetto])
     }
     this.deck=deck.carteassociate
-
-
   }
+
 
   toggleCardSelection(card: any) {
     const index = this.carteSelezionate.findIndex((c) => c.id === card.id);

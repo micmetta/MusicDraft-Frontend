@@ -49,6 +49,11 @@ import { PaginaFaiControffertaComponent } from './componenti/pagina-fai-controff
 import {MatChipsModule} from "@angular/material/chips";
 import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
 import {PaginaMazziComponent} from "./componenti/pagina-mazzi/pagina-mazzi.component";
+import { PaginaMatchmakingComponent } from './componenti/pagina-matchmaking/pagina-matchmaking.component';
+import { PaginaVisualizzaMazzoComponent } from './componenti/pagina-visualizza-mazzo/pagina-visualizza-mazzo.component';
+import {MatchingpopComponent} from "./popup/matchingpop/matchingpop.component";
+
+import { NgChartsModule } from 'ng2-charts'; // npm install ng2-charts per installarlo
 
 @NgModule({
   declarations: [
@@ -74,7 +79,9 @@ import {PaginaMazziComponent} from "./componenti/pagina-mazzi/pagina-mazzi.compo
     DialogMessageComponent,
     PaginaFaiControffertaComponent,
     VendipopComponent,
-
+    PaginaMatchmakingComponent,
+    PaginaVisualizzaMazzoComponent,
+    MatchingpopComponent,
 
   ],
   imports: [
@@ -98,7 +105,9 @@ import {PaginaMazziComponent} from "./componenti/pagina-mazzi/pagina-mazzi.compo
     MatTabsModule,
     MatCardModule,
     MatChipsModule,
-    MatLegacyChipsModule
+    MatLegacyChipsModule,
+    NgChartsModule
+
   ],
     providers: [
       {

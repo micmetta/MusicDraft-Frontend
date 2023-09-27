@@ -62,14 +62,17 @@
       scambia carte
     </button>
 
-  </mat-card>
 
+  </mat-card>
 
 </div>
 
-
-
-
-<button mat-flat-button color="primary" style="margin-left: 50px" (click)="aggiungi_points()">
-  aggiungi 10 points
-</button>
+<div class="chart-container">
+  <canvas baseChart
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [legend]="barChartLegend"
+  >
+  </canvas>
+</div>

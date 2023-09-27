@@ -1,0 +1,308 @@
+
+
+<!--<div *ngIf="!visualizza_mazzi">-->
+<!--  <ul>-->
+<!--    <li *ngFor="let deck of decks">-->
+<!--      {{ deck.nomemazzo }}-->
+<!--      <button (click)="visualizzaMazzo(deck)">Visualizza carte mazzo</button>-->
+<!--      <button (click)="schieraMazzo(deck)">Schiera mazzo</button>-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</div>-->
+
+
+<div class="menu">
+  <ul>
+    <li [class.selected]="selectedSection === 'Cerca-partita'" (click)="selectSection('Cerca-partita')"><span>Cerca partita</span></li>
+    <li [class.selected]="selectedSection === 'Partite-non-abbinate'" (click)="selectSection('Partite-non-abbinate')"><span>Partite non abbinate</span></li>
+    <li [class.selected]="selectedSection === 'Riepilogo-partite'" (click)="selectSection('Riepilogo-partite')"><span>Riepilogo partite</span></li>
+  </ul>
+</div>
+
+<div class="content">
+
+  <div *ngIf="selectedSection === 'Cerca-partita'"> <!-- Contenuto della sezione 'Cerca partita' -->
+
+    <h2> In questa pagina puoi selezionare il mazzo da schierare nella partita all'interno della quale sfiderai un altro giocatore </h2>
+
+    <div *ngIf="!visualizza_mazzi">
+      <ul class="ul_p">
+        <li class="li_p" *ngFor="let deck of decks">
+          {{ deck.nomemazzo }}
+          <button class="button" (click)="visualizzaMazzo(deck)">Visualizza carte mazzo</button>
+          <button class="button" (click)="schieraMazzo(deck)">Schiera mazzo</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div *ngIf="selectedSection === 'Partite-non-abbinate'">
+
+    <h2> In questa sezione puoi visualizzare tutte le tue partite in attesa di abbinamento: </h2> <!-- FAI QUESTO, ovvero l'utente deve visualizzare tutte le offerte che ha fatto (per ciascuna di essere puoi mettere il pulsante "vedi storico" -->
+
+    <div *ngFor="let partita of partite_senza_match_utente_loggato; let i = index">
+      <!-- Utilizza la variabile tempObj per i dati temporanei -->
+
+      <p style="margin-top: 50px; font-size: 16px; font-weight: bold;">
+        N° partita: {{ i + 1 }}, nome mazzo schierato: "{{ partita.nomemazzoU1 }}"
+        <button style="background-color: #007bff; margin-left: 0px; height: 30px" mat-flat-button color="primary" class="button" (click)="elimina(partita)">
+                Elimina
+        </button>
+      </p>
+    </div>
+  </div>
+
+
+
+
+  <div *ngIf="selectedSection === 'Riepilogo-partite'">
+
+    <h2> In questa sezione puoi visualizzare tutti i risultati di tutte le partite che hai giocato: </h2>
+
+    <!-- QUI DOVRAI SCORRERE LA LISTA DI PARTITE GIOCATE E CONCLUSE DALL'UTENTE LOGGATO ..-->
+
+      <div *ngFor="let partita_conclusa of partite_concluse_utente_loggato; let i = index">
+        <!-- Utilizza la variabile tempObj per i dati temporanei -->
+        <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nickVincitore == nickname_user_logged" > N° partita: {{ i + 1 }}, Data partita: {{partita_conclusa.dataGiocata}}, Esito: <span style="color: #45a049"> Vittoria </span> </p>
+        <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nickVincitore != nickname_user_logged && partita_conclusa.nickVincitore != ''" > N° partita: {{ i + 1 }}, Esito: <span style="color: red"> Sconfitta </span> </p>
+        <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.statoOfferta == ''" > N° partita: {{ i + 1 }}, Esito: Pareggio </p>
+
+
+        <div class="carta-container">
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU1 == nickname_user_logged" > TUE CARTE: </p>
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU1 != nickname_user_logged" > CARTE SCHIERATE DA {{partita_conclusa.nicknameU1}}: </p>
+
+          <div *ngFor="let lista_carte_mazzo_U1 of listaDiDIzionari_carte_mazzo_U1_partite_concluse[i].lista_info_carte_associate_mazzo_U1; let j = index">
+            <div *ngFor="let cartaU1 of lista_carte_mazzo_U1; let k = index">
+              <div class="carta-info">
+                  <div class="card-image-small">
+                    <img [src]="cartaU1.immagine" alt="Immagine">
+                  </div>
+                  <p *ngIf="get_tipo(cartaU1) == 'artista'"> Tipo carta: Artista</p>
+                  <p *ngIf="get_tipo(cartaU1) == 'artista'"> genere: {{ cartaU1.genere }} </p>
+                  <p *ngIf="get_tipo(cartaU1) == 'brano'"> Tipo carta: Brano</p>
+                  <p *ngIf="get_tipo(cartaU1) == 'brano'"> Durata: {{ cartaU1.durata }}</p>
+                  <p> Nome carta: {{ cartaU1.nome }} </p>
+                  <p> popolarità: {{ cartaU1.popolarita }} </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carta-container">
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU2 == nickname_user_logged" > TUE CARTE: </p>
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU2 != nickname_user_logged" > CARTE SCHIERATE DA {{partita_conclusa.nicknameU2}}: </p>
+
+          <div *ngFor="let lista_carte_mazzo_U2 of listaDiDIzionari_carte_mazzo_U2_partite_concluse[i].lista_info_carte_associate_mazzo_U2; let j = index">
+            <div *ngFor="let cartaU2 of lista_carte_mazzo_U2; let k = index">
+              <div class="carta-info">
+                <div class="card-image-small">
+                  <img [src]="cartaU2.immagine" alt="Immagine">
+                </div>
+                <p *ngIf="get_tipo(cartaU2) == 'artista'"> Tipo carta: Artista</p>
+                <p *ngIf="get_tipo(cartaU2) == 'artista'"> genere: {{ cartaU2.genere }} </p>
+                <p *ngIf="get_tipo(cartaU2) == 'brano'"> Tipo carta: Brano</p>
+                <p *ngIf="get_tipo(cartaU2) == 'brano'"> Durata: {{ cartaU2.durata }}</p>
+                <p> Nome carta: {{ cartaU2.nome }} </p>
+                <p> popolarità: {{ cartaU2.popolarita }} </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+<!--      <div *ngIf="offerta_ricevuta.statoOfferta == 'in_attesa'">-->
+
+<!--        <p style="margin-top: 20px; font-weight: bold"> LISTA CARTE OFFERTE: </p>-->
+
+<!--        <div class="card-container">-->
+<!--          &lt;!&ndash; Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte &ndash;&gt;-->
+<!--          <div *ngFor="let id_cartaOfferta of convertStringToArray(offerta_ricevuta.lista_carte_offerte_ricevuta); let j = index">-->
+
+
+<!--            &lt;!&ndash; Controllo della condizione &ndash;&gt;-->
+<!--            <ng-container *ngIf="offerta_ricevuta.lista_tipi_carte_offerte_ricevuta[j] == 'artista'; then forArtisti else forBrani"></ng-container>-->
+
+<!--            &lt;!&ndash; Primo *ngFor interno (eseguito se la condizione è vera) &ndash;&gt;-->
+<!--            <ng-template #forArtisti>-->
+<!--              <div class="carta-container">-->
+<!--                <div *ngFor="let carta_artista of lista_carte_artisti_utente_ricevuta">-->
+<!--                  <ng-container *ngIf="carta_artista.id == id_cartaOfferta">-->
+<!--                    <div class="carta-info">-->
+<!--                      <div class="card-image-small">-->
+<!--                        <img [src]="carta_artista.immagine" alt="Immagine">-->
+<!--                      </div>-->
+<!--                      <p>Id carta offerta: {{ id_cartaOfferta }}</p>-->
+<!--                      <p>Nome carta: {{ carta_artista.nome }}</p>-->
+<!--                      <p>popolarità: {{ carta_artista.popolarita }}</p>-->
+<!--                    </div>-->
+<!--                  </ng-container>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+
+<!--            &lt;!&ndash; Secondo *ngFor interno (eseguito se la condizione è falsa) &ndash;&gt;-->
+<!--            <ng-template #forBrani>-->
+<!--              <div class="carta-container">-->
+<!--                <div *ngFor="let carta_brano of lista_carte_brani_utente_ricevuta">-->
+<!--                  <ng-container *ngIf="carta_brano.id == id_cartaOfferta">-->
+<!--                    <div class="carta-info">-->
+<!--                      <div class="card-image-small">-->
+<!--                        <img [src]="carta_brano.immagine" alt="Immagine">-->
+<!--                      </div>-->
+<!--                      <p>Id carta offerta: {{ id_cartaOfferta }}</p>-->
+<!--                      <p>Nome carta: {{ carta_brano.nome }}</p>-->
+<!--                      <p>popolarità: {{ carta_brano.popolarita }}</p>-->
+<!--                    </div>-->
+<!--                  </ng-container>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      </div>-->
+
+
+<!--      <div *ngIf="offerta_ricevuta.statoOfferta == 'controfferta' && !isPari(offerta_ricevuta.numControfferta)">-->
+
+<!--        <p style="margin-top: 20px; font-weight: bold;"> LISTA CARTE RICHIESTE: </p>-->
+
+<!--        <div class="card-container">-->
+<!--          &lt;!&ndash; Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte &ndash;&gt;-->
+<!--          <div *ngFor="let id_cartaOfferta of convertStringToArray(offerta_ricevuta.lista_carte_offerte_ricevuta); let j = index">-->
+
+
+<!--            &lt;!&ndash; Controllo della condizione &ndash;&gt;-->
+<!--            <ng-container *ngIf="offerta_ricevuta.lista_tipi_carte_offerte_ricevuta[j] == 'artista'; then forArtisti else forBrani"></ng-container>-->
+
+<!--            &lt;!&ndash; Primo *ngFor interno (eseguito se la condizione è vera) &ndash;&gt;-->
+<!--            <ng-template #forArtisti>-->
+<!--              <div class="carta-container">-->
+
+<!--                <div *ngFor="let carta_artista of lista_carte_artisti_utente_loggato">-->
+<!--                  <ng-container *ngIf="carta_artista.id == id_cartaOfferta">-->
+
+<!--                    <div class="carta-info">-->
+<!--                      <div class="card-image-small">-->
+<!--                        <img [src]="carta_artista.immagine" alt="Immagine">-->
+<!--                      </div>-->
+<!--                      <p>Id carta offerta: {{ id_cartaOfferta }}</p>-->
+<!--                      <p>Nome carta: {{ carta_artista.nome }}</p>-->
+<!--                      <p>popolarità: {{ carta_artista.popolarita }}</p>-->
+<!--                    </div>-->
+
+<!--                  </ng-container>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+
+<!--            &lt;!&ndash; Secondo *ngFor interno (eseguito se la condizione è falsa) &ndash;&gt;-->
+<!--            <ng-template #forBrani>-->
+<!--              <div class="carta-container">-->
+<!--                <div *ngFor="let carta_brano of lista_carte_brani_utente_loggato">-->
+<!--                  <ng-container *ngIf="carta_brano.id == id_cartaOfferta">-->
+<!--                    <div class="carta-info">-->
+<!--                      <div class="card-image-small">-->
+<!--                        <img [src]="carta_brano.immagine" alt="Immagine">-->
+<!--                      </div>-->
+<!--                      <p>Id carta offerta: {{ id_cartaOfferta }}</p>-->
+<!--                      <p>Nome carta: {{ carta_brano.nome }}</p>-->
+<!--                      <p>popolarità: {{ carta_brano.popolarita }}</p>-->
+<!--                    </div>-->
+<!--                  </ng-container>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      </div>-->
+
+
+
+<!--      <div *ngIf="offerta_ricevuta.statoOfferta == 'controfferta' && isPari(offerta_ricevuta.numControfferta)">-->
+
+<!--        <p style="margin-top: 20px; font-weight: bold;"> LISTA CARTE OFFERTE: </p>-->
+
+<!--        <div class="card-container">-->
+<!--          &lt;!&ndash; Inizia il secondo *ngFor per iterare all'interno di listaCarteOfferte &ndash;&gt;-->
+<!--          <div *ngFor="let id_cartaOfferta of convertStringToArray(offerta_ricevuta.lista_carte_offerte_ricevuta); let j = index">-->
+
+
+<!--            &lt;!&ndash; Controllo della condizione &ndash;&gt;-->
+<!--            <ng-container *ngIf="offerta_ricevuta.lista_tipi_carte_offerte_ricevuta[j] == 'artista'; then forArtisti else forBrani"></ng-container>-->
+
+<!--            &lt;!&ndash; Primo *ngFor interno (eseguito se la condizione è vera) &ndash;&gt;-->
+<!--            <ng-template #forArtisti>-->
+<!--              <div class="carta-container">-->
+
+<!--                <div *ngFor="let carta_artista of lista_carte_artisti_utente_che_ha_inviato_la_controfferta_ricevuta">-->
+<!--                  <ng-container *ngIf="carta_artista.id == id_cartaOfferta">-->
+
+<!--                    <div class="carta-info">-->
+<!--                      <div class="card-image-small">-->
+<!--                        <img [src]="carta_artista.immagine" alt="Immagine">-->
+<!--                      </div>-->
+<!--                      <p>Id carta offerta: {{ id_cartaOfferta }}</p>-->
+<!--                      <p>Nome carta: {{ carta_artista.nome }}</p>-->
+<!--                      <p>popolarità: {{ carta_artista.popolarita }}</p>-->
+<!--                    </div>-->
+
+<!--                  </ng-container>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+
+<!--            &lt;!&ndash; Secondo *ngFor interno (eseguito se la condizione è falsa) &ndash;&gt;-->
+<!--            <ng-template #forBrani>-->
+<!--              <div class="carta-container">-->
+<!--                <div *ngFor="let carta_brano of lista_carte_brani_utente_che_ha_inviato_la_controfferta_ricevuta">-->
+<!--                  <ng-container *ngIf="carta_brano.id == id_cartaOfferta">-->
+<!--                    <div class="carta-info">-->
+<!--                      <div class="card-image-small">-->
+<!--                        <img [src]="carta_brano.immagine" alt="Immagine">-->
+<!--                      </div>-->
+<!--                      <p>Id carta offerta: {{ id_cartaOfferta }}</p>-->
+<!--                      <p>Nome carta: {{ carta_brano.nome }}</p>-->
+<!--                      <p>popolarità: {{ carta_brano.popolarita }}</p>-->
+<!--                    </div>-->
+<!--                  </ng-container>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash;        <p style="margin-top: 20px"> POINTS RICHIESTI: {{offerta_ricevuta.points_offerti_ricevuta}} </p>&ndash;&gt;-->
+
+<!--      </div>-->
+
+
+
+
+<!--      <button *ngIf="offerta_ricevuta.mostra_accetta_offerta" style="background-color: #007bff; margin-left: 0px" mat-flat-button color="primary" class="botton-scambio-carte" (click)="accetta_offerta(offerta_ricevuta.id_offerta_ricevuta)">-->
+<!--        Accetta offerta-->
+<!--      </button>-->
+
+<!--      &lt;!&ndash; Se l'utente corrente può accettare l'offerta allora vuol dire che può anche rifiutarla &ndash;&gt;-->
+<!--      <button *ngIf="offerta_ricevuta.mostra_accetta_offerta" style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="rifiuta_offerta(offerta_ricevuta)">-->
+<!--        Rifiuta offerta-->
+<!--      </button>-->
+
+
+<!--      <button *ngIf="offerta_ricevuta.mostra_fai_controfferta" style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="controfferta(offerta_ricevuta)">-->
+<!--        Fai controfferta-->
+<!--      </button>-->
+
+
+
+
+    </div>
+
+  </div>
+
+</div>
+
+

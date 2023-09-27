@@ -97,3 +97,12 @@
   margin-right: 10px;
   margin-bottom: 10px;
 }
+
+/* Stile per il contenitore del grafico */
+.chart-container {
+  display: flex;
+  float: left; /* Allineamento a sinistra */
+  margin-top: 50px; /* Spazio tra il grafico e altri contenuti */
+  width: 800px; /* Larghezza desiderata */
+  height: 400px; /* Altezza desiderata */
+}

@@ -9,6 +9,11 @@
     "secure": false
   },
 
+  "/api/v1/matchmakingService": {
+    "target": "http://localhost:8083",
+    "secure": false
+  },
+
   "/api/v1/marketplace": {
     "target": "http://localhost:9091",
     "secure": false

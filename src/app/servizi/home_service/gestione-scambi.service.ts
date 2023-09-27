@@ -41,7 +41,7 @@ export class GestioneScambiService {
   }
 
   putControfferta(itemData: any): Observable<any>{
-    return this.http.put(this.putControffertaURL, itemData, {responseType: 'text'}); // riceverà in output una stringa dal backend!
+    return this.http.put(this.putControffertaURL, itemData, {responseType: 'text'});
   }
 
   getUltimaControfferta(id: number) {

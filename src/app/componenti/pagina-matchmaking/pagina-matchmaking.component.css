@@ -1,0 +1,259 @@
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.ul_p {
+  list-style-type: none;
+  padding: 0;
+}
+
+.li_p {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+button[type="submit"],
+button[type="button"] {
+  margin-right: 10px;
+}
+.remove-button,
+.add-button {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  border-radius: 4px;
+}
+
+.remove-button:hover,
+.add-button:hover {
+  background-color: #c82333;
+}
+
+/* Stile per il form di selezione delle carte */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.card-thumbnail {
+  width: 60px; /* Imposta la larghezza desiderata per l'immagine miniatura */
+  height: 60px; /* Imposta l'altezza desiderata per l'immagine miniatura */
+  margin-right: 8px; /* Aggiunge spazio a destra dell'immagine */
+  vertical-align: middle; /* Allinea l'immagine verticalmente al testo */
+}
+/* Stile generale per le chips */
+mat-chip {
+  margin: 4px; /* Spazio tra le chips */
+  background-color: #f5f5f5; /* Colore di sfondo delle chips */
+  color: #333; /* Colore del testo delle chips */
+  font-size: 14px; /* Dimensione del testo */
+  border: 1px solid #ccc; /* Bordo delle chips */
+  border-radius: 4px; /* Angoli arrotondati */
+  cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+}
+
+/* Stile per l'immagine della carta */
+mat-chip mat-icon img {
+  width: 60px; /* Larghezza dell'immagine */
+  height: 60px; /* Altezza dell'immagine */
+  margin-right: 8px; /* Spazio tra l'immagine e il testo */
+}
+
+/* Stile per l'icona di rimozione (X) */
+mat-chip mat-icon[matChipRemove] {
+  font-size: 60px; /* Dimensione dell'icona di rimozione */
+  margin-left: 60px; /* Spazio tra il testo e l'icona di rimozione */
+  cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+}
+
+/* Stile quando la chip è selezionata */
+mat-chip.mat-chip-selected {
+  background-color: #2196F3; /* Cambia il colore di sfondo quando selezionato */
+  color: #fff; /* Cambia il colore del testo quando selezionato */
+}
+
+
+
+
+
+/* Preso da scambi-carte */
+.menu {
+  background-color: #007bff;
+  padding: 10px;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+
+/* Stile per i rettangoli bianchi */
+.menu li {
+  cursor: pointer;
+  padding: 5px 10px;
+  position: relative;
+  transition: background-color 0.3s; /* Aggiungi una transizione per una transizione fluida del colore di sfondo */
+}
+
+
+.menu li.selected {
+  font-weight: bold;
+  color: black;
+}
+
+.menu li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff; /* Colore di sfondo bianco */
+  opacity: 0; /* Rendi il rettangolo bianco inizialmente invisibile */
+  z-index: -1; /* Posiziona il rettangolo bianco dietro il testo */
+  transition: opacity 0.3s; /* Aggiungi una transizione per una transizione fluida dell'opacità */
+}
+
+.menu li:hover::before {
+  opacity: 1; /* Rendi il rettangolo bianco visibile al passaggio del mouse */
+}
+
+
+/* Imposta il colore del testo su nero */
+.menu li span {
+  background-color: #fff;
+  color: black;
+  padding: 10px;
+}
+
+/* Aggiungi stili per evidenziare l'interattività */
+.menu li:hover {
+  background-color: #ddd; /* Cambia il colore di sfondo al passaggio del mouse */
+  transform: scale(1.05); /* Ingrandisci leggermente l'elemento al passaggio del mouse */
+  transition: background-color 0.3s, transform 0.3s; /* Aggiungi transizioni per un effetto fluido */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Aggiungi una leggera ombra al passaggio del mouse */
+  padding: 10px;
+  border-radius: 100px;
+}
+
+.content {
+  padding: 20px;
+}
+
+/* Rimuovi i bordi attorno al contenuto delle sezioni */
+.content div {
+  border: none;
+}
+
+/* Stili CSS allineamento label */
+.label {
+  display: inline-block;
+  width: 150px; /* Puoi regolare la larghezza in base alle tue esigenze */
+  text-align: left;
+  margin-right: 10px; /* Aggiunge uno spazio tra il label e il testo */
+}
+
+.card-image-small img {
+  max-width: 100px; /* Limita la larghezza delle immagini */
+  height: auto; /* Imposta l'altezza delle immagini in base alla larghezza */
+}
+
+
+/* CSS per la visualizzazione orizzontale */
+.carta-container {
+  display: flex; /* Visualizza le informazioni in orizzontale */
+  margin-top: 10px; /* Aggiungi spazio superiore tra le carte */
+}
+
+.carta-info {
+  border: 1px solid #ccc; /* Aggiungi una bordatura alle informazioni della carta */
+  padding: 10px; /* Aggiungi spazio interno alle informazioni della carta */
+  margin-right: 10px; /* Aggiungi spazio destro tra le informazioni delle carte */
+  background-color: #f7f7f7; /* Sfondo grigio chiaro per le informazioni della carta */
+  display: inline-block;
+}
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: left;
+}
+
+.botton-scambio-carte{
+  color: white;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}

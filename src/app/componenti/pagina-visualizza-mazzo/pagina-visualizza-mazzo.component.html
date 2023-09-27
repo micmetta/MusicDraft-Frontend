@@ -1,0 +1,18 @@
+
+<div>
+  <h2> Dettagli mazzo </h2>
+
+  <div class="form-group" >
+    <label>Nome del mazzo: "{{deck.nomemazzo}}" </label>
+
+  </div>
+  <label>Carte presenti nel mazzo: </label>
+  <div *ngFor="let carte of deck.carteassociate">
+    <ul>
+      <li *ngFor="let card of carte">
+        <img src="{{card.immagine }}" alt="{{ card.nome }}" class="card-thumbnail">
+        {{ card.nome }} (Popolarità: {{ card.popolarita }})
+      </li>
+    </ul>
+  </div >
+</div>

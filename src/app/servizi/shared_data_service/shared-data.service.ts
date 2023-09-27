@@ -19,6 +19,9 @@ export class SharedDataService {
   private Lista_carte_artisti_utente_che_ha_inviato_la_controfferta_ricevuta: any[] = [];
   private Lista_carte_brani_utente_che_ha_inviato_la_controfferta_ricevuta: any[] = [];
 
+  private Deck: any;
+  private Popolarita_mazzo: number = 0;
+
   constructor() { }
 
   setCartaData(data: any) {
@@ -58,7 +61,13 @@ export class SharedDataService {
     this.Lista_carte_brani_utente_che_ha_inviato_la_controfferta_ricevuta = lista_carte_brani_utente_che_ha_inviato_la_controfferta_ricevuta;
   }
 
+  setDeck(deck: any){
+    this.Deck = deck;
+  }
 
+  setPopolarita_mazzo(pop: number){
+    this.Popolarita_mazzo = pop;
+  }
 
 
   getCartaData() {
@@ -98,5 +107,12 @@ export class SharedDataService {
     return this.Lista_carte_brani_utente_che_ha_inviato_la_controfferta_ricevuta;
   }
 
+  getDeck(){
+    return this.Deck;
+  }
+
+  getPopolarita_mazzo(){
+    return this.Popolarita_mazzo;
+  }
 
 }

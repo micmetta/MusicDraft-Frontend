@@ -18,6 +18,8 @@ import {PaginaScambiCarteComponent} from "./componenti/pagina-scambi-carte/pagin
 import {PaginaFaiOffertaComponent} from "./componenti/pagina-fai-offerta/pagina-fai-offerta.component";
 import {PaginaCreaOffertaComponent} from "./componenti/pagina-crea-offerta/pagina-crea-offerta.component";
 import {PaginaFaiControffertaComponent} from "./componenti/pagina-fai-controfferta/pagina-fai-controfferta.component";
+import {PaginaMatchmakingComponent} from "./componenti/pagina-matchmaking/pagina-matchmaking.component";
+import {PaginaVisualizzaMazzoComponent} from "./componenti/pagina-visualizza-mazzo/pagina-visualizza-mazzo.component";
 
 const routes: Routes = [
   {path: '', component: HomepageComponent},
@@ -37,6 +39,8 @@ const routes: Routes = [
       {path: 'fai_offerta', component: PaginaFaiOffertaComponent},
       {path: 'crea_offerta', component: PaginaCreaOffertaComponent},
       {path: 'fai_controfferta', component: PaginaFaiControffertaComponent},
+      {path: 'matchmaking', component: PaginaMatchmakingComponent},
+      {path: 'visualizza_mazzo', component: PaginaVisualizzaMazzoComponent},
     ]},
 ]
 
