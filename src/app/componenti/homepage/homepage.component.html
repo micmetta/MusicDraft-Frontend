@@ -1,1 +1,164 @@
-<p>Benvenuto sulla Homepage di MUSIC DRAFT (commit e push su branch_Michele)</p>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+</head>
+<header>
+  <img src="assets\m-low-resolution-logo-color-on-transparent-background.png" alt="Logo" class="logo">
+  <a href="http://localhost:4200/login" class="login-button">LOGIN</a>
+</header>
+<main>
+  <div class="image-container">
+    <img src="assets/musicdraft-low-resolution-color-logo (3).png" alt="Immagine">
+    <button class="bottom-right-button"><p style="font-family: 'Harlow Solid Italic'" (click)="openPopup()">IMPARA A GIOCARE</p></button>
+
+
+    <div class="overlay" [class.popup-opened]="isPopupOpen" (click)="closePopup()"></div>
+    <div class="popup" [ngClass]="{'visible':isPopupOpen}">
+      <div class="popup-content">
+        <h2>Regole del Gioco</h2>
+        <p>Come Funziona:</p>
+        <ol>
+          <li><b>Colleziona le Carte</b>: Inizia collezionando le carte dei tuoi artisti e brani preferiti dal Marketplace di MusicDraft. Ogni mazzo può contenere un massimo di 5 carte.</li>
+          <li><b>Sfide Musicali</b>: Una volta che hai costruito il tuo mazzo, puoi sfidare altri giocatori schierando uno dei tuoi mazzi. La sfida consiste nel confronto delle popolarità delle carte.</li>
+          <li><b>Calcola la Popolarità Media</b>: Ogni carta ha un valore di popolarità. Per determinare il vincitore, calcolerai la popolarità media delle 5 carte nel tuo mazzo schierato.</li>
+        </ol>
+        <ul>
+          <li><b>Espandi la Tua Collezione</b>: Utilizza i punti guadagnati per acquistare nuove carte di artisti e brani nel Marketplace. Più carte hai, più opzioni hai per costruire mazzi strategici.</li>
+          <li><b>Sfida Giocatori di Livello Superiore</b>: Utilizza i punti per sbloccare sfide speciali con giocatori più esperti o famosi. Affronta sfide epiche per vincere ancora più punti e aumentare la tua reputazione musicale.</li>
+        </ul>
+        <h3><b>Caratteristiche Principali:</b></h3>
+        <ul>
+          <li><b>Colleziona le Tue Star</b>: Raccogli le carte dei tuoi artisti e brani preferiti da una vasta selezione disponibile nel Marketplace.</li>
+          <li><b>Strategia e Tattiche</b>: Scegli saggiamente le carte per il tuo mazzo, bilanciando artisti e canzoni per ottenere la popolarità media più alta possibile.</li>
+          <li><b>Sfide Online</b>: Sfida amici o giocatori da tutto il mondo in emozionanti sfide musicali in tempo reale.</li>
+        </ul>
+
+        <button class="close-button" (click)="closePopup()">Chiudi</button>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="description-container" >
+    <p class="game-title" >
+
+      Benvenuto in <span class="music-draft">MusicDraft</span>: il gioco di carte musicali!</p>
+
+    <p>
+      MusicDraft è un'avvincente esperienza di gioco online in cui gli utenti si immergono in un affascinante mondo musicale. Ogni carta rappresenta un artista o una canzone, e ciascuna di esse è dotata di un valore di popolarità.</p>
+
+    <p><span class="section-title">L'Obiettivo: Diventare una Superstar Musicale!</span><br>
+      Il tuo obiettivo in MusicDraft è diventare una vera superstar musicale. Come? Costruendo mazzi di carte composti da artisti e canzoni di fama mondiale. Ma sii pronto, perché la strada verso la gloria è una competizione sfrenata!</p>
+  </div>
+  <div class="info-container">
+    <div class="about-us">
+      <h2>Chi siamo</h2>
+      <p>Siamo studenti dell'università degli studi di Torino</p>
+    </div>
+    <div class="contact">
+      <h2>Contatti</h2>
+      <p>Michele Metta e Pietro Sangermano</p>
+    </div>
+  </div>
+  <h2>Acquisti e Statistiche</h2>
+  <div class="grid-container">
+    <div class="grid-item" (click)="openMarketplacePopup()">
+      <i class="fas fa-store"></i>
+      <h3>Marketplace</h3>
+      <p>Dai un occhiata a ciò che ti aspetta...</p>
+    </div>
+
+
+  <!-- Popup per il Marketplace -->
+    <div class="overlay" [class.popup-opened]="isMarketplacePopupOpen" (click)="closeMarketplacePopup()"></div>
+      <div class="popup" [ngClass]="{'visible':isMarketplacePopupOpen}">
+
+        <div class="popup-content">
+          <h2>Marketplace</h2>
+          <div class="card-container">
+            <div *ngFor="let cartaA of itemsIntero" class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h4>{{ cartaA.nome }} {{ cartaA.cognome }}</h4>
+                  <p>{{ cartaA.genere }}</p>
+                  <p>Pop:{{ cartaA.popolarita }}</p>
+                </div>
+                <div class="card-image">
+                  <img [src]="cartaA.immagine" alt="Immagine">
+                </div>
+                <div class="card-footer">
+                  <p>Costo: {{ cartaA.costo }}</p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="close-button" (click)="closeMarketplacePopup()">X</button>
+        </div>
+
+      </div>
+
+
+
+
+    <div class="grid-item" (click)="openClassifica()">
+      <i class="fas fa-trophy"></i> <!-- Icona di un trofeo -->
+      <h3>Classifica</h3>
+      <p>Chi è il migliore...</p>
+    </div>
+
+    <div class="overlay" [class.popup-opened]="isClassificaPopupOpen" (click)="closeClassifica()"></div>
+    <div class="popup" [ngClass]="{'visible':isClassificaPopupOpen}">
+      <div class="classifica-container">
+        <h2 class="classifica-title">Classifica</h2>
+        <table class="classifica-table">
+          <thead>
+          <tr>
+            <th>Nickname</th>
+            <th>Rank</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let userRank of userRankList">
+            <td>{{ userRank.nick }}</td>
+            <td>{{ userRank.rank }}</td>
+          </tr>
+          </tbody>
+        </table>
+        <button class="close-button" (click)="closeClassifica()">X</button>
+      </div>
+    </div>
+
+    <div class="grid-item" (click)="handleItemClick('Real Time Result')">
+      <i class="fas fa-clock"></i> <!-- Icona di un orologio -->
+      <h3>Real Time Result</h3>
+      <p>Un pò di sfide...</p>
+    </div>
+    <div class="grid-item" (click)="handleItemClick('Community')">
+      <i class="fas fa-users"></i> <!-- Icona di un gruppo di persone -->
+      <h3>Community</h3>
+      <p>Conosci nuovi giocatori...</p>
+    </div>
+  </div>
+
+
+
+
+
+
+</main>
+<footer>
+  <div class="footer-logo">
+    <img src="assets/png-transparent-spotify-logo-spotify-computer-icons-podcast-music-apps-miscellaneous-angle-logo-thumbnail.png" alt="Logo Spotify" class="small-logo">
+  </div>
+  <div class="footer-image">
+    <img src="assets/m-low-resolution-logo-color-on-transparent-background.png" alt="Immagine">
+  </div>
+  <div class="footer-text">
+    <p>Musicdraft&trade;</p>
+  </div>
+</footer>
+
+
+

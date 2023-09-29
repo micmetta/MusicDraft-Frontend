@@ -1,13 +1,398 @@
-.bg-transparent{
-  background-color: transparent;
+/* styles.css (puoi personalizzare il nome del file se necessario) */
+
+
+/* Reset dei margini e dei padding */
+body, h1, h2, p {
+  margin: 0;
+  padding: 0;
 }
-:host{
+
+/* Stile per l'header con il pulsante di login */
+header {
+  background-color: #ffffff;
+  color: #fff;
+  text-align: right;
+  padding: 32px;
+}
+
+/* Stile per il pulsante di login */
+.login-button {
+  background-color: #29323d;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+/* Stile per il contenitore principale */
+main {
+  text-align: center;
+
+
+
+}
+
+/* Stili per il popup container */
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  overflow: auto;
+  max-height: 600px;
+  max-width: 600px;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+
+.visible {
+  display: block !important; /* Usa !important per sovrascrivere display: none */
+}
+/* Stili per il contenuto del popup */
+.popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Colore scuro con opacità */
+  display: none; /* Inizialmente nascosto */
+  z-index: 998; /* Z-index inferiore a quello del popup */
 }
-.photo{
-  object-fit: contain;
+
+.popup-opened {
+  display: block; /* Mostra l'overlay quando il popup è aperto */
 }
-.card{
-  width: 20rem;
-  margin: 0 auto;
+
+/* Stili per il pulsante di chiusura del popup */
+
+.close-button {
+  position: sticky;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  z-index: 1000; /* Assicurati che il pulsante sia sopra il contenuto */
+  /* Aggiungi altri stili a tuo piacimento */
 }
+
+/* Stile per la tabella */
+
+
+.close-button:hover {
+  background-color: #0056b3;
+}
+.image-container {
+  position: relative;
+  width: 100%; /* Larghezza del 100% */
+  height: 45vh; /* Altezza del 25% dell'altezza dello schermo */
+  overflow: hidden;
+  padding-bottom: 40px;
+}
+
+/* Stile per l'immagine nel main */
+.image-container img {
+  width: 100%; /* L'immagine riempirà orizzontalmente l'intero container */
+  height: 100%; /* L'immagine si adatterà verticalmente all'intero container */
+  object-fit: cover;
+
+}
+.game-title {
+  font-size: 24px;
+  color: #0074d9; /* Colore blu */
+  font-weight: bold; /* Testo in grassetto */
+  text-transform: uppercase; /* Maiuscole */
+}
+
+/* Stile per il titolo della sezione */
+.section-title {
+  font-size: 18px;
+  color:#0074d9; /* Colore del testo */
+  font-weight: bold; /* Testo in grassetto */
+}
+
+/* Stile per il sottotitolo */
+.description-container p:not(.game-title):not(.section-title) {
+  font-size: 16px;
+  color: #555; /* Colore del testo più scuro */
+  line-height: 1.5; /* Altezza della riga per una migliore leggibilità */
+  margin-bottom: 20px; /* Spazio inferiore tra i paragrafi */
+}
+
+/* Stile per la decorazione del titolo del gioco */
+.music-draft::before,
+.music-draft::after {
+  content: "♪ ♫ ♪"; /* Simboli musicali */
+  color: #ff0080; /* Colore rosa */
+  font-size: 20px;
+  margin: 0 5px; /* Spazio tra i simboli musicali */
+}
+
+/* Stile per il container delle informazioni "Chi siamo" e "Contatti" */
+.info-container {
+  display: flex; /* Mostra i container affiancati */
+  justify-content: space-between; /* Spazio tra i container */
+  padding: 20px;
+}
+
+/* Stile per il container "Chi siamo" */
+.about-us {
+  flex: 1; /* Occupa metà dello spazio tra i container */
+  text-align: left;
+  padding-right: 10px; /* Spazio tra il testo e il bordo destro */
+}
+
+/* Stile per il container "Contatti" */
+.contact {
+  flex: 1; /* Occupa metà dello spazio tra i container */
+  text-align: right;
+  padding-left: 10px; /* Spazio tra il testo e il bordo sinistro */
+}
+/* Stile per il bottone in basso a destra nel main */
+.bottom-right-button {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  background-color: #29323d;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: -20px; /* Margine negativo per compensare il padding del container */
+
+
+}
+/* Stile per i pulsanti */
+.buttons {
+  margin: 20px;
+}
+.logo {
+  position: absolute;
+  top: 10px; /* Regola la distanza dalla parte superiore */
+  left: 10px; /* Regola la distanza dalla sinistra */
+  width: 100px; /* Regola la larghezza dell'immagine */
+  height: auto; /* Mantieni l'aspetto originale */
+}
+.buttons button {
+  background-color: #0074d9;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+/* Stile per la descrizione */
+.description {
+  text-align: center;
+  margin: 30px;
+}
+
+/* Stile per il piè di pagina */
+/* Stile per il footer */
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff; /* Colore di sfondo del footer */
+  padding: 10px;
+  color: #fff; /* Colore del testo */
+  border-top: 1px solid #ccc; /* Bordo superiore grigio */
+}
+
+/* Stile per il logo di Spotify a sinistra (in piccolo) */
+.small-logo {
+  width: 40px; /* Imposta la larghezza desiderata per il logo piccolo */
+  height: auto; /* L'altezza verrà adattata proporzionalmente alla larghezza */
+}
+
+/* Stile per l'immagine centrale */
+.footer-image img {
+  width: 100px; /* Imposta la larghezza desiderata */
+  height: auto; /* L'altezza verrà adattata proporzionalmente alla larghezza */
+}
+
+/* Stile per il testo a destra */
+.footer-text {
+  text-align: right;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: bold; /* Testo in grassetto */
+  color: #000; /* Colore del testo nero */
+}
+
+/* Stile per la griglia di Acquisti e Statistiche */
+.grid-container {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Creazione di due colonne */
+  gap: 10px; /* Spazio tra le celle */
+  margin-top: 20px;
+  padding-bottom: 10px;
+}
+
+/* Stile per le celle della griglia */
+.grid-item {
+  border: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Stile per le icone */
+.grid-item i {
+  font-size: 48px;
+  color: #0074d9;
+}
+
+/* Stile per l'intestazione della griglia */
+.grid-container h2 {
+  text-align: center;
+}
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  border: 1px solid #ccc;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content {
+  padding: 10px;
+}
+
+.card-header {
+  background-color: #f1f1f1;
+  padding: 5px 10px;
+  text-align: center;
+}
+
+.card-header h4 {
+  margin: 5px 0;
+}
+
+.card-image {
+  text-align: center;
+  padding: 10px;
+}
+
+.card-image img {
+  max-width: 100%;
+  max-height: 150px;
+}
+
+.card-footer {
+  background-color: #f1f1f1;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Stile per la tabella */
+/* Stile per il container della classifica */
+.classifica-container {
+  text-align: center;
+  background-color: #0074d9;
+  color: #fff; /* Cambiato il colore del testo in bianco */
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid #0074d9; /* Bordi blu per la tabella */
+}
+
+/* Stile per il titolo della classifica */
+.classifica-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #000; /* Cambiato il colore del testo in nero */
+}
+
+/* Stile per la tabella */
+.classifica-table {
+  max-width: 100%; /* Imposta una larghezza massima del 100% */
+  width: 300px; /* Larghezza automatica per adattarsi al contenuto */
+  height: auto;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+/* Stile per l'intestazione della tabella */
+.classifica-table thead {
+  background-color: #0074d9;
+  color: #fff;
+  border: 3px solid #000000; /* Bordi blu per la tabella */
+}
+.classifica-table th:not(:last-child) {
+  border-right: 3px solid #000; /* Separatori neri tra le celle */
+}
+
+/* Stile per le celle dell'intestazione */
+.classifica-table th {
+  padding: 10px;
+  text-align: center;
+  color: #fff; /* Cambiato il colore del testo in bianco */
+}
+
+/* Stile per le righe della tabella (colore alternato) */
+.classifica-table tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+/* Stile per le righe della tabella (colore alternato) */
+.classifica-table tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+/* Stile per le celle delle righe */
+.classifica-table td {
+  padding: 10px;
+  text-align: center;
+  color: #000; /* Cambiato il colore del testo in nero */
+  border: 3px solid #000000; /* Bordi blu per la tabella */
+}
+
+/* Hover sull'elemento della tabella */
+.classifica-table tbody tr:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+/* Stile per il pulsante di chiusura */
+.close-button {
+  background-color: #0074d9;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.close-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
