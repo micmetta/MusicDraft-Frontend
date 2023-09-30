@@ -12,8 +12,11 @@
   <div *ngIf="selectedSection === 'Amici'">
     <ul>
       <li *ngFor="let stringa of lista_amici">
-        {{ stringa }}
-        <button (click)="faiOfferta(stringa)">Fai Offerta</button>
+
+        <p style="margin-top: 50px; font-size: 16px; font-weight: bold;"> {{ stringa }}
+          <button style="background-color: #007bff; margin-left: 0px; height: 30px" mat-flat-button color="primary" class="button" (click)="faiOfferta(stringa)"> Fai Offerta </button>
+        </p>
+
       </li>
     </ul>
   </div>
@@ -378,7 +381,7 @@
 
 
 
-      <button *ngIf="offerta_ricevuta.mostra_accetta_offerta" style="background-color: #007bff; margin-left: 0px" mat-flat-button color="primary" class="botton-scambio-carte" (click)="accetta_offerta(offerta_ricevuta.id_offerta_ricevuta)">
+      <button *ngIf="offerta_ricevuta.mostra_accetta_offerta" style="background-color: #007bff; margin-left: 0px" mat-flat-button color="primary" class="botton-scambio-carte" (click)="accetta_offerta(offerta_ricevuta)">
         Accetta offerta
       </button>
 

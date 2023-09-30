@@ -1,0 +1,9 @@
+<h2>Cambia il tuo nickname</h2>
+<div>
+  <label for="new-nickname">Nuovo nickname:</label>
+  <input type="text" id="new-nickname" [(ngModel)]="newNickname" />
+</div>
+<div class="dialog-actions">
+  <button mat-button (click)="onNoClick()">Annulla</button>
+  <button mat-button (click)="onYesClick()">Conferma</button>
+</div>

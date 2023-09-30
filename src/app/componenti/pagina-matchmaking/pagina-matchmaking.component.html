@@ -1,16 +1,5 @@
 
 
-<!--<div *ngIf="!visualizza_mazzi">-->
-<!--  <ul>-->
-<!--    <li *ngFor="let deck of decks">-->
-<!--      {{ deck.nomemazzo }}-->
-<!--      <button (click)="visualizzaMazzo(deck)">Visualizza carte mazzo</button>-->
-<!--      <button (click)="schieraMazzo(deck)">Schiera mazzo</button>-->
-<!--    </li>-->
-<!--  </ul>-->
-<!--</div>-->
-
-
 <div class="menu">
   <ul>
     <li [class.selected]="selectedSection === 'Cerca-partita'" (click)="selectSection('Cerca-partita')"><span>Cerca partita</span></li>
@@ -27,8 +16,8 @@
 
     <div *ngIf="!visualizza_mazzi">
       <ul class="ul_p">
-        <li class="li_p" *ngFor="let deck of decks">
-          {{ deck.nomemazzo }}
+        <li class="li_p" *ngFor="let deck of decks; let j = index">
+          <span style="font-size: 16px; font-weight: bold;"> {{ deck.nomemazzo }} - popolarità mazzo: {{ (deck.carteassociate[0][0].popolarita + deck.carteassociate[1][0].popolarita + deck.carteassociate[2][0].popolarita + deck.carteassociate[3][0].popolarita + deck.carteassociate[4][0].popolarita)/5}} </span>
           <button class="button" (click)="visualizzaMazzo(deck)">Visualizza carte mazzo</button>
           <button class="button" (click)="schieraMazzo(deck)">Schiera mazzo</button>
         </li>
@@ -70,8 +59,8 @@
 
 
         <div class="carta-container">
-          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU1 == nickname_user_logged" > TUE CARTE: </p>
-          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU1 != nickname_user_logged" > CARTE SCHIERATE DA {{partita_conclusa.nicknameU1}}: </p>
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU1 == nickname_user_logged" > TUE CARTE: <br> (pop mazzo: {{partita_conclusa.popolaritaMazzoU1}}) </p>
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU1 != nickname_user_logged" > CARTE SCHIERATE DA: {{partita_conclusa.nicknameU1}} <br> (pop mazzo: {{partita_conclusa.popolaritaMazzoU1}}) </p>
 
           <div *ngFor="let lista_carte_mazzo_U1 of listaDiDIzionari_carte_mazzo_U1_partite_concluse[i].lista_info_carte_associate_mazzo_U1; let j = index">
             <div *ngFor="let cartaU1 of lista_carte_mazzo_U1; let k = index">
@@ -91,8 +80,8 @@
         </div>
 
         <div class="carta-container">
-          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU2 == nickname_user_logged" > TUE CARTE: </p>
-          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU2 != nickname_user_logged" > CARTE SCHIERATE DA {{partita_conclusa.nicknameU2}}: </p>
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU2 == nickname_user_logged" > TUE CARTE: <br> (pop mazzo: {{partita_conclusa.popolaritaMazzoU2}}) </p>
+          <p style="margin-top: 50px; font-size: 16px; font-weight: bold;" *ngIf="partita_conclusa.nicknameU2 != nickname_user_logged" > CARTE SCHIERATE DA: {{partita_conclusa.nicknameU2}} <br> (pop mazzo: {{partita_conclusa.popolaritaMazzoU2}}) </p>
 
           <div *ngFor="let lista_carte_mazzo_U2 of listaDiDIzionari_carte_mazzo_U2_partite_concluse[i].lista_info_carte_associate_mazzo_U2; let j = index">
             <div *ngFor="let cartaU2 of lista_carte_mazzo_U2; let k = index">

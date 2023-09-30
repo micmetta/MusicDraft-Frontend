@@ -81,6 +81,20 @@ export class LoginComponent implements OnInit {
             //this.email_user_logged = JSON.stringify(data);
             this.nicknameAndEmailUserLoggedService.updateNickname_user_logged(nickname_or_email);
             this.nicknameAndEmailUserLoggedService.updateEmail_user_logged(JSON.stringify(data));
+
+            // setto lo stato IsOffline a true per l'utente loggato corrente (devo metterlo sia qui che nel ramo dell'else sotto perchè i .subscribe vengono eseguiti
+            // in parallelo e quindi se voglio essere certo di settare lo stato nel momento giusto devo per forza eseguire this.authService.setIsOnline subito dopo
+            // aver settato il nickname e l'email dell'utente loggato:
+            this.authService.setIsOnline(this.nicknameAndEmailUserLoggedService.getStoredNickname_user_logged()).subscribe(data => {
+              console.log("Risposta ottenuta dal backend dopo aver invocato this.authService.setIsOnline:");
+              console.log(data);
+
+              // Siccome adesso sono certo che "this.nicknameAndEmailUserLoggedService.updateNickname_user_logged(nickname_or_email)" e
+              // this.nicknameAndEmailUserLoggedService.updateEmail_user_logged(JSON.stringify(data))
+              // sono stati eseguiti, posso portare l'utente, che si è appena loggato, nella schermata di home:
+              this.router.navigate(["/dashboard/home"])
+              this.loginFailed = false;
+            })
           })
           //////////////////////////////////////////////
         }
@@ -90,13 +104,23 @@ export class LoginComponent implements OnInit {
           this.authService.getNickname(nickname_or_email).subscribe(data => {
             this.nicknameAndEmailUserLoggedService.updateNickname_user_logged(JSON.stringify(data));
             this.nicknameAndEmailUserLoggedService.updateEmail_user_logged(nickname_or_email);
+
+            // setto lo stato IsOffline a true per l'utente loggato corrente (devo metterlo sia qui che nel ramo dell'if sopra perchè i .subscribe vengono eseguiti
+            // in parallelo e quindi se voglio essere certo di settare lo stato nel momento giusto devo per forza eseguire this.authService.setIsOnline subito dopo
+            // aver settato il nickname e l'email dell'utente loggato:
+            this.authService.setIsOnline(this.nicknameAndEmailUserLoggedService.getStoredNickname_user_logged()).subscribe(data => {
+              console.log("Risposta ottenuta dal backend dopo aver invocato this.authService.setIsOnline:");
+              console.log(data);
+
+              // Siccome adesso sono certo che "this.nicknameAndEmailUserLoggedService.updateNickname_user_logged(nickname_or_email)" e
+              // this.nicknameAndEmailUserLoggedService.updateEmail_user_logged(JSON.stringify(data))
+              // sono stati eseguiti, posso portare l'utente, che si è appena loggato, nella schermata di home:
+              this.router.navigate(["/dashboard/home"])
+              this.loginFailed = false;
+            })
           })
           //////////////////////////////////////////////
         }
-
-
-        this.router.navigate(["/dashboard/home"])
-        this.loginFailed = false;
       }
       else{
         // vuol dire che l'utente ha inserito dati sbagliati o nel campo nickname_or_email oppure nel campo password..

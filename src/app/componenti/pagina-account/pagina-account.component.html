@@ -1,1 +1,21 @@
-<p>pagina-account works!</p>
+
+<br>
+<h2> In questa pagina puoi modificare il tuo nickname e la tua password: </h2>
+<br>
+
+<div>
+  <label style="margin-top: 50px; font-size: 16px; font-weight: bold;" for="nickname">Nickname corrente: </label>
+  <input type="text" id="nickname" [value]="nickname_user_logged" readonly>
+</div>
+
+<div>
+  <label style="margin-top: 50px; font-size: 16px; font-weight: bold;" for="password">Password corrente: </label>
+  <input type="password" id="password" [value]="password_user_logged" readonly>
+  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="togglePasswordVisibility()">Mostra/Nascondi Password</button>
+</div>
+
+<div>
+  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="openChangeNicknameDialog()">Cambia nickname</button>
+  <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" (click)="openChangePasswordDialog()">Cambia password</button>
+
+</div>

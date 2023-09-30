@@ -4,5 +4,37 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #eee;
+  background: #fff;
+}
+.botton-scambio-carte{
+  color: white;
+  margin-top: 30px;
+  margin-left: 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  display: flex;
+  align-content: center;
+}
+
+/* Cambia il colore di sfondo e del testo quando l'elemento è in hover */
+.example-container mat-sidenav mat-list mat-list-item:hover {
+  background-color: white; /* Colore di sfondo in hover */
+  color: #fff; /* Colore del testo in hover (ad esempio, bianco) */
+}
+
+/* Aggiungi uno sfondo bianco solo all'elemento attivo */
+.example-container mat-sidenav mat-list mat-list-item.active {
+  background-color: #fff; /* Colore di sfondo bianco per l'elemento attivo */
+}
+
+/* Cambia il colore di sfondo e del testo quando l'elemento è in hover */
+.section-link:hover {
+  background-color: lightskyblue;
+  color: #fff;
+}
+
+/* Stile per l'elemento attivo */
+.active {
+  background-color: #fff; /* Colore di sfondo bianco per l'elemento attivo */
 }

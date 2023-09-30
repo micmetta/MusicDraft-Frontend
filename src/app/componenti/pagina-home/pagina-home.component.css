@@ -89,9 +89,10 @@
 .small-text {
   font-size: 12px; /* Imposta la dimensione del carattere desiderata */
   font-weight: normal; /* Rimuovi lo stile in grassetto */
-  color: #777; /* Cambia il colore del testo se necessario */
+  color: black; /* Cambia il colore del testo se necessario */
 }
 .botton-scambio-carte{
+  color: white;
   margin-top: 2px;
   margin-left: 10px;
   margin-right: 10px;
@@ -105,4 +106,50 @@
   margin-top: 50px; /* Spazio tra il grafico e altri contenuti */
   width: 800px; /* Larghezza desiderata */
   height: 400px; /* Altezza desiderata */
+}
+
+/* Stili per la legenda */
+.legend {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* Stili per ciascun elemento della legenda */
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+/* Stili per il colore della legenda */
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.gray {
+  background-color: gray;
+}
+
+
+/* Stile per il contenitore del grafico e della legenda */
+.chart-legend-container {
+  display: flex; /* Usa flexbox per posizionare la legenda sopra il grafico */
+  flex-direction: column; /* Imposta la direzione in colonna per la legenda sopra il grafico */
+  float: left; /* Allineamento a sinistra */
+  margin-top: 50px; /* Spazio tra il grafico e altri contenuti */
+  width: 800px; /* Larghezza desiderata */
+  height: 800px; /* Altezza desiderata */
 }

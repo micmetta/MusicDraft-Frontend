@@ -21,6 +21,12 @@ import {SharedDataService} from "../../servizi/shared_data_service/shared-data.s
 })
 export class PaginaScambiCarteComponent implements OnInit {
 
+  private baseUrl2 = 'http://localhost:9092/api/v1/cartemazzi';
+  private apiUrl = ''; // la setto nell'NgOnInit
+  private apiurl2=`${this.baseUrl2}/getUserArtista`
+  private apiurl3=`${this.baseUrl2}/getUserBrano`
+  decks: any; // I tuoi mazzi di carte
+
   // @ts-ignore
   nickname_user_logged: string; // contiene il nickname dell'utente
   lista_amici: any; // conterrà i nickname degli amici dell'utente corrente
@@ -46,7 +52,6 @@ export class PaginaScambiCarteComponent implements OnInit {
   lista_carte_offerte_ricevuta: string[] = [];
   lista_tipi_carte_offerte_ricevuta: string[] = [];
   obj_vuoto_ricevuta: any;
-
 
 
   // Dichiarazione di un array di dizionari che conterrà per ogni "offerta_inviata" presente in lista_offerte_inviate tutte le info necessarie
@@ -105,7 +110,8 @@ export class PaginaScambiCarteComponent implements OnInit {
               private show: ShowCarteInVenditaService,
               private router: Router,
               private dialog: MatDialog,
-              private sharedDataService: SharedDataService) {
+              private sharedDataService: SharedDataService,
+              private http: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -124,13 +130,69 @@ export class PaginaScambiCarteComponent implements OnInit {
       },
     )
 
-    // LE DUE CHIAMATE DI SOTTO VERRANNO ESEGUITE IN PARALLELO:
+    // LE 3 CHIAMATE DI SOTTO VERRANNO ESEGUITE IN PARALLELO:
+
+    // Prendo tutti i mazzi dell'utente loggato (in modo tale che poi posso sapere quali carte può proporre e quali no):
+    this.apiUrl = `${this.baseUrl2}/showMazzi/${this.nickname_user_logged}`;
+    this.http.get<any[]>(this.apiUrl)
+      .subscribe(
+        (data: any[]) => {
+          console.log("data:", data);
+          const mazziAssociati: any = {};
+
+          data.forEach(item => {
+
+            const nomeMazzo = item.nomemazzo;
+
+            if (!mazziAssociati[nomeMazzo]) {
+              mazziAssociati[nomeMazzo] = {
+                nomemazzo: nomeMazzo,
+                carteassociate: [],
+                nickname: item.nickname
+              };
+            }
+
+            // prova ad usare una lista di liste dove in ogni lista interna ti salvi la popolarità di quel mazzo.
+
+            this.http.get<any>(this.apiurl2 + `/${item.cartaassociata}`)
+              .subscribe(
+                (data: any) => {
+                  if (data.length != 0) {
+
+                    mazziAssociati[nomeMazzo].carteassociate.push(data);
+                  } else {
+                    this.http.get<any>(this.apiurl3 + `/${item.cartaassociata}`)
+                      .subscribe(
+                        (data: any) => {
+                          if (data != null) {
+                            mazziAssociati[nomeMazzo].carteassociate.push(data);
+                          }
+                        }
+                      );
+
+                  }
+                }
+              );
+          });
+          // Ora puoi utilizzare mazziAssociati come desideri
+          console.log("mazziAssociati:", mazziAssociati);
+
+          // Esegui il codice che dipende da this.decks qui dentro
+          this.decks = Object.values(mazziAssociati); // siccome non so il nome dei mazzi e quindi la chiave iniziale, allora uso Object.values(...)
+          console.log("this.decks:");
+          console.log(this.decks);
+        }
+      );
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     // invoco il metodo di sotto per prendere già i dati della sezione "Offerte-inviate":
     this.onOfferteInviateSectionActivated();
 
     // invoco il metodo di sotto per prendere già i dati della sezione "Offerte-ricevute":
     this.onOfferteRicevuteSectionActivated();
+
+
   }
 
 
@@ -782,23 +844,89 @@ async onOfferteInviateSectionActivated() {
     return [];
   }
 
-  accetta_offerta(id_offerta_ricevuta: number){
+  accetta_offerta(offerta_ricevuta: any){
 
     console.log("Click su accetta offerta!!")
-    console.log("id_offerta_ricevuta:")
-    console.log(id_offerta_ricevuta)
+    console.log("offerta_ricevuta: ", offerta_ricevuta)
 
-    // Poichè l'utente con nicknameU2 ha accettato l'offerta_ricevuta allora posso chiamare il backend per eseguire l'aggiornamento delle carte:
-    this.gestioneScambiService.putAccettaOfferta(id_offerta_ricevuta).subscribe(((data:any)=>{
-      console.log("Risposta da putAccettaOfferta(..): ");
-      console.log(data);
-      this.openDialog("Offerta accettata con successo!" , "LO SCAMBIO SI E' CONCLUSO CON SUCCESSO!");
+    console.log("this.convertStringToArray(offerta_ricevuta.lista_carte_offerte_ricevuta): ", this.convertStringToArray(offerta_ricevuta.lista_carte_offerte_ricevuta))
 
-      // Adesso aggiorno la pagina scambi_carte:
-      // this.onOfferteRicevuteSectionActivated();
-      // this.router.navigate(["/dashboard/home"]);
-      // this.router.navigate(["/dashboard/scambi_carte"]);
-    }))
+    console.log("offerta_ricevuta.id_offerta_ricevuta:")
+    console.log(offerta_ricevuta.id_offerta_ricevuta)
+
+    // console.log("this.decks: ", this.decks)
+
+    // PRIMA DI PERMETTERGLI DI ACCETTARE L'OFFERTA DEVO VERIFICARE CHE CHE LE CARTE PRESENTI IN offerta_ricevuta.listaCarteOfferte NON SIANO PRESENTI IN NESSUN MAZZO
+    let carta_aggiungibile: boolean = true;
+
+    // QUESTO IF GESTISCE IL CASO IN CUI L'UTENTE LOGGATO E' QUELLO CHE VUOLE FARE LA CONTROFFERTA E OFFRE DELLE PROPRIE CARTE:
+    if((offerta_ricevuta.statoOfferta == "controfferta") && (!this.isPari(offerta_ricevuta.numControfferta))){ // QUESTO FUNZIONA ORA DEVI GESTIRE GLI ALTRI CASI
+      // E RICORDATI DI DECOMMENTARE QUELLO PRESENTE DENTRO if(carta_aggiungibile)...
+
+      for (const id_carta_offerta of this.convertStringToArray(offerta_ricevuta.lista_carte_offerte_ricevuta)) {
+        let carta_non_vendibile: any;
+        for (const deck of this.decks) {
+          console.log("deck: ", deck)
+          console.log("deck.carteassociate: ", deck.carteassociate)
+          for (const carta_associata of deck.carteassociate) {
+            console.log("carta_associata[0].id: ", carta_associata[0].id)
+            console.log("id_carta_offerta: ", id_carta_offerta)
+            if(carta_associata[0].id == id_carta_offerta){
+              carta_aggiungibile = false;
+              carta_non_vendibile = carta_associata[0];
+              break; // esco subito dal for interno
+            }
+          }
+          if(!carta_aggiungibile){
+            break // esco subito dal for interno
+          }
+        }
+        if(!carta_aggiungibile){
+          this.openDialog("La carta chiamata: " + carta_non_vendibile.nome + " è presente in 1 o più mazzi" , "NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN ALMENO UN MAZZO, DEVI PRIMA TOGLIERLA DA TUTTI I MAZZI PRIMA DI POTERLA VENDERE AD UN ALTRO GIOCATORE!");
+        }
+      }
+    }
+    // QUESTO ELSE IF GESTISCE IL CASO IN CUI L'UTENTE LOGGATO E' QUELLO CHE HA RICEVUTO LA OFFERTA/CONTROFFERTA E QUINDI DEVE DECIDERE SE ACCETTARE E VENDERE LA CARTA RICHIESTA IN CAMBIO DELLA LISTA
+    // CARTE OFFERTE E DEI POINTS:
+    else if(this.isPari(offerta_ricevuta.numControfferta)){ // PUO' AVER RICEVUTO SIA UN'OFFERTA CHE UNA CONTROFFERTA
+
+      console.log("offerta_ricevuta.id_carta_richiesta_ricevuta: ", offerta_ricevuta.id_carta_richiesta_ricevuta)
+      let carta_non_vendibile: any;
+      for (const deck of this.decks) {
+        console.log("deck: ", deck)
+        console.log("deck.carteassociate: ", deck.carteassociate)
+        for (const carta_associata of deck.carteassociate) {
+          console.log("carta_associata[0].id: ", carta_associata[0].id)
+          if(carta_associata[0].id == offerta_ricevuta.id_carta_richiesta_ricevuta){
+            carta_aggiungibile = false;
+            carta_non_vendibile = carta_associata[0];
+            break; // esco subito dal for interno
+          }
+        }
+        if(!carta_aggiungibile){
+          break // esco subito dal for interno
+        }
+      }
+      if(!carta_aggiungibile){
+        this.openDialog("La carta chiamata: " + carta_non_vendibile.nome + " è presente in 1 o più mazzi" , "NON PUOI VENDERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN ALMENO UN MAZZO, DEVI PRIMA TOGLIERLA DA TUTTI I MAZZI PRIMA DI POTERLA VENDERE AD UN ALTRO GIOCATORE!");
+      }
+    }
+
+    // SE NON C'E' NESSUNA CARTA NON VENDIBILE ALLORA LA CONTROFFERTA VERRA' INVIATA:
+    if(carta_aggiungibile){
+      // Poichè l'utente con nicknameU2 ha accettato l'offerta_ricevuta allora posso chiamare il backend per eseguire l'aggiornamento delle carte:
+      this.gestioneScambiService.putAccettaOfferta(offerta_ricevuta.id_offerta_ricevuta).subscribe(((data:any)=>{
+        console.log("Risposta da putAccettaOfferta(..): ");
+        console.log(data);
+        this.openDialog("Offerta accettata con successo!" , "LO SCAMBIO SI E' CONCLUSO CON SUCCESSO!");
+
+        // Adesso aggiorno la pagina scambi_carte:
+        // this.onOfferteRicevuteSectionActivated();
+        // this.router.navigate(["/dashboard/home"]);
+        // this.router.navigate(["/dashboard/scambi_carte"]);
+      }))
+    }
+
   }
 
   rifiuta_offerta(offerta_ricevuta: any){

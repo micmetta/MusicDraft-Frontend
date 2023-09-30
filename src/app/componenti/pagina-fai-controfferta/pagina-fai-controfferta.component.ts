@@ -8,6 +8,7 @@ import {SharedDataService} from "../../servizi/shared_data_service/shared-data.s
 import {GestioneScambiService} from "../../servizi/home_service/gestione-scambi.service";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogMessageComponent} from "../dialog-message/dialog-message.component";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-pagina-fai-controfferta',
@@ -15,6 +16,13 @@ import {DialogMessageComponent} from "../dialog-message/dialog-message.component
   styleUrls: ['./pagina-fai-controfferta.component.css']
 })
 export class PaginaFaiControffertaComponent implements OnInit{
+
+  private baseUrl2 = 'http://localhost:9092/api/v1/cartemazzi';
+  private apiUrl = ''; // la setto nell'NgOnInit
+  private apiurl2=`${this.baseUrl2}/getUserArtista`
+  private apiurl3=`${this.baseUrl2}/getUserBrano`
+  decks: any; // I tuoi mazzi di carte
+
 
   offerta_ricevuta: any;
   lista_carte_offerte_ricevuta: any[] = []
@@ -39,6 +47,7 @@ export class PaginaFaiControffertaComponent implements OnInit{
               private nicknameAndEmailUserLoggedService: Nickname_and_email_user_loggedService,
               private sharedDataService: SharedDataService,
               private gestioneScambiService: GestioneScambiService,
+              private http: HttpClient,
               private dialog: MatDialog,
               private router: Router) {}
 
@@ -70,6 +79,61 @@ export class PaginaFaiControffertaComponent implements OnInit{
       console.log(this.lista_tipi_carte_offerte_ricevuta);
 
       this.get_info_carte_utente_loggato(this.offerta_ricevuta);
+
+      // Prendo tutti i mazzi dell'utente loggato (in modo tale che poi posso sapere quali carte può proporre e quali no):
+      this.apiUrl = `${this.baseUrl2}/showMazzi/${this.nicknameAndEmailUserLoggedService.getStoredNickname_user_logged()}`;
+      this.http.get<any[]>(this.apiUrl)
+        .subscribe(
+          (data: any[]) => {
+            console.log("data:", data);
+            const mazziAssociati: any = {};
+
+            data.forEach(item => {
+
+              const nomeMazzo = item.nomemazzo;
+
+              if (!mazziAssociati[nomeMazzo]) {
+                mazziAssociati[nomeMazzo] = {
+                  nomemazzo: nomeMazzo,
+                  carteassociate: [],
+                  nickname: item.nickname
+                };
+              }
+
+              // prova ad usare una lista di liste dove in ogni lista interna ti salvi la popolarità di quel mazzo.
+
+              this.http.get<any>(this.apiurl2 + `/${item.cartaassociata}`)
+                .subscribe(
+                  (data: any) => {
+                    if (data.length != 0) {
+
+                      mazziAssociati[nomeMazzo].carteassociate.push(data);
+                    } else {
+                      this.http.get<any>(this.apiurl3 + `/${item.cartaassociata}`)
+                        .subscribe(
+                          (data: any) => {
+                            if (data != null) {
+                              mazziAssociati[nomeMazzo].carteassociate.push(data);
+                            }
+                          }
+                        );
+
+                    }
+                  }
+                );
+            });
+            // Ora puoi utilizzare mazziAssociati come desideri
+            console.log("mazziAssociati:", mazziAssociati);
+
+            // Esegui il codice che dipende da this.decks qui dentro
+            this.decks = Object.values(mazziAssociati); // siccome non so il nome dei mazzi e quindi la chiave iniziale, allora uso Object.values(...)
+            console.log("this.decks:");
+            console.log(this.decks);
+          }
+        );
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     }
   }
 
@@ -182,36 +246,137 @@ export class PaginaFaiControffertaComponent implements OnInit{
     // Adesso preparo il dizionario che conterrà tutti i dati della controfferta e invio la chiamata al backend:
 
     this.lista_carte_richieste_nella_controfferta_per_il_backend = this.lista_carte_richieste_nella_controfferta.map(carta => carta.id);
+    console.log("this.offerta_ricevuta IN invia_controfferta: ", this.offerta_ricevuta)
+    console.log("this.offerta_ricevuta.id_carta_richiesta_ricevuta IN invia_controfferta: ", this.offerta_ricevuta.id_carta_richiesta_ricevuta)
+    console.log("this.lista_carte_richieste_nella_controfferta_per_il_backend: ", this.lista_carte_richieste_nella_controfferta_per_il_backend)
+    console.log("this.lista_carte_offerte_ricevuta: ", this.lista_carte_offerte_ricevuta)
 
-    // se this.lista_carte_offerte_ricevuta non è vuota aggiungo anche queste carte in this.lista_carte_richieste_nella_controfferta..
-    // Perchè vuol dire che l'utente che sta facendo la controfferta vuole comunque mantenere le carte (o una parte di esse) che gli sono state offerte in precedente:
-    if(this.lista_carte_offerte_ricevuta.length > 0){
-      for (let i = 0; i < this.lista_carte_offerte_ricevuta.length; i++) {
-        this.lista_carte_richieste_nella_controfferta_per_il_backend.push(this.lista_carte_offerte_ricevuta[i]);
-        this.lista_tipi_carte_richieste_nella_controfferta.push(this.lista_tipi_carte_offerte_ricevuta[i]) // aggiungo anche il tipo per ogni carta
+
+    // PRIMA DI PERMETTERGLI DI ACCETTARE L'OFFERTA DEVO VERIFICARE CHE CHE LE CARTE PRESENTI IN this.lista_carte_offerte_ricevuta NON SIANO PRESENTI IN NESSUN MAZZO
+    let carta_aggiungibile: boolean = true;
+
+    // GESTISCE IL CASO QUANDO L'UTENTE LOGGATO E' QUELLO CHE HA FATTO L'OFFERTA INIZIALE E QUINDI E' QUELLO CHE OFFRE LE CARTE IN LISTA CARTE OFFERTE E LISTA CARTE AGGIUNTIVE
+    if((this.offerta_ricevuta.statoOfferta == "controfferta") && (!this.isPari(this.offerta_ricevuta.numControfferta))){
+      for (const id_carta_offerta of this.lista_carte_offerte_ricevuta) {
+
+        let carta_non_vendibile: any;
+
+        for (const deck of this.decks) {
+
+          console.log("deck: ", deck)
+          console.log("deck.carteassociate: ", deck.carteassociate)
+
+          for (const carta_associata of deck.carteassociate) {
+
+            console.log("carta_associata[0].id: ", carta_associata[0].id)
+            console.log("id_carta_offerta: ", id_carta_offerta)
+
+            if(carta_associata[0].id == id_carta_offerta){
+              carta_aggiungibile = false;
+              carta_non_vendibile = carta_associata[0];
+              break; // esco subito dal for interno
+            }
+          }
+          if(!carta_aggiungibile){
+            break // esco subito dal for interno
+          }
+        }
+
+        if(!carta_aggiungibile){
+          this.openDialog("La carta chiamata: " + carta_non_vendibile.nome + " è presente in 1 o più mazzi" , "NON PUOI AGGIUNGERE QUESTA CARTA NELLA LISTA-CARTE-OFFERTE PERCHE' E' GIA' PRESENTE IN ALMENO UN MAZZO, DEVI PRIMA TOGLIERLA DA TUTTI I MAZZI PRIMA DI POTERLA VENDERE AD UN ALTRO GIOCATORE!");
+        }
+
+      }
+
+      // PRIMA DI PERMETTERGLI DI ACCETTARE L'OFFERTA DEVO VERIFICARE CHE LE CARTE PRESENTI IN this.lista_carte_richieste_nella_controfferta_per_il_backend NON SIANO PRESENTI IN NESSUN MAZZO
+      for (const id_carta_offerta of this.lista_carte_richieste_nella_controfferta_per_il_backend) {
+
+        let carta_non_vendibile: any;
+
+        for (const deck of this.decks) {
+
+          console.log("deck: ", deck)
+          console.log("deck.carteassociate: ", deck.carteassociate)
+
+          for (const carta_associata of deck.carteassociate) {
+
+            console.log("carta_associata[0].id: ", carta_associata[0].id)
+            console.log("id_carta_offerta: ", id_carta_offerta)
+
+            if(carta_associata[0].id == id_carta_offerta){
+              carta_aggiungibile = false;
+              carta_non_vendibile = carta_associata[0];
+              break; // esco subito dal for interno
+            }
+          }
+          if(!carta_aggiungibile){
+            break // esco subito dal for interno
+          }
+        }
+
+        if(!carta_aggiungibile){
+          this.openDialog("La carta chiamata: " + carta_non_vendibile.nome + " è presente in 1 o più mazzi" , "NON PUOI AGGIUNGERE QUESTA CARTA NELLA LISTA-CARTE-AGGIUNTIVE PERCHE' E' GIA' PRESENTE IN ALMENO UN MAZZO, DEVI PRIMA TOGLIERLA DA TUTTI I MAZZI PRIMA DI POTERLA VENDERE AD UN ALTRO GIOCATORE!");
+        }
+
+      }
+    }
+    // GESTISCE IL CASO QUANDO L'UTENTE LOGGATO E' QUELLO CHE HA RICEVUTO L'OFFERTA INIZIALE E QUINDI E' QUELLO CHE IN QUESTO MOMENTO VUOLE FARE UNA CONTROFFERTE PER CHIEDERE MAGARI CARTE
+    // DIVERSE RISPETTO A QUELLE CHE GLI SONO STATE PROPOSTE:
+    else if(this.isPari(this.offerta_ricevuta.numControfferta)){
+      console.log("this.offerta_ricevuta.id_carta_richiesta_ricevuta: ", this.offerta_ricevuta.id_carta_richiesta_ricevuta)
+      let carta_non_vendibile: any;
+      for (const deck of this.decks) {
+        console.log("deck: ", deck)
+        console.log("deck.carteassociate: ", deck.carteassociate)
+        for (const carta_associata of deck.carteassociate) {
+          console.log("carta_associata[0].id: ", carta_associata[0].id)
+          if(carta_associata[0].id == this.offerta_ricevuta.id_carta_richiesta_ricevuta){
+            carta_aggiungibile = false;
+            carta_non_vendibile = carta_associata[0];
+            break; // esco subito dal for interno
+          }
+        }
+        if(!carta_aggiungibile){
+          break // esco subito dal for interno
+        }
+      }
+      if(!carta_aggiungibile){
+        this.openDialog("La carta chiamata: " + carta_non_vendibile.nome + " è presente in 1 o più mazzi" , "NON PUOI VENDERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN ALMENO UN MAZZO, DEVI PRIMA TOGLIERLA DA TUTTI I MAZZI PRIMA DI POTERLA VENDERE O PROPORA AD UN ALTRO GIOCATORE!");
       }
     }
 
-    console.log("Sono in invia_controfferta !!")
-    console.log("this.lista_carte_offerte_ricevuta: ", this.lista_carte_offerte_ricevuta)
-    console.log("this.lista_tipi_carte_offerte_ricevuta: ", this.lista_tipi_carte_offerte_ricevuta)
-    console.log("this.lista_carte_richieste_nella_controfferta: ", this.lista_carte_richieste_nella_controfferta)
-    console.log("this.lista_tipi_carte_richieste_nella_controfferta: ", this.lista_tipi_carte_richieste_nella_controfferta)
-    console.log("points_richiesti: ", points_richiesti)
-    console.log("this.offerta_ricevuta.idStart: ", this.offerta_ricevuta.idStart)
 
-    this.gestioneScambiService.putControfferta(
-      {
-        nicknameU1: this.offerta_ricevuta.nicknameU1,
-        nicknameU2: this.offerta_ricevuta.nicknameU2,
-        idCartaRichiesta: this.offerta_ricevuta.id_carta_richiesta_ricevuta,
-        tipoCartaRichiesta: this.offerta_ricevuta.tipo_carta_richiesta_ricevuta,
-        listaCarteOfferte: JSON.stringify(this.lista_carte_richieste_nella_controfferta_per_il_backend), // la listaCarteOfferte adesso conterrà tutte le carte inserite durante la controfferta
-        listaTipiCarteOfferte: JSON.stringify(this.lista_tipi_carte_richieste_nella_controfferta),
-        pointsOfferti: points_richiesti,
-        idStart: this.offerta_ricevuta.idStart
+    // SE NON C'E' NESSUNA CARTA NON VENDIBILE ALLORA LA CONTROFFERTA VERRA' INVIATA:
+    if(carta_aggiungibile){
+      // se this.lista_carte_offerte_ricevuta non è vuota aggiungo anche queste carte in this.lista_carte_richieste_nella_controfferta..
+      // Perchè vuol dire che l'utente che sta facendo la controfferta vuole comunque mantenere le carte (o una parte di esse) che gli sono state offerte in precedente:
+      if(this.lista_carte_offerte_ricevuta.length > 0){
+        for (let i = 0; i < this.lista_carte_offerte_ricevuta.length; i++) {
+          this.lista_carte_richieste_nella_controfferta_per_il_backend.push(this.lista_carte_offerte_ricevuta[i]);
+          this.lista_tipi_carte_richieste_nella_controfferta.push(this.lista_tipi_carte_offerte_ricevuta[i]) // aggiungo anche il tipo per ogni carta
+        }
       }
-    ).subscribe(data => {
+
+      console.log("Sono in invia_controfferta !!")
+      console.log("this.lista_carte_offerte_ricevuta: ", this.lista_carte_offerte_ricevuta)
+      console.log("this.lista_tipi_carte_offerte_ricevuta: ", this.lista_tipi_carte_offerte_ricevuta)
+      console.log("this.lista_carte_richieste_nella_controfferta: ", this.lista_carte_richieste_nella_controfferta)
+      console.log("this.lista_tipi_carte_richieste_nella_controfferta: ", this.lista_tipi_carte_richieste_nella_controfferta)
+      console.log("points_richiesti: ", points_richiesti)
+      console.log("this.offerta_ricevuta.idStart: ", this.offerta_ricevuta.idStart)
+
+      this.gestioneScambiService.putControfferta(
+        {
+          nicknameU1: this.offerta_ricevuta.nicknameU1,
+          nicknameU2: this.offerta_ricevuta.nicknameU2,
+          idCartaRichiesta: this.offerta_ricevuta.id_carta_richiesta_ricevuta,
+          tipoCartaRichiesta: this.offerta_ricevuta.tipo_carta_richiesta_ricevuta,
+          listaCarteOfferte: JSON.stringify(this.lista_carte_richieste_nella_controfferta_per_il_backend), // la listaCarteOfferte adesso conterrà tutte le carte inserite durante la controfferta
+          listaTipiCarteOfferte: JSON.stringify(this.lista_tipi_carte_richieste_nella_controfferta),
+          pointsOfferti: points_richiesti,
+          idStart: this.offerta_ricevuta.idStart
+        }
+      ).subscribe(data => {
 
         console.log("Risposta backend di putControfferta: ", data)
 
@@ -225,7 +390,9 @@ export class PaginaFaiControffertaComponent implements OnInit{
           // e dopodichè lo riporto direttamente in "/dashboard/scambi_carte":
           this.openDialog('Errore nell\'invio della controfferta', 'Si è verificato un errore durante l\'invio della controfferta.');
         }
-    })
+      })
+
+    } // termine if(carta_aggiungibile)
 
   }
 

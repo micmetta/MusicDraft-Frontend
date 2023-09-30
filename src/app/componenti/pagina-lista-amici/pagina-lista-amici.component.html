@@ -1,1 +1,83 @@
-<p>pagina-lista-amici works!</p>
+<div class="menu">
+  <ul>
+    <li [class.selected]="selectedSection === 'Lista-amici'" (click)="selectSection('Lista-amici')"><span>Lista amici</span></li>
+    <li [class.selected]="selectedSection === 'Richiedi-amicizia'" (click)="selectSection('Richiedi-amicizia')"><span>Richiedi amicizia</span></li>
+<!--    <li [class.selected]="selectedSection === 'Richieste-amicizia-inviate'" (click)="selectSection('Richieste-amicizia-inviate')"><span>Richieste amicizia inviate</span></li> SI POTREBBE AGGIUNGERE UN DOMANI.. -->
+    <li [class.selected]="selectedSection === 'Richieste-amicizia-ricevute'" (click)="selectSection('Richieste-amicizia-ricevute')"><span>Richieste amicizia ricevute</span></li>
+  </ul>
+</div>
+
+
+<div *ngIf="selectedSection === 'Lista-amici'">
+
+  <h2> In questa sezione puoi visualizzare tutti i tuoi amici e vedere quali di essi sono Online/Offline </h2>
+
+  <ul>
+    <li *ngFor="let nickname_amico of lista_amici; let i = index">
+      <p *ngIf="lista_stato_amici[i] == 'Online' " style="margin-top: 50px; font-size: 16px; font-weight: bold;"> Nickname amico: {{nickname_amico}}, Stato: <span style="color: #45a049">Online</span> </p>
+      <p *ngIf="lista_stato_amici[i] == 'Offline' " style="margin-top: 50px; font-size: 16px; font-weight: bold;"> Nickname amico: {{nickname_amico}}, Stato: <span style="color: red">Offline</span> </p>
+
+      <!-- Qui cancello un'amicizia -->
+      <button style="background-color: #007bff;" mat-flat-button color="primary" class="botton-scambio-carte" (click)="cancellaAmicizia(nickname_amico)">
+        Cancella amicizia
+      </button>
+    </li>
+  </ul>
+
+</div>
+
+
+
+
+
+<div *ngIf="selectedSection === 'Richiedi-amicizia'">
+
+  <h2 style="margin-top: 20px; background-color: lightskyblue"> Qui sotto puoi inserire il nickname dell'utente al quale mandare la richiesta di amicizia. </h2>
+
+  <form id="friendRequestForm" (submit)="inviaRichiesta(nickname)">
+    <label for="nickname" class="bold-label"> Nickname dell'utente: </label>
+    <input type="text" id="nickname" name="nickname" required [(ngModel)]="nickname">
+    <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" type="submit">Invia Richiesta</button>
+  </form>
+
+  <h2 style="margin-top: 50px; background-color: lightskyblue"> Qui sotto, invece, sono mostrati tutti gli utenti registrati nell'applicazione: </h2>
+
+  <div *ngFor="let user of lista_users_app; let i = index">
+    <p style="margin-top: 30px; font-size: 16px; font-weight: bold;">
+      Nickname utente: {{user.nickname}}
+    </p>
+    <button style="background-color: #007bff; margin-left: 0px" mat-flat-button color="primary" class="botton-scambio-carte" (click)="inviaRichiesta(user.nickname)">
+      Invia richiesta
+    </button>
+  </div>
+
+</div>
+
+
+<div *ngIf="selectedSection === 'Richieste-amicizia-ricevute'">
+
+  <h2> In questa sezione puoi visualizzare e rispondere alle richieste di amicizia che ti sono state inviate: </h2>
+
+  <!--  <form id="friendRequestForm" (submit)="inviaRichiesta()">-->
+  <!--    <label for="nickname" class="bold-label"> Nickname dell'utente: </label>-->
+  <!--    <input type="text" id="nickname" name="nickname" required [(ngModel)]="nickname">-->
+  <!--    <button style="background-color: #007bff" mat-flat-button color="primary" class="botton-scambio-carte" type="submit">Invia Richiesta</button>-->
+  <!--  </form>-->
+
+  <div *ngFor="let nickname_user_inviato_richiesta of lista_richieste_amicizia_ricevute; let i = index">
+
+    <p style="margin-top: 50px; font-size: 16px; font-weight: bold;">
+      Nickname utente: {{nickname_user_inviato_richiesta}}
+    </p>
+    <div style="display: flex">
+      <button style="background-color: #007bff; margin-top: 0px; margin-left: 0px" mat-flat-button color="primary" class="botton-scambio-carte" (click)="accettaRichiesta(nickname_user_inviato_richiesta)">
+        Accetta richiesta
+      </button>
+      <button style="background-color: #007bff; margin-top: 0px; margin-left: 0px" mat-flat-button color="primary" class="botton-scambio-carte" (click)="rifiutaRichiesta(nickname_user_inviato_richiesta)">
+        Rifiuta richiesta
+      </button>
+    </div>
+
+  </div>
+
+</div>

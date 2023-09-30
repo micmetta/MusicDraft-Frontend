@@ -8,6 +8,7 @@ import {ShowCarteInVenditaService} from "../../servizi/marketplace/show-carte-in
 import {GestioneScambiService} from "../../servizi/home_service/gestione-scambi.service";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogMessageComponent} from "../dialog-message/dialog-message.component";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-pagina-crea-offerta',
@@ -16,10 +17,15 @@ import {DialogMessageComponent} from "../dialog-message/dialog-message.component
 })
 export class PaginaCreaOffertaComponent implements OnInit{
 
+  private baseUrl2 = 'http://localhost:9092/api/v1/cartemazzi';
+  private apiUrl = ''; // la setto nell'NgOnInit
+  private apiurl2=`${this.baseUrl2}/getUserArtista`
+  private apiurl3=`${this.baseUrl2}/getUserBrano`
+
   carta_richiesta: any
   tipo_carta_richiesta: any
   nickn_propr_carta_richiesta: any
-
+  decks: any; // I tuoi mazzi di carte
 
   // @ts-ignore
   user_offerta: string // nickname dell'utente al qualo voglio fare l'offerta
@@ -46,6 +52,7 @@ export class PaginaCreaOffertaComponent implements OnInit{
               private show:ShowCarteInVenditaService,
               private gestioneScambiService: GestioneScambiService,
               private router: Router,
+              private http: HttpClient,
               private dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -68,6 +75,7 @@ export class PaginaCreaOffertaComponent implements OnInit{
       // Recupero il parametro dalla query string che contiene il nickname dell'utente del quale voglio vedere le carte:
       this.nickname_user_logged = this.nickname_loggedService.getStoredNickname_user_logged();
 
+      this.apiUrl = `${this.baseUrl2}/showMazzi/${this.nickname_user_logged}`;
 
       // Ora invoco il backend per farmi passare tutte le carte dell'utente con nickname->"user_offerta":
       this.show.getCarteArtistaByNickname(this.nickname_user_logged)
@@ -80,6 +88,60 @@ export class PaginaCreaOffertaComponent implements OnInit{
           this.lista_carte_brani_utente = Object.keys(data).map((key)=>{return data[key]});
           console.log(data);
         }))
+
+
+      // Prendo tutti i mazzi dell'utente loggato (in modo tale che poi posso sapere quali carte può proporre e quali no):
+      this.http.get<any[]>(this.apiUrl)
+        .subscribe(
+          (data: any[]) => {
+            console.log("data:", data);
+            const mazziAssociati: any = {};
+
+            data.forEach(item => {
+
+              const nomeMazzo = item.nomemazzo;
+
+              if (!mazziAssociati[nomeMazzo]) {
+                mazziAssociati[nomeMazzo] = {
+                  nomemazzo: nomeMazzo,
+                  carteassociate: [],
+                  nickname: item.nickname
+                };
+              }
+
+              // prova ad usare una lista di liste dove in ogni lista interna ti salvi la popolarità di quel mazzo.
+
+              this.http.get<any>(this.apiurl2 + `/${item.cartaassociata}`)
+                .subscribe(
+                  (data: any) => {
+                    if (data.length != 0) {
+
+                      mazziAssociati[nomeMazzo].carteassociate.push(data);
+                    } else {
+                      this.http.get<any>(this.apiurl3 + `/${item.cartaassociata}`)
+                        .subscribe(
+                          (data: any) => {
+                            if (data != null) {
+                              mazziAssociati[nomeMazzo].carteassociate.push(data);
+                            }
+                          }
+                        );
+
+                    }
+                  }
+                );
+            });
+            // Ora puoi utilizzare mazziAssociati come desideri
+            console.log("mazziAssociati:", mazziAssociati);
+
+            // Esegui il codice che dipende da this.decks qui dentro
+            this.decks = Object.values(mazziAssociati); // siccome non so il nome dei mazzi e quindi la chiave iniziale, allora uso Object.values(...)
+            console.log("this.decks:");
+            console.log(this.decks);
+          }
+        );
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
 
   }
@@ -109,32 +171,61 @@ export class PaginaCreaOffertaComponent implements OnInit{
     // mi basta invocare cartaB.id:
     console.log("cartaA.id corrente: ", cartaA.id);
 
-    // Qui controllo SE LA CARTA CHE SI VUOLE AGGIUNGERE ALL'OFFERTA NON SIA GIA' PRESENTE IN UN'ALTRA OFFERTA, qualora fosse così allora
-    // avverto l'utente che questa cosa non può farla e non aggiungo la carta selezionata:
-    this.lista_offerte_inviate = await this.gestioneScambiService.getAllOfferteInviate(this.nickname_user_logged).toPromise(); // chiamata sincrona (senza .subscribe)
-    let flag: boolean = true;
+    // Faccio qui il controllo sul fatto che l'utente loggato non deve avere questa carta in uno qualunque dei suoi mazzi
+    let carta_aggiungibile: boolean = true;
+    for (const deck of this.decks) {
 
-    // scorro le offerte inviate e vedo se in una di queste è già presente la carta che si vuole aggiungere alla nuova offerta:
-    for (const offerta_inviata of this.lista_offerte_inviate) {
+      console.log("deck: ", deck)
+      console.log("deck.carteassociate: ", deck.carteassociate)
 
-      this.lista_carte_offerte = JSON.parse(offerta_inviata.listaCarteOfferte);
-      this.lista_tipi_carte_offerte = JSON.parse(offerta_inviata.listaTipiCarteOfferte);
-      for (let i=0; i < this.lista_carte_offerte.length; i++){
-        if((this.lista_carte_offerte[i] == cartaA.id) && (this.lista_tipi_carte_offerte[i] == "artista")){
-          // allora la carta è già presente in un'altra offerta
-          flag = false; // indica che non devo aggiungere questa carta alla nuova offerta
+      for (const carta_associata of deck.carteassociate) {
+
+        console.log("carta_associata[0].id: ", carta_associata[0].id)
+        console.log("cartaA.id: ", cartaA.id)
+
+        if(carta_associata[0].id == cartaA.id){
+          carta_aggiungibile = false;
+          break; // esco subito dal for interno
         }
       }
+      if(!carta_aggiungibile){
+        break // esco subito dal for interno
+      }
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    if(flag){
-      // aggiungo la carta solo se il flag è true
-      this.aggiungiCarta(cartaA); // aggiungo l'id di questa carta alla listaCarteOfferte
-      this.aggiungiTipoCarta("artista"); // aggiungo anche il tipo di questa nuova carta appena aggiunta a listaCarteOfferte
+    if(!carta_aggiungibile){
+      this.openDialog_2("La carta proposta è presente in 1 o più mazzi" , "NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN ALMENO UN MAZZO, DEVI PRIMA TOGLIERLA DA TUTTI I MAZZI PRIMA DI POTERLA PROPORRE IN UN'OFFERTA!");
     }
     else{
-      console.log("NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!")
-      this.openDialog_2("Errore durante l'aggiunta della carta" , "NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!");
+
+      // Qui controllo SE LA CARTA CHE SI VUOLE AGGIUNGERE ALL'OFFERTA NON SIA GIA' PRESENTE IN UN'ALTRA OFFERTA, qualora fosse così allora
+      // avverto l'utente che questa cosa non può farla e non aggiungo la carta selezionata:
+      this.lista_offerte_inviate = await this.gestioneScambiService.getAllOfferteInviate(this.nickname_user_logged).toPromise(); // chiamata sincrona (senza .subscribe)
+      let flag: boolean = true;
+
+      // scorro le offerte inviate e vedo se in una di queste è già presente la carta che si vuole aggiungere alla nuova offerta:
+      for (const offerta_inviata of this.lista_offerte_inviate) {
+
+        this.lista_carte_offerte = JSON.parse(offerta_inviata.listaCarteOfferte);
+        this.lista_tipi_carte_offerte = JSON.parse(offerta_inviata.listaTipiCarteOfferte);
+        for (let i=0; i < this.lista_carte_offerte.length; i++){
+          if((this.lista_carte_offerte[i] == cartaA.id) && (this.lista_tipi_carte_offerte[i] == "artista")){
+            // allora la carta è già presente in un'altra offerta
+            flag = false; // indica che non devo aggiungere questa carta alla nuova offerta
+          }
+        }
+      }
+
+      if(flag){
+        // aggiungo la carta solo se il flag è true
+        this.aggiungiCarta(cartaA); // aggiungo l'id di questa carta alla listaCarteOfferte
+        this.aggiungiTipoCarta("artista"); // aggiungo anche il tipo di questa nuova carta appena aggiunta a listaCarteOfferte
+      }
+      else{
+        console.log("NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!")
+        this.openDialog_2("Errore durante l'aggiunta della carta" , "NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!");
+      }
     }
   }
 
@@ -146,32 +237,64 @@ export class PaginaCreaOffertaComponent implements OnInit{
     // mi basta invocare cartaB.id:
     console.log("cartaB.id corrente: ", cartaB.id);
 
-    // Qui controllo SE LA CARTA CHE SI VUOLE AGGIUNGERE ALL'OFFERTA NON SIA GIA' PRESENTE IN UN'ALTRA OFFERTA, qualora fosse così allora
-    // avverto l'utente che questa cosa non può farla e non aggiungo la carta selezionata:
-    this.lista_offerte_inviate = await this.gestioneScambiService.getAllOfferteInviate(this.nickname_user_logged).toPromise(); // chiamata sincrona (senza .subscribe)
-    let flag: boolean = true;
 
-    // scorro le offerte inviate e vedo se in una di queste è già presente la carta che si vuole aggiungere alla nuova offerta:
-    for (const offerta_inviata of this.lista_offerte_inviate) {
+    // metto qui il controllo sul fatto che l'utente loggato non deve avere questa carta in uno qualunque dei suoi mazzi
+    // Faccio qui il controllo sul fatto che l'utente loggato non deve avere questa carta in uno qualunque dei suoi mazzi
+    let carta_aggiungibile: boolean = true;
+    for (const deck of this.decks) {
 
-      this.lista_carte_offerte = JSON.parse(offerta_inviata.listaCarteOfferte);
-      this.lista_tipi_carte_offerte = JSON.parse(offerta_inviata.listaTipiCarteOfferte);
-      for (let i=0; i < this.lista_carte_offerte.length; i++){
-        if((this.lista_carte_offerte[i] == cartaB.id) && (this.lista_tipi_carte_offerte[i] == "brano")){
-          // allora la carta è già presente in un'altra offerta
-          flag = false; // indica che non devo aggiungere questa carta alla nuova offerta
+      console.log("deck: ", deck)
+      console.log("deck.carteassociate: ", deck.carteassociate)
+
+      for (const carta_associata of deck.carteassociate) {
+
+        console.log("carta_associata[0].id: ", carta_associata[0].id)
+        console.log("cartaB.id: ", cartaB.id)
+
+        if(carta_associata[0].id == cartaB.id){
+          carta_aggiungibile = false;
+          break; // esco subito dal for interno
         }
       }
+      if(!carta_aggiungibile){
+        break // esco subito dal for interno
+      }
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    if(flag){
-      // aggiungo la carta solo se il flag è true
-      this.aggiungiCarta(cartaB); // aggiungo l'id di questa carta alla listaCarteOfferte
-      this.aggiungiTipoCarta("brano"); // aggiungo anche il tipo di questa nuova carta appena aggiunta a listaCarteOfferte
+    // Qui controllo SE LA CARTA CHE SI VUOLE AGGIUNGERE ALL'OFFERTA NON SIA GIA' PRESENTE IN UN'ALTRA OFFERTA, qualora fosse così allora
+    // avverto l'utente che questa cosa non può farla e non aggiungo la carta selezionata:
+
+    if(!carta_aggiungibile){
+      this.openDialog_2("La carta proposta è presente in 1 o più mazzi" , "NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN ALMENO UN MAZZO, DEVI PRIMA TOGLIERLA DA TUTTI I MAZZI PRIMA DI POTERLA PROPORRE IN UN'OFFERTA!");
     }
     else{
-      console.log("NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!")
-      this.openDialog_2("Errore durante l'aggiunta della carta" , "NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!");
+
+      this.lista_offerte_inviate = await this.gestioneScambiService.getAllOfferteInviate(this.nickname_user_logged).toPromise(); // chiamata sincrona (senza .subscribe)
+      let flag: boolean = true;
+
+      // scorro le offerte inviate e vedo se in una di queste è già presente la carta che si vuole aggiungere alla nuova offerta:
+      for (const offerta_inviata of this.lista_offerte_inviate) {
+
+        this.lista_carte_offerte = JSON.parse(offerta_inviata.listaCarteOfferte);
+        this.lista_tipi_carte_offerte = JSON.parse(offerta_inviata.listaTipiCarteOfferte);
+        for (let i=0; i < this.lista_carte_offerte.length; i++){
+          if((this.lista_carte_offerte[i] == cartaB.id) && (this.lista_tipi_carte_offerte[i] == "brano")){
+            // allora la carta è già presente in un'altra offerta
+            flag = false; // indica che non devo aggiungere questa carta alla nuova offerta
+          }
+        }
+      }
+
+      if(flag){
+        // aggiungo la carta solo se il flag è true
+        this.aggiungiCarta(cartaB); // aggiungo l'id di questa carta alla listaCarteOfferte
+        this.aggiungiTipoCarta("brano"); // aggiungo anche il tipo di questa nuova carta appena aggiunta a listaCarteOfferte
+      }
+      else{
+        console.log("NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!")
+        this.openDialog_2("Errore durante l'aggiunta della carta" , "NON PUOI AGGIUNGERE QUESTA CARTA PERCHE' E' GIA' PRESENTE IN UN'ALTRA OFFERTA!");
+      }
     }
   }
 

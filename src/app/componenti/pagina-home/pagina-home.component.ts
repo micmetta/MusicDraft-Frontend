@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {MatchmakingServiceService} from "../../servizi/matchmaking_service/matchmaking-service.service";
 
 import { ChartOptions, ChartDataset, ChartType } from 'chart.js';
+import {GestioneScambiService} from "../../servizi/home_service/gestione-scambi.service";
 
 
 @Component({
@@ -21,6 +22,11 @@ export class PaginaHomeComponent implements OnInit{
   // @ts-ignore
   email_user_logged: String; // contiene l'email dell'utente
   points_user: number = 0; // conterrà i points dell'utente
+  num_users_online: number = 0;
+  lista_amici: any[] = [];
+  lista_amici_online: any[] = [];
+  num_amici_tot: number = 0;
+  num_amici_online_tot: number = 0;
 
   partite_concluse_utente_loggato: any[] = []
   listaDiDIzionari_carte_mazzo_U1_partite_concluse: {
@@ -33,6 +39,9 @@ export class PaginaHomeComponent implements OnInit{
   // lista_points_guadagnati_in_data_giocata: any[] = [];
   lista_points_guadagnati_in_data_giocata: any[] = [];
 
+
+  // Aggiungo una variabile per memorizzare le descrizioni del profitto
+  public barChartDescriptions: string[] = [];
   // Definisco le variabili per il grafico
   public barChartOptions: ChartOptions = {
     responsive: true,
@@ -45,36 +54,22 @@ export class PaginaHomeComponent implements OnInit{
         beginAtZero: true,
       },
     },
-    plugins: {
-      legend: {
-        display: true,
-      },
-    }
   };
   public barChartLabels: string[] = [];
-  public barChartType: ChartType = 'bar';
-  public barChartLegend = true;
+  public barChartLegend = false; // la legenda la creo per conto mio sopra al grafico nell'html
   public barChartData: ChartDataset[] = [
-    { data: [], label: 'Profitto Totale' }
+    { data: [] }
   ];
 
-  // @ts-ignore
-  private subscription: Subscription;
 
   constructor(private nicknameAndEmailUserLoggedService: Nickname_and_email_user_loggedService,
               private authService: AuthService,
               private matchmakingService: MatchmakingServiceService,
+              private gestioneScambiService: GestioneScambiService,
               private router: Router) {
   }
 
   ngOnInit(): void {
-    // this.subscription = this.nicknameAndEmailUserLoggedService.nickname_user_logged$.subscribe(value => {
-    //   this.nickname_user_logged = value;
-    // });
-    //
-    // this.subscription = this.nicknameAndEmailUserLoggedService.email_user_logged$.subscribe(value => {
-    //   this.email_user_logged = value;
-    // });
 
     this.nickname_user_logged = this.nicknameAndEmailUserLoggedService.getStoredNickname_user_logged();
     this.nicknameAndEmailUserLoggedService.nickname_user_logged$.subscribe(value => {
@@ -90,6 +85,28 @@ export class PaginaHomeComponent implements OnInit{
     this.authService.getPoints(this.nickname_user_logged).subscribe(data => {
       this.points_user = Number(data);
     })
+
+    // Prendo il numero totale di utenti online:
+    this.authService.getNumberUsersOnline().subscribe(data => {
+      this.num_users_online = data;
+    })
+
+    // carico tutta la lista amici dell'utente loggato e conto quanti amici ha:
+    this.gestioneScambiService.getAllFriends(this.nickname_user_logged).subscribe(data => {
+      this.lista_amici = data;
+      console.log("this.lista_amici:")
+      console.log(this.lista_amici)
+      this.num_amici_tot = this.lista_amici.length;
+    })
+
+    // carico tutta la lista amici dell'utente loggato e conto quanti amici sono online:
+    this.gestioneScambiService.getAllFriendsAreOnline(this.nickname_user_logged).subscribe(data => {
+      this.lista_amici_online = data;
+      console.log("this.lista_amici_online:")
+      console.log(this.lista_amici_online)
+      this.num_amici_online_tot = this.lista_amici_online.length;
+    })
+
 
     // riempio tutta la lista di partite che si sono concluse e che sono state giocate dell'utente loggato:
     this.matchmakingService.getAllPartiteConcluse(this.nicknameAndEmailUserLoggedService.getStoredNickname_user_logged()).subscribe(data => {
@@ -156,6 +173,7 @@ export class PaginaHomeComponent implements OnInit{
       // Estraggo le date e i profitti totali dai dati e li inserisco nei rispettivi array:
       this.barChartLabels = this.lista_points_guadagnati_in_data_giocata.map(item => item.data_giocata);
       this.barChartData[0].data = this.lista_points_guadagnati_in_data_giocata.map(item => item.profitto_totale);
+      this.barChartData[0].label = '';
       this.calculateBarColors();
     })
 
@@ -165,10 +183,13 @@ export class PaginaHomeComponent implements OnInit{
   calculateBarColors() {
     this.barChartData[0].backgroundColor = this.lista_points_guadagnati_in_data_giocata.map((item) => {
       if (item.profitto_totale > 0) {
+        this.barChartDescriptions.push('Profitto Totale Positivo');
         return 'green'; // Profitto positivo (verde)
       } else if (item.profitto_totale < 0) {
+        this.barChartDescriptions.push('Profitto Totale Negativo');
         return 'red'; // Profitto negativo (rosso)
       } else {
+        this.barChartDescriptions.push('Profitto Totale Uguale a Zero');
         return 'gray'; // Profitto uguale a zero (grigio)
       }
     });

@@ -53,7 +53,9 @@ import { PaginaMatchmakingComponent } from './componenti/pagina-matchmaking/pagi
 import { PaginaVisualizzaMazzoComponent } from './componenti/pagina-visualizza-mazzo/pagina-visualizza-mazzo.component';
 import {MatchingpopComponent} from "./popup/matchingpop/matchingpop.component";
 
-import { NgChartsModule } from 'ng2-charts'; // npm install ng2-charts per installarlo
+import { NgChartsModule } from 'ng2-charts';
+import { ChangeNicknamePopComponent } from './popup/changeNickname/change-nickname-pop/change-nickname-pop.component';
+import { ChangePasswordPopComponent } from './popup/changePassword/change-password-pop/change-password-pop.component'; // npm install ng2-charts per installarlo
 
 @NgModule({
   declarations: [
@@ -82,6 +84,8 @@ import { NgChartsModule } from 'ng2-charts'; // npm install ng2-charts per insta
     PaginaMatchmakingComponent,
     PaginaVisualizzaMazzoComponent,
     MatchingpopComponent,
+    ChangeNicknamePopComponent,
+    ChangePasswordPopComponent,
 
   ],
   imports: [

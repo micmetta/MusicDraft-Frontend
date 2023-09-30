@@ -65,6 +65,8 @@ export class PaginaMatchmakingComponent implements OnInit{
 
     this.nickname_user_logged = this.nicknameAndEmailUserLoggedService.getStoredNickname_user_logged(); // prendo il nickname dell'utente loggato in questo momento
 
+
+    // prendo tutti i mazzi dell'utente loggato:
     this.http.get<any[]>(apiUrl)
       .subscribe(
         (data: any[]) => {
@@ -72,7 +74,9 @@ export class PaginaMatchmakingComponent implements OnInit{
           const mazziAssociati: any = {};
 
           data.forEach(item => {
+
             const nomeMazzo = item.nomemazzo;
+
             if (!mazziAssociati[nomeMazzo]) {
               mazziAssociati[nomeMazzo] = {
                 nomemazzo: nomeMazzo,
@@ -80,6 +84,8 @@ export class PaginaMatchmakingComponent implements OnInit{
                 nickname: item.nickname
               };
             }
+
+            // prova ad usare una lista di liste dove in ogni lista interna ti salvi la popolarità di quel mazzo.
 
             this.http.get<any>(apiurl2+`/${item.cartaassociata}`)
               .subscribe(
@@ -107,15 +113,80 @@ export class PaginaMatchmakingComponent implements OnInit{
           console.log("mazziAssociati:", mazziAssociati);
 
           // Esegui il codice che dipende da this.decks qui dentro
-          this.decks = Object.values(mazziAssociati);
-          this.caricaCarteUtente();
+          this.decks = Object.values(mazziAssociati); // siccome non so il nome dei mazzi e quindi la chiave iniziale, allora uso Object.values(...)
+
+          console.log("this.decks:");
           console.log(this.decks);
+          // console.log("this.decks[0].carteassociate: ", this.decks[0].carteassociate);
+          // console.log("this.decks[0].carteassociate[0][0].popolarita;: ", this.decks[0].carteassociate[0][0].popolarita);
+          console.log("this.decks[0]: ", this.decks[0]);
+          console.log("this.decks[0].carteassociate: ", this.decks[0].carteassociate);
+          console.log("this.decks[0].carteassociate[0]: ", this.decks[0].carteassociate[0]); /////// come lo leggo? ///////////////////////////
+
+          this.caricaCarteUtente();
+
+          // [
+          //     [
+          //         {
+          //             "id": "4p0SvdDuBppNhGbNixwpt8",
+          //             "nome": "Último Estilo",
+          //             "popolarita": 4,
+          //             "genere": "Non disponibile",
+          //             "immagine": "https://i.scdn.co/image/ab6761610000e5eb3565edac8aa45438effb047d",
+          //             "nickname": "Michele Metta"
+          //         }
+          //     ],
+          //     [
+          //         {
+          //             "id": "2roFS1imYIudFZHFYqdQmH",
+          //             "nome": "1More2Me",
+          //             "popolarita": 20,
+          //             "genere": "Non disponibile",
+          //             "immagine": "https://i.scdn.co/image/ab6761610000e5ebc1fcd43e3fd61b7dbb07c5dc",
+          //             "nickname": "Michele Metta"
+          //         }
+          //     ],
+          //     [
+          //         {
+          //             "id": "6kKdfKvmGhD9U8T8GuYIK2",
+          //             "nome": "UL1TO",
+          //             "popolarita": 5,
+          //             "genere": "Non disponibile",
+          //             "immagine": "https://i.scdn.co/image/ab6761610000e5eb2774b6575c90c696c2307a02",
+          //             "nickname": "Michele Metta"
+          //         }
+          //     ],
+          //     [
+          //         {
+          //             "id": "72qUhfSJSbholn96Bpayw1",
+          //             "nome": "Ranma 1/2",
+          //             "popolarita": 15,
+          //             "genere": "Non disponibile",
+          //             "immagine": "https://i.scdn.co/image/ab67616d0000b2734d7c91f2449164ea71e15aae",
+          //             "nickname": "Michele Metta"
+          //         }
+          //     ],
+          //     [
+          //         {
+          //             "id": "7bS2p0bunoYHbQ4uEV4sHM",
+          //             "nome": "Bad Memories",
+          //             "durata": "3minuti e 29secondi",
+          //             "anno_pubblicazione": "2019-09-02",
+          //             "popolarita": 9,
+          //             "immagine": "https://i.scdn.co/image/ab67616d0000b27355efb1a866c9155edd148b55",
+          //             "nickname": "Michele Metta"
+          //         }
+          //     ]
+          // ]
+
+
+
         },
         (error) => {
           console.error('Errore durante il recupero dei mazzi', error);
         }
       );
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // riempio tutta la lista delle partite non abbinate per l'utente loggato:
     this.matchmakingService.getAllPartiteSenzaMatch(this.nickname_user_logged).subscribe(data => {
@@ -147,6 +218,8 @@ export class PaginaMatchmakingComponent implements OnInit{
         let id_carteAssociateMazzoU2: any[] = []
         id_carteAssociateMazzoU1 = this.convertStringToArray(partita_conclusa.carteAssociateMazzoU1);
         id_carteAssociateMazzoU2 = this.convertStringToArray(partita_conclusa.carteAssociateMazzoU2);
+
+        console.log("partita_conclusa corrente: ", partita_conclusa)
         console.log("id_carteAssociateMazzoU1: ", id_carteAssociateMazzoU1);
         console.log("id_carteAssociateMazzoU2: ", id_carteAssociateMazzoU2);
 
@@ -184,6 +257,7 @@ export class PaginaMatchmakingComponent implements OnInit{
         let nuovoElemento = {
           lista_info_carte_associate_mazzo_U1: lista_info_carte_associate_mazzo_U1
         }
+        console.log("this.listaDiDIzionari_carte_mazzo_U1_partite_concluse: ", this.listaDiDIzionari_carte_mazzo_U1_partite_concluse)
         this.listaDiDIzionari_carte_mazzo_U1_partite_concluse.push(nuovoElemento); // inserisco la lista nella lista di dizionari
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -221,6 +295,7 @@ export class PaginaMatchmakingComponent implements OnInit{
         let nuovoElemento_2 = {
           lista_info_carte_associate_mazzo_U2: lista_info_carte_associate_mazzo_U2
         }
+        console.log("this.listaDiDIzionari_carte_mazzo_U1_partite_concluse: ", this.listaDiDIzionari_carte_mazzo_U1_partite_concluse)
         this.listaDiDIzionari_carte_mazzo_U2_partite_concluse.push(nuovoElemento_2); // inserisco la lista nella lista di dizionari
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       }

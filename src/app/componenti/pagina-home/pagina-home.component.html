@@ -3,7 +3,7 @@
 <mat-card>
   <mat-card-content class="custom-barra-superiore">
     <p class="paragrafo-barra-superiore">
-      Bentornato, {{this.nickname_user_logged}}
+      <span style="font-weight: bold"> Bentornato, {{this.nickname_user_logged}} </span>
     </p>
   </mat-card-content>
 </mat-card>
@@ -35,7 +35,7 @@
             <span class="points-label" style="margin-left: 10px">Matchmaking</span>
           </div>
           <div class="header-right">
-            <div class="points-value" style="margin-top: 10px">utenti online: 12,302</div>
+            <div class="points-value" style="margin-top: 10px">utenti online: {{num_users_online}}</div>
           </div>
         </div>
       </mat-card-title>
@@ -51,14 +51,14 @@
             <span class="points-label" style="margin-left: 10px">Lista amici</span>
           </div>
           <div class="header-right">
-            <div class="small-text">2 online</div>
-            <div class="points-value">amici totali: 20</div>
+            <div class="small-text">{{num_amici_online_tot}} online</div>
+            <div class="points-value">amici totali: {{num_amici_tot}}</div>
           </div>
         </div>
       </mat-card-title>
     </mat-card-header>
 
-    <button mat-flat-button color="primary" class="botton-scambio-carte" (click)="pagina_scambi()">
+    <button mat-flat-button style="background-color: black;" class="botton-scambio-carte" (click)="pagina_scambi()">
       scambia carte
     </button>
 
@@ -67,12 +67,32 @@
 
 </div>
 
-<div class="chart-container">
-  <canvas baseChart
-          [datasets]="barChartData"
-          [labels]="barChartLabels"
-          [options]="barChartOptions"
-          [legend]="barChartLegend"
-  >
-  </canvas>
+<div class="chart-legend-container">
+
+  <!-- Legenda sopra il grafico -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-color green"></div>
+      <div class="legend-text">Profitto Totale Positivo</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color red"></div>
+      <div class="legend-text">Profitto Totale Negativo</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color gray"></div>
+      <div class="legend-text">Profitto Totale Uguale a Zero</div>
+    </div>
+  </div>
+
+  <!-- Grafico a barre -->
+  <div class="chart-container">
+    <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+    >
+    </canvas>
+  </div>
 </div>
