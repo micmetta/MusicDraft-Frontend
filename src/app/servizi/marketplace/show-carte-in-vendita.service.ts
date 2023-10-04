@@ -28,7 +28,7 @@ export class ShowCarteInVenditaService {
         'Access-Control-Allow-Origin': '*' // Imposta l'origine consentita, potrebbe essere più restrittivo
       })
     };
-    return this.http.get(url,httpOptions);
+    return this.http.get(url);
   }
   getCarteInVenditaBrano() {
     const url = `${this.baseUrl}/show-carteinvenditaBrano`;
@@ -38,11 +38,12 @@ export class ShowCarteInVenditaService {
         'Access-Control-Allow-Origin': '*' // Imposta l'origine consentita, potrebbe essere più restrittivo
       })
     };
-    return this.http.get(url,httpOptions);
+    return this.http.get(url);
   }
 
   getCarteArtistaByNickname(nick:string){
     const url = `${this.baseUrl2}/showCardArtistaUtente/${nick}`;
+    console.log(url)
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ export class ShowCarteInVenditaService {
       })
     };
 
-    return this.http.get(url,httpOptions);
+    return this.http.get(url);
   }
   getCarteBranoByNickname(nick:string){
     const url = `${this.baseUrl2}/showCardArtistaBrani/${nick}`;
@@ -60,7 +61,7 @@ export class ShowCarteInVenditaService {
         'Access-Control-Allow-Origin': '*' // Imposta l'origine consentita, potrebbe essere più restrittivo
       })
     };
-    return this.http.get(url,httpOptions);
+    return this.http.get(url);
   }
 
 
@@ -75,7 +76,7 @@ export class ShowCarteInVenditaService {
       })
     };
 
-    return this.http.get(url,httpOptions);
+    return this.http.get(url);
   }
 
   getAllBrani(){
@@ -87,7 +88,7 @@ export class ShowCarteInVenditaService {
       })
     };
 
-    return this.http.get(url,httpOptions);
+    return this.http.get(url);
   }
 
 

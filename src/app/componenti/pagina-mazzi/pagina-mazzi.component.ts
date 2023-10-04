@@ -22,7 +22,7 @@ export class PaginaMazziComponent {
   isEditing = false;
   selectedCard: any;
   availableCards: any[]=[];
-  private baseUrl2 = 'http://localhost:9092/api/v1/cartemazzi';
+  private baseUrl2 = '/api/v1/cartemazzi';
   carteSelezionate: any[] = []; // Inizializza l'array delle carte selezionate
   selectedCardToAdd: any | undefined;
   selectedDeck: any;
@@ -246,6 +246,7 @@ export class PaginaMazziComponent {
     if (this.carteSelezionate.length === 5 && (this.carteSelezionate.length == set.size)) {
       console.log(this.carteSelezionate)
       // Invia i dati al backend
+      console.log(this.deck.name,this.carteSelezionate,this.nick.getStoredNickname_user_logged())
       this.mazzoService.creaNuovoMazzo(this.deck.name, this.carteSelezionate,this.nick.getStoredNickname_user_logged()).subscribe(
         (response) => {
         console.log("fatto")        },
@@ -268,7 +269,7 @@ export class PaginaMazziComponent {
       // Rimuovi il mazzo dall'array
       console.log(deck.nomemazzo)
       this.decks.splice(index, 1);
-      this.http.delete(`http://localhost:9092/api/v1/cartemazzi/deleteMazzo/${deck.nomemazzo}`)
+      this.http.delete(`/api/v1/cartemazzi/deleteMazzo/${deck.nomemazzo}`)
         .subscribe((response) => {
           console.log("fatto")});
 
@@ -1076,7 +1077,7 @@ export class PaginaMazziComponent {
       const set = new Set(this.c);
       if (this.c.length == 5) {
         if (!contieneDuplicati) {
-          this.http.delete(`http://localhost:9092/api/v1/cartemazzi/deleteMazzo/${this.nomemazoattuale}`)
+          this.http.delete(`/api/v1/cartemazzi/deleteMazzo/${this.nomemazoattuale}`)
             .subscribe((response) => {
                 console.log("fatto")
                 this.mazzoService.creaNuovoMazzo(this.selectedDeck.nomemazzo, this.c, this.selectedDeck.nickname).subscribe(

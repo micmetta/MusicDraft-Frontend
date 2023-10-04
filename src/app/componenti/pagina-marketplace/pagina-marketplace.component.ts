@@ -24,8 +24,8 @@ export class PaginaMarketplaceComponent implements OnInit{
   itemsA: any
   itemsT:any
   costo:any;
-  private baseUrl = 'http://localhost:9092/api/v1/cartemazzi'
-  private baseurl2 ='http://localhost:9091/api/v1/marketplace'
+  private baseUrl = '/api/v1/cartemazzi'
+  private baseurl2 ='/api/v1/marketplace'
   // @ts-ignore
   private url: string;
   searchQuery: string = '';
@@ -55,6 +55,7 @@ export class PaginaMarketplaceComponent implements OnInit{
   }
   applyFilters() {
     // Filtra le carte per nome e genere
+    console.log(this.itemsA)
     this.FiltereditemsA = this.itemsA.filter((cartaA:any) =>
       cartaA.nome.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
       (this.selectedGenre === '' || cartaA.genere === this.selectedGenre) &&
