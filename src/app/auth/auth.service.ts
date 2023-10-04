@@ -92,6 +92,8 @@ export class AuthService {
   }
 
   setIsOnline(nickname_user_logged: string){
+
+    console.log("URL dentro setIsOnline: ", `${this.setIsOnlineURL}`+`${nickname_user_logged}`)
     return this.http.put(`${this.setIsOnlineURL}`+`${nickname_user_logged}`, null, {responseType: 'text'})
   }
 

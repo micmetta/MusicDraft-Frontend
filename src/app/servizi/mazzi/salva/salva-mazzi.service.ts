@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MazzoService {
-  private baseUrl = 'http://localhost:9092/api/v1/cartemazzi';
 
+  private baseUrl: string = '/api/v1/cartemazzi'; // qui non serve http://localhost:9095 !!!!!!!!
 
   constructor(private http: HttpClient) {}
 
@@ -16,9 +16,7 @@ export class MazzoService {
       nomeMazzo,
       carteSelezionate,
       nickname
-
     };
-    console.log(body)
     return this.http.post(`${this.baseUrl}/salvaMazzo`, body);
   }
 
