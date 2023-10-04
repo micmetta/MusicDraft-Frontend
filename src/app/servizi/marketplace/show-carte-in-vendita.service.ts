@@ -43,6 +43,7 @@ export class ShowCarteInVenditaService {
 
   getCarteArtistaByNickname(nick:string){
     const url = `${this.baseUrl2}/showCardArtistaUtente/${nick}`;
+    console.log(url)
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

@@ -85,6 +85,7 @@ export class LoginComponent implements OnInit {
             // setto lo stato IsOffline a true per l'utente loggato corrente (devo metterlo sia qui che nel ramo dell'else sotto perchè i .subscribe vengono eseguiti
             // in parallelo e quindi se voglio essere certo di settare lo stato nel momento giusto devo per forza eseguire this.authService.setIsOnline subito dopo
             // aver settato il nickname e l'email dell'utente loggato:
+
             this.authService.setIsOnline(this.nicknameAndEmailUserLoggedService.getStoredNickname_user_logged()).subscribe(data => {
               console.log("Risposta ottenuta dal backend dopo aver invocato this.authService.setIsOnline:");
               console.log(data);
