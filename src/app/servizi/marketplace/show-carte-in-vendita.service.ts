@@ -50,7 +50,7 @@ export class ShowCarteInVenditaService {
         'Access-Control-Allow-Origin': '*' // Imposta l'origine consentita, potrebbe essere più restrittivo
       })
     };
-
+//
     return this.http.get(url);
   }
   getCarteBranoByNickname(nick:string){
