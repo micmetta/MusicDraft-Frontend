@@ -7,10 +7,10 @@ import {Observable} from "rxjs";
 })
 export class ShowCarteInVenditaService {
 
-  private baseUrl = 'http://localhost:9095/api/v1/marketplace';
-  private baseUrl2 = 'http://localhost:9095/api/v1/cartemazzi';
-  private baseUrl3: string = 'http://localhost:9095/api/v1/artistController';
-  private baseUrl4: string = 'http://localhost:9095/api/v1/trackController';
+  private baseUrl = '/api/v1/marketplace';
+  private baseUrl2 = '/api/v1/cartemazzi';
+  private baseUrl3: string = '/api/v1/artistController';
+  private baseUrl4: string = '/api/v1/trackController';
 
   http:HttpClient;
 

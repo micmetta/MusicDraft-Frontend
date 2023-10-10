@@ -1,23 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MazzoService {
+  private baseUrl = '/api/v1/cartemazzi';
 
-  private baseUrl: string = '/api/v1/cartemazzi'; // qui non serve http://localhost:9095 !!!!!!!!
 
   constructor(private http: HttpClient) {}
 
   creaNuovoMazzo(nomeMazzo: string, carteSelezionate: any[], nickname:string): Observable<any> {
+
     const body = {
       nomeMazzo,
       carteSelezionate,
       nickname
+
     };
+
+
+    // Esegui la richiesta POST con le opzioni CORS configurate
     return this.http.post(`${this.baseUrl}/salvaMazzo`, body);
+
   }
 
   // Altri metodi per eliminare, modificare, ecc. se necessario

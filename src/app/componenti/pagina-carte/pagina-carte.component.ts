@@ -17,8 +17,8 @@ export class PaginaCarteComponent implements OnInit{
   itemsA: any
   itemsT :any
   private carta: any;
-  private baseUrl = 'http://localhost:9095/api/v1/cartemazzi';
-  private baseurl2 = 'http://localhost:9095/api/v1/marketplace';
+  private baseUrl = '/api/v1/cartemazzi';
+  private baseurl2 = '/api/v1/marketplace';
   private nome: any;
   private durata: any;
   private anno_pubblicazione: any;
@@ -49,12 +49,13 @@ export class PaginaCarteComponent implements OnInit{
 
   openVendiPopup(carta: any) {
 
+
     console.log(carta.nome)
     console.log(carta.popolarita)
     console.log(carta.id)
 
 
-    this.http.get(`http://localhost:9095/api/v1/cartemazzi/esisteCardinMazzo/${carta.nickname}/${carta.id}`)
+    this.http.get(`/api/v1/cartemazzi/esisteCardinMazzo/${carta.nickname}/${carta.id}`)
       .subscribe(
         (data:any)=>{
           if(data == true){

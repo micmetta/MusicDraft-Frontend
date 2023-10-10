@@ -22,7 +22,7 @@ export class PaginaMazziComponent {
   isEditing = false;
   selectedCard: any;
   availableCards: any[]=[];
-  private baseUrl2 = 'http://localhost:9095/api/v1/cartemazzi';
+  private baseUrl2 = '/api/v1/cartemazzi';
   carteSelezionate: any[] = []; // Inizializza l'array delle carte selezionate
   selectedCardToAdd: any | undefined;
   selectedDeck: any;
@@ -242,15 +242,12 @@ export class PaginaMazziComponent {
 
   salvaMazzo() { // viene eseguito quando alla fine della creazione l'utente clicca su "Crea"
 
-    console.log("this.deck.name: ", this.deck.name)
-    console.log(" this.carteSelezionate: ", this.carteSelezionate)
-    console.log(" this.nick.getStoredNickname_user_logged(): ", this.nick.getStoredNickname_user_logged())
-
     const set = new Set(this.carteSelezionate);
     if (this.carteSelezionate.length === 5 && (this.carteSelezionate.length == set.size)) {
       console.log(this.carteSelezionate)
       // Invia i dati al backend
-      this.mazzoService.creaNuovoMazzo(this.deck.name, this.carteSelezionate, this.nick.getStoredNickname_user_logged()).subscribe(
+      console.log(this.deck.name,this.carteSelezionate,this.nick.getStoredNickname_user_logged())
+      this.mazzoService.creaNuovoMazzo(this.deck.name, this.carteSelezionate,this.nick.getStoredNickname_user_logged()).subscribe(
         (response) => {
         console.log("fatto")        },
         (error) => {
@@ -272,7 +269,7 @@ export class PaginaMazziComponent {
       // Rimuovi il mazzo dall'array
       console.log(deck.nomemazzo)
       this.decks.splice(index, 1);
-      this.http.delete(`/api/v1/cartemazzi/deleteMazzo/${deck.nomemazzo}`) // qui non serve http://localhost:9095 !!!!!!!!
+      this.http.delete(`/api/v1/cartemazzi/deleteMazzo/${deck.nomemazzo}`)
         .subscribe((response) => {
           console.log("fatto")});
 
@@ -390,6 +387,30 @@ export class PaginaMazziComponent {
         else{
           // Quando entro qui sono certo che l'offerta corrente è una controfferta ad un'offerta precedente fatta dall'utente loggato e quindi adesso
           // questa controfferta dovrò inserirla in this.listaDiDizionari_offerta_ricevuta dell'utente loggato:
+
+          // creo quella che adesso è una controfferta ricevuta e la inserisco nella this.listaDiDizionari_offerta_ricevuta:
+
+          // let nuovoElemento = {
+          //   id_offerta_ricevuta: offerta_ricevuta.id,
+          //   idStart: offerta_ricevuta.idStart,
+          //   nickname_utente_richiesta_ricevuta: this.nickname_utente_richiesta_ricevuta,
+          //   nicknameU1: this.nickname_utente_richiesta_ricevuta,
+          //   nicknameU2: this.nickname_user_logged,
+          //   id_carta_richiesta_ricevuta: this.id_carta_corrente_ricevuta,
+          //   nome_carta_richiesta_ricevuta: carta.nome,
+          //   tipo_carta_richiesta_ricevuta: this.tipo_carta_richiesta_ricevuta,
+          //   lista_carte_offerte_ricevuta: this.lista_carte_offerte_ricevuta,
+          //   lista_tipi_carte_offerte_ricevuta: this.lista_tipi_carte_offerte_ricevuta,
+          //   immagine_carta_ricevuta: carta.immagine,
+          //   popolarita_ricevuta: carta.popolarita,
+          //   genere_ricevuta: carta.genere,
+          //   points_offerti_ricevuta: this.points_offerti_ricevuta,
+          //   mostra_accetta_offerta: mostra_accetta_offerta,
+          //   mostra_fai_controfferta: mostra_fai_controfferta,
+          //   statoOfferta: offerta_ricevuta.statoOfferta
+          // }
+          // this.listaDiDizionari_offerta_ricevuta.push(nuovoElemento);
+          // console.log("this.listaDiDizionari_offerta_ricevuta DOPO IL PUSH:", this.listaDiDizionari_offerta_ricevuta);
 
           let nuovoElemento = {
             id_offerta_ricevuta: offerta_inviata.id,
@@ -708,6 +729,22 @@ export class PaginaMazziComponent {
 
           else{
             // creo quella che adesso è una controfferta inviata e la inserisco nella this.listaDiDizionari_offerta_inviata:
+
+            // let nuovoElemento = {
+            //   nickname_utente_richiesta_inviata: this.nickname_utente_richiesta_inviata,
+            //   id_carta_richiesta: this.id_carta_corrente,
+            //   nome_carta_richiesta: carta.nome,
+            //   tipo_carta_richiesta: this.tipo_carta_richiesta,
+            //   lista_carte_offerte: this.lista_carte_offerte,
+            //   lista_tipi_carte_offerte: this.lista_tipi_carte_offerte,
+            //   immagine_carta: carta.immagine,
+            //   popolarita: carta.popolarita,
+            //   genere: carta.genere,
+            //   points_offerti: this.points_offerti
+            // }
+            // this.listaDiDizionari_offerta_inviata.push(nuovoElemento);
+            // console.log("this.listaDiDizionari_offerta_inviata DOPO IL PUSH:", this.listaDiDizionari_offerta_inviata);
+
             let nuovoElemento = {
               nickname_utente_richiesta_inviata: this.nickname_utente_richiesta_ricevuta,
               id_carta_richiesta: this.id_carta_corrente_ricevuta,
@@ -774,6 +811,21 @@ export class PaginaMazziComponent {
 
           else{
             // creo quella che adesso è una controfferta inviata e la inserisco nella this.listaDiDizionari_offerta_inviata:
+
+            // let nuovoElemento = {
+            //   nickname_utente_richiesta_inviata: this.nickname_utente_richiesta_inviata,
+            //   id_carta_richiesta: this.id_carta_corrente,
+            //   nome_carta_richiesta: carta.nome,
+            //   tipo_carta_richiesta: this.tipo_carta_richiesta,
+            //   lista_carte_offerte: this.lista_carte_offerte,
+            //   lista_tipi_carte_offerte: this.lista_tipi_carte_offerte,
+            //   immagine_carta: carta.immagine,
+            //   popolarita: carta.popolarita,
+            //   genere: carta.genere,
+            //   points_offerti: this.points_offerti
+            // }
+            // this.listaDiDizionari_offerta_inviata.push(nuovoElemento);
+            // console.log("this.listaDiDizionari_offerta_inviata DOPO IL PUSH:", this.listaDiDizionari_offerta_inviata);
 
             let nuovoElemento = {
               nickname_utente_richiesta_inviata: this.nickname_utente_richiesta_ricevuta,
@@ -1025,7 +1077,7 @@ export class PaginaMazziComponent {
       const set = new Set(this.c);
       if (this.c.length == 5) {
         if (!contieneDuplicati) {
-          this.http.delete(`http://localhost:9095/api/v1/cartemazzi/deleteMazzo/${this.nomemazoattuale}`)
+          this.http.delete(`/api/v1/cartemazzi/deleteMazzo/${this.nomemazoattuale}`)
             .subscribe((response) => {
                 console.log("fatto")
                 this.mazzoService.creaNuovoMazzo(this.selectedDeck.nomemazzo, this.c, this.selectedDeck.nickname).subscribe(
