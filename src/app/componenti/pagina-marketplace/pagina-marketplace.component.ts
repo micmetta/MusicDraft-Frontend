@@ -184,7 +184,7 @@ export class PaginaMarketplaceComponent implements OnInit{
 
         }
 
-
+//
       }
     });
 
