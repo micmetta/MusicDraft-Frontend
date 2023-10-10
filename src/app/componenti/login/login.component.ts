@@ -56,7 +56,10 @@ export class LoginComponent implements OnInit {
     console.log("password:")
     console.log(password)
 
-
+    if (this.nick_mail === 'admin' && this.password === 'admin') {
+      // Reindirizza l'utente alla pagina dell'admin
+      this.router.navigate(['/admin']);
+    } else {
     ////////// chiamata al backend ////////////////
     // chiamare il metodo presente in auth.service che chiamerà il tuo microservizio backend che si preoccupa
     // di controllare se nickname_or_email e password sono presenti nel DB user.
@@ -131,7 +134,7 @@ export class LoginComponent implements OnInit {
 
     })
     //form.reset()
-
+      }
   }
 
   togglePasswordVisibility(): void {
