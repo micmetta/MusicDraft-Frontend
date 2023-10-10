@@ -81,6 +81,11 @@ export class PaginaMarketplaceComponent implements OnInit{
         if (carta.hasOwnProperty('durata')) {
           url = `${this.baseUrl}/acquistaCartaBrano/${this.nick.getStoredNickname_user_logged()}`;
           url2 = `${this.baseurl2}/delete-CardBrano/${carta.id}`
+
+          console.log("DENTRO BRANO")
+          console.log("url: ", url)
+          console.log("url2: ", url2)
+
           this.id=carta.id;
           this.nome = carta.nome;
           this.durata = carta.durata;
@@ -92,6 +97,11 @@ export class PaginaMarketplaceComponent implements OnInit{
         } else {
           url = `${this.baseUrl}/acquistaCartaArtista/${this.nick.getStoredNickname_user_logged()}`;
           url2 = `${this.baseurl2}/delete-CardArtist/${carta.id}`
+
+          console.log("DENTRO ARTISTA")
+          console.log("url: ", url)
+          console.log("url2: ", url2)
+
           this.id=carta.id;
           this.nome = carta.nome;
           this.popolarita = carta.popolarita;
@@ -99,6 +109,16 @@ export class PaginaMarketplaceComponent implements OnInit{
           this.costo = carta.costo;
           this.immagine = carta.immagine;
           this.nickname=carta.nick;
+
+          console.log("id: ", this.id)
+          console.log("nome: ", this.nome)
+          console.log("durata: ", this.durata)
+          console.log("anno_pubblicazione: ", this.anno_pubblicazione)
+          console.log("popolarita: ", this.popolarita)
+          console.log("immagine: ", this.immagine)
+          console.log("costo: ", this.costo)
+          console.log("nick: ", this.nickname)
+
         }
         if (carta.hasOwnProperty('durata')) {
           this.http.post(url, {
