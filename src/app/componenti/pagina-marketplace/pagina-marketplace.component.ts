@@ -112,32 +112,35 @@ export class PaginaMarketplaceComponent implements OnInit{
             "nick":this.nickname
           })
             .subscribe(
-              response => {
+              (response:any) => {
                 // Gestisci la risposta dal backend
-                console.log("Risposta dal backend:", response);
+                this.http.delete(url2)
+                  .subscribe(
+                    response => {
+                      // Gestisci la risposta dal backend
+                      console.log("Risposta dal backend:", response);
+                    },
+                    error => {
+                      // Gestisci gli errori
+                      console.error("Errore nella chiamata:", error);
+                    }
+                  );
+                this.removeItemFromArray(carta);
 
               },
-              error => {
+              (error:any) => {
+                this.risposta=error
                 // Gestisci gli errori
-                console.error("Errore nella chiamata:", error);
+                alert("Points non sufficienti")
+
+
+
 
               }
-            );
-          if(this.risposta != "Punti insufficienti per acquistare questa carta.") {
-            this.http.delete(url2)
-              .subscribe(
-                response => {
-                  // Gestisci la risposta dal backend
-                  console.log("Risposta dal backend:", response);
-                },
-                error => {
-                  // Gestisci gli errori
-                  console.error("Errore nella chiamata:", error);
-                }
-              );
-            this.removeItemFromArray(carta);
 
-          }
+            );
+          console.log(this.risposta)
+
         } else {
           this.http.post(url, {
             "id": this.id,
@@ -149,32 +152,35 @@ export class PaginaMarketplaceComponent implements OnInit{
             "nick": this.nickname
           })
             .subscribe(
-              response => {
+              (response:any) => {
                 // Gestisci la risposta dal backend
-                console.log("Risposta dal backend:", response);
+
+                  this.http.delete(url2)
+                    .subscribe(
+                      (response:any) => {
+                        // Gestisci la risposta dal backend
+                        this.risposta=response
+                        console.log("Risposta dal backend:", response);
+                      },
+                      error => {
+                        this.risposta=error
+                        // Gestisci gli errori
+                        console.error("Errore nella chiamata:", error);
+                      }
+                    );
+                  this.removeItemFromArray(carta);
+
 
               },
-              error => {
+              (error:any) => {
+                this.risposta=error
                 // Gestisci gli errori
-                console.error("Errore nella chiamata:", error);
+                alert("Points non sufficienti");
 
               }
             );
-          console.log("OH sto qua:"+this.risposta)
-          if (this.risposta != "Punti insufficienti per acquistare questa carta.") {
-            this.http.delete(url2)
-              .subscribe(
-                response => {
-                  // Gestisci la risposta dal backend
-                  console.log("Risposta dal backend:", response);
-                },
-                error => {
-                  // Gestisci gli errori
-                  console.error("Errore nella chiamata:", error);
-                }
-              );
-            this.removeItemFromArray(carta);
-          }
+          console.log(this.risposta)
+
 
         }
 
