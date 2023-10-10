@@ -56,7 +56,8 @@ import {MatchingpopComponent} from "./popup/matchingpop/matchingpop.component";
 
 import { NgChartsModule } from 'ng2-charts';
 import { ChangeNicknamePopComponent } from './popup/changeNickname/change-nickname-pop/change-nickname-pop.component';
-import { ChangePasswordPopComponent } from './popup/changePassword/change-password-pop/change-password-pop.component'; // npm install ng2-charts per installarlo
+import { ChangePasswordPopComponent } from './popup/changePassword/change-password-pop/change-password-pop.component';
+import { AdminPageComponent } from './admin-page/admin-page.component'; // npm install ng2-charts per installarlo
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { ChangePasswordPopComponent } from './popup/changePassword/change-passwo
     MatchingpopComponent,
     ChangeNicknamePopComponent,
     ChangePasswordPopComponent,
+    AdminPageComponent,
 
   ],
   imports: [

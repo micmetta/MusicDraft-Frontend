@@ -1,0 +1,33 @@
+<div style="display: flex; flex-direction: column; align-items: flex-start;">
+  <div style="margin-left: 20px;">
+
+    <h1>Admin Page</h1>
+
+    <div class="admin-box">
+      <h2>Benvenuto, Admin!</h2>
+
+      <!-- Primo campo di testo e pulsanti -->
+      <mat-form-field appearance="outline" class="equal-width">
+        <mat-label>Inserire nome artista</mat-label>
+        <input matInput type="text" name="testo1" [(ngModel)]="text1">
+      </mat-form-field>
+
+      <div class="button-group centered">
+        <button mat-raised-button color="primary" type="button" (click)="handleButton1()" class="button1">Inserire Artista </button>
+        <button mat-raised-button color="primary" type="button" (click)="handleButton2()">Inject martketplace</button>
+      </div>
+
+      <!-- Secondo campo di testo e pulsanti -->
+      <mat-form-field appearance="outline" class="equal-width">
+        <mat-label>Inserire Nome Brano</mat-label>
+        <input matInput type="text" name="testo2" [(ngModel)]="text2" class="text2">
+      </mat-form-field>
+
+      <div class="button-group centered">
+        <button mat-raised-button color="primary" type="button" (click)="handleButton3()">Inserire Brano</button>
+        <button mat-raised-button color="primary" type="button" (click)="handleButton4()">Inject martketplace</button>
+      </div>
+
+
+    </div>
+</div>

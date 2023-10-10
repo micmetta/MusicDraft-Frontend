@@ -20,6 +20,7 @@ import {PaginaCreaOffertaComponent} from "./componenti/pagina-crea-offerta/pagin
 import {PaginaFaiControffertaComponent} from "./componenti/pagina-fai-controfferta/pagina-fai-controfferta.component";
 import {PaginaMatchmakingComponent} from "./componenti/pagina-matchmaking/pagina-matchmaking.component";
 import {PaginaVisualizzaMazzoComponent} from "./componenti/pagina-visualizza-mazzo/pagina-visualizza-mazzo.component";
+import {AdminPageComponent} from "./admin-page/admin-page.component";
 
 const routes: Routes = [
   {path: '', component: HomepageComponent},
@@ -27,6 +28,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'registrazione', component: RegistrazioneComponent},
   {path: 'auth_google', component: ContinuaConGoogleComponent},
+  { path: 'admin', component: AdminPageComponent },
   {path: 'dashboard', component: DashboardComponent, canActivate: [authGuard], children:[
       {path: '', redirectTo: 'home', pathMatch: 'full'}, // in questo modo ogni volta che vado su http://localhost:4200/dashboard verrò reindirizzato direttamente su http://localhost:4200/dashboard/home
       {path: 'home', component: PaginaHomeComponent},
@@ -41,6 +43,8 @@ const routes: Routes = [
       {path: 'fai_controfferta', component: PaginaFaiControffertaComponent},
       {path: 'matchmaking', component: PaginaMatchmakingComponent},
       {path: 'visualizza_mazzo', component: PaginaVisualizzaMazzoComponent},
+
+
     ]},
 ]
 

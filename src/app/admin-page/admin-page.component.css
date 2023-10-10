@@ -1,0 +1,67 @@
+/* Stile generale */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Stile per la pagina dell'admin */
+.admin-box {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  text-align: center;
+  margin: 20px auto;
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Stile per i campi di testo e i pulsanti */
+input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 16px;
+}
+
+button {
+  font-size: 16px;
+  width: 48%; /* Imposta la larghezza desiderata per i pulsanti */
+}
+
+/* Stili per il messaggio di login errato */
+mat-dialog-content {
+  color: red;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+/* Stile per l'header della pagina dell'admin */
+h1 {
+  color: #333333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Stili per il primo pulsante e il secondo campo di testo */
+.button1 {
+  margin-bottom: 20px; /* Aggiungi uno spazio tra il pulsante 1 e il campo di testo 2 */
+}
+
+/* Stili per il secondo campo di testo */
+input[name="text2"] {
+  margin-top: 20px; /* Aggiungi uno spazio sopra il campo di testo 2 */
+}
