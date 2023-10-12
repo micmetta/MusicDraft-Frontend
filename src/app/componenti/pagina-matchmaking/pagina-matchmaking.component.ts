@@ -25,7 +25,7 @@ export class PaginaMatchmakingComponent implements OnInit{
   deck: any ; // Il mazzo in fase di modifica o aggiunta
   visualizza_mazzi: boolean = false;
   availableCards: any[]=[];
-  private baseUrl2 = 'http://localhost:9092/api/v1/cartemazzi';
+  private baseUrl2 = '/api/v1/cartemazzi';
   selectedCardToAdd: any | undefined;
   selectedDeck: any;
   nomemazoattuale:any;

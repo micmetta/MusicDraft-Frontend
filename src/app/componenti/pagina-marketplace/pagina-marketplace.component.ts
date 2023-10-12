@@ -152,12 +152,7 @@ export class PaginaMarketplaceComponent implements OnInit{
                 this.risposta=error
                 // Gestisci gli errori
                 alert("Points non sufficienti")
-
-
-
-
               }
-
             );
           console.log(this.risposta)
 
