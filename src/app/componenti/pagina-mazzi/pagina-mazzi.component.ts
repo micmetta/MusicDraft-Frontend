@@ -245,7 +245,7 @@ export class PaginaMazziComponent {
     const set = new Set(this.carteSelezionate);
     if (this.carteSelezionate.length === 5 && (this.carteSelezionate.length == set.size)) {
 
-      if(this.deck.name != "" && this.deck.name != null){
+      if(this.deck.name != "" && this.deck.name != null){ // aggiunto dopo
 
         console.log(this.carteSelezionate)
         // Invia i dati al backend
@@ -263,7 +263,7 @@ export class PaginaMazziComponent {
         this.selectedDeck=false;
       }
       else{
-        alert('Devi inserire un nome da dare al mazzo!.');
+        alert('Devi inserire un nome da dare al mazzo!');
       }
 
     } else {
