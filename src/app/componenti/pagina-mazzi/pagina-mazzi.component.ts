@@ -252,7 +252,7 @@ export class PaginaMazziComponent {
         console.log(this.deck.name,this.carteSelezionate,this.nick.getStoredNickname_user_logged())
         this.mazzoService.creaNuovoMazzo(this.deck.name, this.carteSelezionate,this.nick.getStoredNickname_user_logged()).subscribe(
           (response) => {
-            console.log("fatto")        },
+            console.log("fatto")},
           (error) => {
             console.error('Errore durante la creazione del mazzo', error);
             // Gestisci gli errori, ad esempio, mostrando un messaggio all'utente
