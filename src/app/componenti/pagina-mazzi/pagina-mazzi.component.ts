@@ -118,6 +118,9 @@ export class PaginaMazziComponent {
 
           data.forEach(item => {
             const nomeMazzo = item.nomemazzo;
+
+            console.log("nomeMazzo:", nomeMazzo);
+
             if (!mazziAssociati[nomeMazzo]) {
               mazziAssociati[nomeMazzo] = {
                 nomemazzo: nomeMazzo,
@@ -140,12 +143,9 @@ export class PaginaMazziComponent {
                             mazziAssociati[nomeMazzo].carteassociate.push(data);
                           }}
                       );
-
                   }
                 }
               );
-
-
           });
 
           // Ora puoi utilizzare mazziAssociati come desideri
@@ -244,20 +244,28 @@ export class PaginaMazziComponent {
 
     const set = new Set(this.carteSelezionate);
     if (this.carteSelezionate.length === 5 && (this.carteSelezionate.length == set.size)) {
-      console.log(this.carteSelezionate)
-      // Invia i dati al backend
-      console.log(this.deck.name,this.carteSelezionate,this.nick.getStoredNickname_user_logged())
-      this.mazzoService.creaNuovoMazzo(this.deck.name, this.carteSelezionate,this.nick.getStoredNickname_user_logged()).subscribe(
-        (response) => {
-        console.log("fatto")        },
-        (error) => {
-          console.error('Errore durante la creazione del mazzo', error);
-          // Gestisci gli errori, ad esempio, mostrando un messaggio all'utente
-        }
-      );
-      this.isEditing = false;
-      this.creanuovomazzo=false;
-      this.selectedDeck=false;
+
+      if(this.deck.name != "" && this.deck.name != null){
+
+        console.log(this.carteSelezionate)
+        // Invia i dati al backend
+        console.log(this.deck.name,this.carteSelezionate,this.nick.getStoredNickname_user_logged())
+        this.mazzoService.creaNuovoMazzo(this.deck.name, this.carteSelezionate,this.nick.getStoredNickname_user_logged()).subscribe(
+          (response) => {
+            console.log("fatto")        },
+          (error) => {
+            console.error('Errore durante la creazione del mazzo', error);
+            // Gestisci gli errori, ad esempio, mostrando un messaggio all'utente
+          }
+        );
+        this.isEditing = false;
+        this.creanuovomazzo=false;
+        this.selectedDeck=false;
+      }
+      else{
+        alert('Devi inserire un nome da dare al mazzo!.');
+      }
+
     } else {
       alert('Devi selezionare esattamente 5 carte diverse prima di salvare il mazzo.');
     }

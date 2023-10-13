@@ -21,7 +21,7 @@ import {SharedDataService} from "../../servizi/shared_data_service/shared-data.s
 })
 export class PaginaScambiCarteComponent implements OnInit {
 
-  private baseUrl2 = 'http://localhost:9092/api/v1/cartemazzi';
+  private baseUrl2 = '/api/v1/cartemazzi';
   private apiUrl = ''; // la setto nell'NgOnInit
   private apiurl2=`${this.baseUrl2}/getUserArtista`
   private apiurl3=`${this.baseUrl2}/getUserBrano`

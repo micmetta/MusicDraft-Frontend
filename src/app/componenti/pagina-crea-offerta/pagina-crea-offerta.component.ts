@@ -9,6 +9,7 @@ import {GestioneScambiService} from "../../servizi/home_service/gestione-scambi.
 import {MatDialog} from "@angular/material/dialog";
 import {DialogMessageComponent} from "../dialog-message/dialog-message.component";
 import {HttpClient} from "@angular/common/http";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-pagina-crea-offerta',
@@ -17,7 +18,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class PaginaCreaOffertaComponent implements OnInit{
 
-  private baseUrl2 = 'http://localhost:9092/api/v1/cartemazzi';
+  private baseUrl2 = '/api/v1/cartemazzi';
   private apiUrl = ''; // la setto nell'NgOnInit
   private apiurl2=`${this.baseUrl2}/getUserArtista`
   private apiurl3=`${this.baseUrl2}/getUserBrano`
@@ -51,6 +52,7 @@ export class PaginaCreaOffertaComponent implements OnInit{
               private nickname_loggedService: Nickname_and_email_user_loggedService,
               private show:ShowCarteInVenditaService,
               private gestioneScambiService: GestioneScambiService,
+              private authService: AuthService,
               private router: Router,
               private http: HttpClient,
               private dialog: MatDialog) {}
@@ -304,58 +306,69 @@ export class PaginaCreaOffertaComponent implements OnInit{
     console.log('Dati inviati -> listaTipiCarteOfferte:', this.listaTipiCarteOfferte);
     console.log('Dati inviati -> pointsOfferti:', this.pointsOfferti);
 
-
-    // Qui preparo la richiesta all'endpoint: http://localhost:8082/api/v1/homeService/scambiController/inviaOfferta
-    // {
-    // "nicknameU1": "Michele Metta",
-    // "nicknameU2": "TonySoprano",
-    // "idCartaRichiesta": "15",
-    // "tipoCartaRichiesta": "brano",
-    // "listaCarteOfferte": "[\"1\"]",
-    // "listaTipiCarteOfferte": "[\"artista\"]",
-    // "pointsOfferti": 150
-    // }
-
-    const nicknameU1 = this.nickname_user_logged;
-    const nicknameU2 = this.nickn_propr_carta_richiesta;
-    const idCartaRichiesta = this.carta_richiesta.id;
-    const tipoCartaRichiesta = this.tipo_carta_richiesta;
-    const idList: string[] = this.listaCarteOfferte.map(carta => carta.id); // estraggo tutti gli id di ogni carta presente in this.listaCarteOfferte
-    const listaCarteOfferte: string = JSON.stringify(idList); // mi memorizzo in ListaCarteOfferte in formato JSON tutti gli id delle carte offerte
-    const listaTipiCarteOfferte: String = JSON.stringify(this.listaTipiCarteOfferte);
-    const pointsOfferti = this.pointsOfferti;
-
-    console.log("nicknameU1: ", nicknameU1)
-    console.log("nicknameU2: ", nicknameU2)
-    console.log("idCartaRichiesta: ", idCartaRichiesta)
-    console.log("tipoCartaRichiesta: ", tipoCartaRichiesta) // cerca di capire perchè non lo prende..
-    console.log("listaCarteOfferte: ", listaCarteOfferte)
-    console.log("listaTipiCarteOfferte: ", listaTipiCarteOfferte)
-    console.log("pointsOfferti: ", pointsOfferti)
-
-
-    this.gestioneScambiService.inviaOfferta(
-      {
-        nicknameU1: nicknameU1,
-        nicknameU2: nicknameU2,
-        idCartaRichiesta: idCartaRichiesta,
-        tipoCartaRichiesta: tipoCartaRichiesta,
-        listaCarteOfferte: listaCarteOfferte,
-        listaTipiCarteOfferte: listaTipiCarteOfferte,
-        pointsOfferti: pointsOfferti
-      }
-    ).subscribe(data => {
-      console.log("Risposta backend di invia_offerta: ", data)
-
-      if(data == "Offerta inviata."){
-        // Faccio apparire una finestra di dialogo che avverte l'utente dell'invio dell'offerta
-        // e dopodichè lo riporto direttamente in "/dashboard/scambi_carte":
-        this.openDialog('Offerta Inviata con Successo', 'L\'offerta è stata inviata con successo a ' + this.nickn_propr_carta_richiesta + '!');
+    // controllo se i points offerti l'utente corrente li ha davvero altrimenti mostro un popup di errore:
+    this.authService.getPoints(this.nickname_user_logged).subscribe((data: any) => {
+      if(data == -1){
+        console.log("ERRORE: NON ESISTE NELLA TABELLA UTENTI L'UTENTE LOGGATO..")
       }
       else{
-        // Faccio apparire una finestra di dialogo che avverte l'utente che l'offerta non è stata inviata correttamente
-        // e dopodichè lo riporto direttamente in "/dashboard/scambi_carte":
-        this.openDialog('Errore nell\'invio dell\'offerta', 'Si è verificato un errore durante l\'invio dell\'offerta.');
+        if(data < this.pointsOfferti){
+          // non può offrire questi points perchè non li ha
+          this.openDialog('Errore: Non è possibile inviare l\'offerta', 'Hai inserito un quantitativo di points che non hai a disposizione!');
+        }
+        else{
+          // Qui preparo la richiesta all'endpoint: http://localhost:8082/api/v1/homeService/scambiController/inviaOfferta
+          // {
+          // "nicknameU1": "Michele Metta",
+          // "nicknameU2": "TonySoprano",
+          // "idCartaRichiesta": "15",
+          // "tipoCartaRichiesta": "brano",
+          // "listaCarteOfferte": "[\"1\"]",
+          // "listaTipiCarteOfferte": "[\"artista\"]",
+          // "pointsOfferti": 150
+          // }
+          const nicknameU1 = this.nickname_user_logged;
+          const nicknameU2 = this.nickn_propr_carta_richiesta;
+          const idCartaRichiesta = this.carta_richiesta.id;
+          const tipoCartaRichiesta = this.tipo_carta_richiesta;
+          const idList: string[] = this.listaCarteOfferte.map(carta => carta.id); // estraggo tutti gli id di ogni carta presente in this.listaCarteOfferte
+          const listaCarteOfferte: string = JSON.stringify(idList); // mi memorizzo in ListaCarteOfferte in formato JSON tutti gli id delle carte offerte
+          const listaTipiCarteOfferte: String = JSON.stringify(this.listaTipiCarteOfferte);
+          const pointsOfferti = this.pointsOfferti;
+
+          console.log("nicknameU1: ", nicknameU1)
+          console.log("nicknameU2: ", nicknameU2)
+          console.log("idCartaRichiesta: ", idCartaRichiesta)
+          console.log("tipoCartaRichiesta: ", tipoCartaRichiesta) // cerca di capire perchè non lo prende..
+          console.log("listaCarteOfferte: ", listaCarteOfferte)
+          console.log("listaTipiCarteOfferte: ", listaTipiCarteOfferte)
+          console.log("pointsOfferti: ", pointsOfferti)
+
+          this.gestioneScambiService.inviaOfferta(
+            {
+              nicknameU1: nicknameU1,
+              nicknameU2: nicknameU2,
+              idCartaRichiesta: idCartaRichiesta,
+              tipoCartaRichiesta: tipoCartaRichiesta,
+              listaCarteOfferte: listaCarteOfferte,
+              listaTipiCarteOfferte: listaTipiCarteOfferte,
+              pointsOfferti: pointsOfferti
+            }
+          ).subscribe(data => {
+            console.log("Risposta backend di invia_offerta: ", data)
+
+            if(data == "Offerta inviata."){
+              // Faccio apparire una finestra di dialogo che avverte l'utente dell'invio dell'offerta
+              // e dopodichè lo riporto direttamente in "/dashboard/scambi_carte":
+              this.openDialog('Offerta Inviata con Successo', 'L\'offerta è stata inviata con successo a ' + this.nickn_propr_carta_richiesta + '!');
+            }
+            else{
+              // Faccio apparire una finestra di dialogo che avverte l'utente che l'offerta non è stata inviata correttamente
+              // e dopodichè lo riporto direttamente in "/dashboard/scambi_carte":
+              this.openDialog('Errore nell\'invio dell\'offerta', 'Si è verificato un errore durante l\'invio dell\'offerta.');
+            }
+          })
+        }
       }
     })
   }
