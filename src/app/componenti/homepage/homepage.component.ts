@@ -78,7 +78,7 @@ export class HomepageComponent {
     }
 
     this.isClassificaPopupOpen=true;
-    this.http.get<UserRank[]>(this.localhostbase+`/api/v1/cartemazzi/getAllforAlluser`).subscribe(
+    this.http.get<UserRank[]>(`/api/v1/cartemazzi/getAllforAlluser`).subscribe(
       (data:UserRank[])=>{
 
         this.userRankList.push(...data);
