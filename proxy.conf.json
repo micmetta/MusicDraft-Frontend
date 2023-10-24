@@ -1,6 +1,6 @@
 {
   "/api/v1": {
-    "target": "http://127.0.0.1:58456",
+    "target": "http://127.0.0.1:50934",
     "secure": false
   }
 }
