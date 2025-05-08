@@ -2,6 +2,14 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.2.
 
+# General information
+
+Music-themed web application based on a **microservices architecture**, developed during the **Advanced Techniques and Architectures for Software Development (TAAS**) course of the master’s degree program.
+In the game, players can register and compete in **1 vs 1 online matches**, using cards that represent **artists** or **songs**.
+
+- The entire application is composed of a frontend (developed with **Angular**) and a backend (developed with **Spring Boot**).
+- The files **"Project_presentation.pptx"** and **"Project_presentation.pdf"** contain the presentation shown during the exam session.
+
 ## Start MusicDraft Front-end
 
 After launch `MusicDraft-Backend` (https://github.com/micmetta/MusicDraft-Backend for info), run `npm start` for a dev server. 
